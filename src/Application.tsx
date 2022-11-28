@@ -1,6 +1,13 @@
 import { Application as pxApplication, IApplicationOptions } from "pixi.js";
-import { createContext, createEffect, useContext } from "solid-js";
-import { pixiChildren, useDiffChildren } from "./useChildren";
+import {
+  createContext,
+  createEffect,
+  useContext,
+  JSX,
+  createUniqueId,
+  splitProps,
+} from "solid-js";
+import { pixiChildren, useDiffChildren } from "./usePixiChildren";
 
 export const ApplicationContext = createContext<pxApplication>();
 
@@ -8,29 +15,18 @@ export function useApplication() {
   return useContext(ApplicationContext);
 }
 export interface ApplicationProps extends Partial<IApplicationOptions> {
-  id?: string;
   children?: any;
 }
 
 export function Application(props: ApplicationProps) {
-  const app = new pxApplication();
-  // props.id = props.id || createUniqueId();
-  // const [pixiApp, setPixiApp] = createSignal<pxApplication>();
+  const [ours, pixis] = splitProps(props, ["children"]);
+  const app = new pxApplication(pixis);
 
-  // onMount(() => {
-  //   const app = new pxApplication();
-  //   setPixiApp(app);
-  // });
-
-  // Create the application
-
-  // const children = props.children
   const [, update] = useDiffChildren(app.stage);
-  const resolved = pixiChildren(props.children);
+  const resolved = pixiChildren(ours.children);
   createEffect(() => {
     update(resolved());
   });
 
-  // Add the view to the DOM
-  return app.view;
+  return app.view as unknown as JSX.Element;
 }

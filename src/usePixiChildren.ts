@@ -29,7 +29,7 @@ export function useDiffChildren<T extends Container = Container>(
     }, {} as Record<string, DisplayObject>);
 
     // Add/Remove children
-    const existing = map.keys();
+    const existing = [...map.keys()];
     difference(updates, existing).forEach((name: string) => {
       map.set(name, childrenByName[name]!);
       setContainer((c) => {
