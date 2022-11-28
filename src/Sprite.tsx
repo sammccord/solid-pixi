@@ -1,36 +1,16 @@
 import {
   BaseTexture,
   DisplayObjectEvents,
-  IAutoDetectOptions,
   IBaseTextureOptions,
   IPointData,
-  Rectangle,
-  Resource,
   Sprite as pxSprite,
   SpriteSource,
   Texture,
 } from "pixi.js";
-import { Accessor, createEffect, JSX, onCleanup, splitProps } from "solid-js";
+import { createEffect, JSX, onCleanup, splitProps } from "solid-js";
 import { Events, EventTypes } from "./events";
+import { TextureWithOptions } from "./interfaces";
 import { pixiChildren, useDiffChildren } from "./usePixiChildren";
-
-type TextureWithOptions = [
-  texture: Texture<Resource> | BaseTexture<Resource, IAutoDetectOptions>,
-  frame?: Rectangle,
-  orig?: Rectangle,
-  trim?: Rectangle,
-  rotate?: number,
-  anchor?: IPointData
-];
-
-type DirectiveAttributes = {
-  [Key in keyof Directives as `use:${Key}`]?: Directives[Key];
-};
-
-interface Directives {}
-interface DirectiveFunctions {
-  [x: string]: (el: Element, accessor: Accessor<any>) => void;
-}
 
 export interface SpriteProps
   extends Partial<

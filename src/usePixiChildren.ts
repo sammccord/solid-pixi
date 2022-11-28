@@ -2,7 +2,11 @@ import difference from "lodash.difference";
 import { Container, DisplayObject } from "pixi.js";
 import { Accessor, children, createSignal } from "solid-js";
 
-export type PIXIChildren<T = Container> = DisplayObject[] | undefined;
+export type PIXIChildren = DisplayObject[] | undefined;
+
+export interface IPIXIChildren {
+  children?: any;
+}
 
 export const pixiChildren = children as (
   fn: Accessor<PIXIChildren>
