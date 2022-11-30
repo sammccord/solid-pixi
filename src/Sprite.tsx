@@ -11,7 +11,6 @@ import { createEffect, JSX, onCleanup, splitProps } from "solid-js";
 import { Events, EventTypes } from "./events";
 import { TextureWithOptions } from "./interfaces";
 import { pixiChildren, useDiffChildren } from "./usePixiChildren";
-
 export interface SpriteProps
   extends Partial<
       Omit<

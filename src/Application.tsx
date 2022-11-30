@@ -2,10 +2,9 @@ import { Application as pxApplication, IApplicationOptions } from "pixi.js";
 import {
   createContext,
   createEffect,
-  useContext,
   JSX,
-  createUniqueId,
   splitProps,
+  useContext,
 } from "solid-js";
 import { pixiChildren, useDiffChildren } from "./usePixiChildren";
 

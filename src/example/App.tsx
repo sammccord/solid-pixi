@@ -14,14 +14,14 @@ function App() {
 
   onMount(() => {
     const i = setInterval(() => {
-      if (sprites().length > 1) {
+      if (sprites().length > 5) {
         setSprites([]);
         clearInterval(i);
         return;
       }
       setSprites([...sprites(), createUniqueId()]);
       setPos((pos) => ({ x: (pos.x += 10), y: (pos.y += 10) }));
-    }, 3000);
+    }, 2000);
 
     onCleanup(() => clearInterval(i));
   });
