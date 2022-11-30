@@ -1,31 +1,34 @@
-import {
-  Container,
-  Container as pxContainer,
-  DisplayObjectEvents,
-  IPointData,
-} from "pixi.js";
+import { BitmapText as pxBitmapText, DisplayObjectEvents } from "pixi.js";
 import { createEffect, JSX, onCleanup, splitProps } from "solid-js";
 import { Events, EventTypes } from "./events";
-import { Uses } from "./interfaces";
+import { Transform, Uses } from "./interfaces";
 import { pixiChildren, useDiffChildren } from "./usePixiChildren";
-
-export interface ContainerProps
-  extends Partial<Omit<pxContainer, "children">>,
+export interface BitmapTextProps
+  extends Partial<Omit<pxBitmapText, "texture" | "children" | keyof Transform>>,
+    Transform,
     Partial<Events> {
   children?: any;
   name: string;
-  use: Uses<pxContainer>;
+  use?: Uses<pxBitmapText>;
+  text: string;
 }
 
-export function Sprite(props: ContainerProps): JSX.Element {
+export function BitmapText(props: BitmapTextProps): JSX.Element {
   const [ours, events, pixis] = splitProps(
     props,
     ["children", "name", "use"],
     EventTypes
   );
-  let container = new Container();
+  let text: pxBitmapText = new pxBitmapText(props.text, {
+    fontName: pixis.fontName,
+    fontSize: pixis.fontSize,
+    align: pixis.align,
+    tint: pixis.tint,
+    letterSpacing: pixis.letterSpacing,
+    maxWidth: pixis.maxWidth,
+  });
 
-  container.name = ours.name;
+  text.name = ours.name;
 
   createEffect(() => {
     const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
@@ -33,22 +36,22 @@ export function Sprite(props: ContainerProps): JSX.Element {
     ).map((p) => {
       const handler = events[p as unknown as keyof Events];
       const n = p.split(":")[1] as keyof DisplayObjectEvents;
-      container.on(n, handler as any);
+      text.on(n, handler as any);
       return [n, handler];
     });
 
     onCleanup(() => {
-      handlers.forEach(([e, handler]) => container.off(e, handler));
+      handlers.forEach(([e, handler]) => text.off(e, handler));
     });
   });
 
   createEffect(() => {
     for (let key in pixis) {
-      (container as any)[key] = (pixis as any)[key];
+      (text as any)[key] = (pixis as any)[key];
     }
   });
 
-  const [, update] = useDiffChildren(container);
+  const [, update] = useDiffChildren(text);
   const resolved = pixiChildren(ours.children);
   createEffect(() => {
     update(resolved());
@@ -57,12 +60,13 @@ export function Sprite(props: ContainerProps): JSX.Element {
   createEffect(() => {
     if (props.use) {
       if (Array.isArray(props.use)) {
-        props.use.forEach((fn) => fn(container));
+        props.use.forEach((fn) => fn(text));
       } else {
-        props.use(container);
+        props.use(text);
       }
     }
   });
+
   // Add the view to the DOM
-  return container as unknown as JSX.Element;
+  return text as unknown as JSX.Element;
 }

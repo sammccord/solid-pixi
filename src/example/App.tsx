@@ -7,6 +7,14 @@ import {
   onMount,
 } from "solid-js";
 import { Application, Sprite } from "..";
+import Cool from "./Cool";
+
+function use(val) {
+  console.log(val.name);
+  // return (t) => {
+  //   console.log(t.name);
+  // };
+}
 
 function App() {
   const [sprites, setSprites] = createSignal<string[]>([]);
@@ -28,7 +36,8 @@ function App() {
 
   return (
     <Application>
-      <For each={sprites()}>
+      <Cool />
+      {/* <For each={sprites()}>
         {(id, i) => (
           <Sprite
             name={id}
@@ -37,9 +46,10 @@ function App() {
             interactive={i() % 2 === 0}
             on:click={() => console.log(i())}
             zIndex={i()}
+            use={use}
           />
         )}
-      </For>
+      </For> */}
     </Application>
   );
 }

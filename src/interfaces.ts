@@ -25,3 +25,22 @@ export interface Directives {}
 export interface DirectiveFunctions {
   [x: string]: (el: Element, accessor: Accessor<any>) => void;
 }
+
+export interface Transform {
+  position?: IPointData;
+  scale?: IPointData;
+  skew?: IPointData;
+  pivot?: IPointData;
+  rotation?: number;
+}
+
+export const TransformKeys: (keyof Transform)[] = [
+  "position",
+  "scale",
+  "skew",
+  "pivot",
+];
+
+export type Use<T> = (t: T) => void | Promise<void>;
+
+export type Uses<T> = Use<T> | Use<T>[];

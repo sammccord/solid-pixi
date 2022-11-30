@@ -7,12 +7,6 @@ import {
   useContext,
 } from "solid-js";
 import { pixiChildren, useDiffChildren } from "./usePixiChildren";
-
-export const ApplicationContext = createContext<pxApplication>();
-
-export function useApplication() {
-  return useContext(ApplicationContext);
-}
 export interface ApplicationProps extends Partial<IApplicationOptions> {
   children?: any;
 }

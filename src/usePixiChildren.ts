@@ -23,7 +23,7 @@ export function useDiffChildren<T extends Container = Container>(
     const updates: string[] = [];
     // If it's one child
     if (!Array.isArray(resolved)) {
-      resolved = [children as unknown as DisplayObject];
+      resolved = [resolved as unknown as DisplayObject];
     }
     // If it's multiple
     const childrenByName = resolved.reduce((f, c) => {

@@ -1,54 +1,49 @@
 import {
-  BaseTexture,
-  DisplayObject,
+  AnimatedSprite as pxAnimatedSprite,
   DisplayObjectEvents,
-  IBaseTextureOptions,
-  IPointData,
-  Sprite as pxSprite,
-  SpriteSource,
   Texture,
 } from "pixi.js";
 import { createEffect, JSX, onCleanup, splitProps } from "solid-js";
 import { Events, EventTypes } from "./events";
-import { TextureWithOptions, Transform, Uses } from "./interfaces";
+import { Transform, Uses } from "./interfaces";
 import { pixiChildren, useDiffChildren } from "./usePixiChildren";
-export interface SpriteProps
-  extends Partial<Omit<pxSprite, "texture" | "children" | keyof Transform>>,
+
+export interface AnimatedSpriteProps
+  extends Partial<
+      Omit<pxAnimatedSprite, "texture" | "children" | keyof Transform>
+    >,
     Transform,
     Partial<Events> {
   children?: any;
-  from?: SpriteSource;
-  texture?: TextureWithOptions;
-  textureOptions?: IBaseTextureOptions<any> | undefined;
+  fromFrames?: string[];
+  fromImages?: string[];
+  textures?: Texture[];
   name: string;
-  use?: Uses<pxSprite>;
+  use?: Uses<pxAnimatedSprite>;
 }
 
-export function Sprite(props: SpriteProps): JSX.Element {
-  let sprite: pxSprite;
+export function AnimatedSprite(props: AnimatedSpriteProps): JSX.Element {
+  let sprite: pxAnimatedSprite;
   const [ours, events, pixis] = splitProps(
     props,
-    ["children", "texture", "from", "textureOptions", "name", "use"],
+    ["children", "textures", "fromFrames", "fromImages", "name", "use"],
     EventTypes
   );
 
-  if (!ours.from && !ours.texture) {
-    sprite = new pxSprite(Texture.EMPTY);
+  if (ours.textures) {
+    sprite = new pxAnimatedSprite(ours.textures, props.autoUpdate);
+  } else if (ours.fromFrames) {
+    sprite = pxAnimatedSprite.fromFrames(ours.fromFrames);
+  } else if (ours.fromImages) {
+    sprite = pxAnimatedSprite.fromImages(ours.fromImages);
   } else {
-    sprite =
-      ours.texture && ours.texture[0] instanceof Texture
-        ? new pxSprite(ours.texture[0])
-        : pxSprite.from(props.from!, props.textureOptions);
+    sprite = new pxAnimatedSprite([Texture.EMPTY]);
   }
 
   sprite.name = ours.name;
 
   createEffect(() => {
-    if (ours.texture && ours.texture[0] instanceof BaseTexture)
-      sprite.texture = new Texture(
-        ours.texture[0],
-        ...(ours.texture.slice(1) as any)
-      );
+    if (ours.textures) sprite.textures = ours.textures;
   });
 
   createEffect(() => {
