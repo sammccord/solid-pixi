@@ -5,15 +5,13 @@ import { CommonPropKeys, CommonProps } from "./interfaces";
 import { ParentContext, useParent } from "./ParentContext";
 
 export interface ContainerProps
-  extends Partial<Omit<pxContainer, "children" | "name">>,
+  extends Partial<Omit<pxContainer, "children">>,
     CommonProps<pxContainer>,
     Partial<Events> {}
 
 export function Container(props: ContainerProps): JSX.Element {
   const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes);
   let container = new pxContainer();
-
-  if (ours.key) container.name = ours.key;
 
   createEffect(() => {
     const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
@@ -55,7 +53,7 @@ export function Container(props: ContainerProps): JSX.Element {
   // Add the view to the DOM
   return (
     <ParentContext.Provider value={container}>
-      {props.children}
+      {ours.children}
     </ParentContext.Provider>
   );
 }

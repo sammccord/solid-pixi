@@ -9,7 +9,7 @@ import { Events, EventTypes } from "./events";
 import { CommonPropKeys, CommonProps, Transform } from "./interfaces";
 import { ParentContext, useParent } from "./ParentContext";
 export interface SimplePlaneProps
-  extends Partial<Omit<pxSimplePlane, "children" | "name" | keyof Transform>>,
+  extends Partial<Omit<pxSimplePlane, "children" | keyof Transform>>,
     CommonProps<pxSimplePlane>,
     Transform,
     Partial<Events> {
@@ -30,8 +30,6 @@ export function SimplePlane(props: SimplePlaneProps): JSX.Element {
     ours.verticesX,
     ours.verticesY
   );
-
-  if (ours.key) plane.name = ours.key;
 
   createEffect(() => {
     const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
@@ -63,7 +61,7 @@ export function SimplePlane(props: SimplePlaneProps): JSX.Element {
 
   return (
     <ParentContext.Provider value={plane}>
-      {props.children}
+      {ours.children}
     </ParentContext.Provider>
   );
 }

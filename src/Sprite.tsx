@@ -18,9 +18,7 @@ import {
 import { ParentContext, useParent } from "./ParentContext";
 
 export interface SpriteProps
-  extends Partial<
-      Omit<pxSprite, "texture" | "children" | "name" | keyof Transform>
-    >,
+  extends Partial<Omit<pxSprite, "texture" | "children" | keyof Transform>>,
     CommonProps<pxSprite>,
     Transform,
     Partial<Events> {
@@ -30,6 +28,7 @@ export interface SpriteProps
 }
 
 export function Sprite(props: SpriteProps): JSX.Element {
+  console.log("mounting", props);
   let sprite: pxSprite;
   const [ours, events, pixis] = splitProps(
     props,
@@ -45,8 +44,6 @@ export function Sprite(props: SpriteProps): JSX.Element {
         ? new pxSprite(ours.texture[0])
         : pxSprite.from(props.from!, props.textureOptions);
   }
-
-  if (ours.key) sprite.name = ours.key;
 
   createEffect(() => {
     if (ours.texture && ours.texture[0] instanceof BaseTexture)
@@ -78,13 +75,18 @@ export function Sprite(props: SpriteProps): JSX.Element {
   });
 
   createEffect(() => {
+    let cleanups: (void | (() => void))[] = [];
     if (props.use) {
       if (Array.isArray(props.use)) {
-        props.use.forEach((fn) => fn(sprite));
+        cleanups = props.use.map((fn) => fn(sprite));
       } else {
-        props.use(sprite);
+        cleanups.push(props.use(sprite));
       }
     }
+
+    onCleanup(() =>
+      cleanups.forEach((cleanup) => typeof cleanup === "function" && cleanup())
+    );
   });
 
   const parent = useParent();
@@ -95,7 +97,7 @@ export function Sprite(props: SpriteProps): JSX.Element {
 
   return (
     <ParentContext.Provider value={sprite}>
-      {props.children}
+      {ours.children}
     </ParentContext.Provider>
   );
 }

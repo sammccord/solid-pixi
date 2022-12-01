@@ -18,7 +18,7 @@ import {
 import { ParentContext, useParent } from "./ParentContext";
 export interface TilingSpriteProps
   extends Partial<
-      Omit<pxTilingSprite, "texture" | "children" | "name" | keyof Transform>
+      Omit<pxTilingSprite, "texture" | "children" | keyof Transform>
     >,
     CommonProps<pxTilingSprite>,
     Transform,
@@ -51,8 +51,6 @@ export function TilingSprite(props: TilingSpriteProps): JSX.Element {
             props.textureOptions || { width: 0, height: 0 }
           );
   }
-
-  if (ours.key) sprite.name = ours.key;
 
   createEffect(() => {
     if (ours.texture && ours.texture[0] instanceof BaseTexture)
@@ -102,7 +100,7 @@ export function TilingSprite(props: TilingSpriteProps): JSX.Element {
   // Add the view to the DOM
   return (
     <ParentContext.Provider value={sprite}>
-      {props.children}
+      {ours.children}
     </ParentContext.Provider>
   );
 }

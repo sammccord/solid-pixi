@@ -8,7 +8,7 @@ import { Events, EventTypes } from "./events";
 import { CommonPropKeys, CommonProps, Transform } from "./interfaces";
 import { ParentContext, useParent } from "./ParentContext";
 export interface GraphicsProps
-  extends Partial<Omit<pxGraphics, "children" | "name" | keyof Transform>>,
+  extends Partial<Omit<pxGraphics, "children" | keyof Transform>>,
     CommonProps<pxGraphics>,
     Transform,
     Partial<Events> {
@@ -22,8 +22,6 @@ export function Graphics(props: GraphicsProps): JSX.Element {
     EventTypes
   );
   let graphics: pxGraphics = new pxGraphics(ours.geometry);
-
-  if (ours.key) graphics.name = ours.key;
 
   createEffect(() => {
     const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
@@ -65,7 +63,7 @@ export function Graphics(props: GraphicsProps): JSX.Element {
   // Add the view to the DOM
   return (
     <ParentContext.Provider value={graphics}>
-      {props.children}
+      {ours.children}
     </ParentContext.Provider>
   );
 }

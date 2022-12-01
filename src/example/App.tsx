@@ -9,10 +9,14 @@ import {
 import { Application, Container, Sprite, Text } from "..";
 
 function use(val) {
-  console.log(val.name);
-  // return (t) => {
-  //   console.log(t.name);
-  // };
+  console.log(val);
+  return (sprite) => {
+    console.log(sprite);
+
+    return () => {
+      console.log("cleaning up");
+    };
+  };
 }
 
 function App() {
@@ -36,7 +40,6 @@ function App() {
   return (
     <Application>
       <Text
-        key="kk"
         text={sprites().join(" ")}
         x={50}
         y={10}
@@ -63,13 +66,13 @@ function App() {
       <For each={sprites()}>
         {(id, i) => (
           <Sprite
-            key={id}
+            name={id}
             from="/sprite.png"
             position={i() === 0 ? pos() : { x: 0, y: 0 }}
             interactive={i() % 2 === 0}
             on:click={() => console.log(i())}
             zIndex={i()}
-            use={use}
+            // use={[use(i() % 2 === 0)]}
           />
         )}
       </For>

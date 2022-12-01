@@ -4,9 +4,7 @@ import { Events, EventTypes } from "./events";
 import { CommonPropKeys, CommonProps, Transform } from "./interfaces";
 import { ParentContext, useParent } from "./ParentContext";
 export interface BitmapTextProps
-  extends Partial<
-      Omit<pxBitmapText, "texture" | "children" | "name" | keyof Transform>
-    >,
+  extends Partial<Omit<pxBitmapText, "texture" | "children" | keyof Transform>>,
     CommonProps<pxBitmapText>,
     Transform,
     Partial<Events> {
@@ -23,8 +21,6 @@ export function BitmapText(props: BitmapTextProps): JSX.Element {
     letterSpacing: pixis.letterSpacing,
     maxWidth: pixis.maxWidth,
   });
-
-  if (ours.key) text.name = ours.key;
 
   createEffect(() => {
     const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
@@ -66,7 +62,7 @@ export function BitmapText(props: BitmapTextProps): JSX.Element {
   // Add the view to the DOM
   return (
     <ParentContext.Provider value={text}>
-      {props.children}
+      {ours.children}
     </ParentContext.Provider>
   );
 }

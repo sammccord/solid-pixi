@@ -43,18 +43,16 @@ export const TransformKeys: (keyof Transform)[] = [
   "pivot",
 ];
 
-export type Use<T> = (t: T) => void | Promise<void>;
+export type Use<T> = (t: T) => void | (() => void);
 
 export type Uses<T> = Use<T> | Use<T>[];
 
 export interface CommonProps<T> {
   children?: any;
-  key?: string;
   use?: Uses<T>;
 }
 
 export const CommonPropKeys: (keyof CommonProps<DisplayObject>)[] = [
   "children",
-  "key",
   "use",
 ];

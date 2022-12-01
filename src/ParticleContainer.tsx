@@ -9,9 +9,7 @@ import { CommonPropKeys, CommonProps, Transform } from "./interfaces";
 import { ParentContext, useParent } from "./ParentContext";
 
 export interface ParticleContainerProps
-  extends Partial<
-      Omit<pxParticleContainer, "children" | "name" | keyof Transform>
-    >,
+  extends Partial<Omit<pxParticleContainer, "children" | keyof Transform>>,
     CommonProps<pxParticleContainer>,
     Transform,
     Partial<Events> {
@@ -33,8 +31,6 @@ export function ParticleContainer(props: ParticleContainerProps): JSX.Element {
     ours.batchSize,
     pixis.autoResize
   );
-
-  if (ours.key) particleContainer.name = ours.key;
 
   createEffect(() => {
     if (ours.properties) particleContainer.setProperties(ours.properties);
@@ -80,7 +76,7 @@ export function ParticleContainer(props: ParticleContainerProps): JSX.Element {
   // Add the view to the DOM
   return (
     <ParentContext.Provider value={particleContainer}>
-      {props.children}
+      {ours.children}
     </ParentContext.Provider>
   );
 }

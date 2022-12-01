@@ -4,20 +4,14 @@ import { Events, EventTypes } from "./events";
 import { CommonPropKeys, CommonProps, Transform } from "./interfaces";
 import { ParentContext, useParent } from "./ParentContext";
 export interface TextProps
-  extends Partial<Omit<pxText, "children" | "name" | keyof Transform>>,
+  extends Partial<Omit<pxText, "children" | keyof Transform>>,
     CommonProps<pxText>,
     Transform,
     Partial<Events> {}
 
 export function Text(props: TextProps): JSX.Element {
-  const [ours, events, pixis] = splitProps(
-    props,
-    [...CommonPropKeys],
-    EventTypes
-  );
+  const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes);
   let text = new pxText(pixis.text, pixis.style, pixis.canvas);
-
-  if (ours.key) text.name = ours.key;
 
   createEffect(() => {
     const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
@@ -59,7 +53,7 @@ export function Text(props: TextProps): JSX.Element {
   // Add the view to the DOM
   return (
     <ParentContext.Provider value={text}>
-      {props.children}
+      {ours.children}
     </ParentContext.Provider>
   );
 }

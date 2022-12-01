@@ -10,7 +10,7 @@ import { ParentContext, useParent } from "./ParentContext";
 
 export interface AnimatedSpriteProps
   extends Partial<
-      Omit<pxAnimatedSprite, "texture" | "children" | "name" | keyof Transform>
+      Omit<pxAnimatedSprite, "texture" | "children" | keyof Transform>
     >,
     CommonProps<pxAnimatedSprite>,
     Transform,
@@ -37,8 +37,6 @@ export function AnimatedSprite(props: AnimatedSpriteProps): JSX.Element {
     sprite = new pxAnimatedSprite([Texture.EMPTY]);
   }
 
-  if (ours.key) sprite.name = ours.key;
-
   createEffect(() => {
     const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
       events
@@ -61,13 +59,18 @@ export function AnimatedSprite(props: AnimatedSpriteProps): JSX.Element {
   });
 
   createEffect(() => {
+    let cleanups: (void | (() => void))[] = [];
     if (props.use) {
       if (Array.isArray(props.use)) {
-        props.use.forEach((fn) => fn(sprite));
+        cleanups = props.use.map((fn) => fn(sprite));
       } else {
-        props.use(sprite);
+        cleanups.push(props.use(sprite));
       }
     }
+
+    onCleanup(() =>
+      cleanups.forEach((cleanup) => typeof cleanup === "function" && cleanup())
+    );
   });
 
   const parent = useParent();
@@ -79,7 +82,7 @@ export function AnimatedSprite(props: AnimatedSpriteProps): JSX.Element {
   // Add the view to the DOM
   return (
     <ParentContext.Provider value={sprite}>
-      {props.children}
+      {ours.children}
     </ParentContext.Provider>
   );
 }

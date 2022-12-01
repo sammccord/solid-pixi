@@ -10,7 +10,7 @@ import { Events, EventTypes } from "./events";
 import { CommonPropKeys, CommonProps, Transform } from "./interfaces";
 import { ParentContext, useParent } from "./ParentContext";
 export interface SimpleRopeProps
-  extends Partial<Omit<pxSimpleRope, "children" | "name" | keyof Transform>>,
+  extends Partial<Omit<pxSimpleRope, "children" | keyof Transform>>,
     CommonProps<pxSimpleRope>,
     Transform,
     Partial<Events> {
@@ -27,8 +27,6 @@ export function SimpleRope(props: SimpleRopeProps): JSX.Element {
     pixis.points,
     pixis.textureScale
   );
-
-  if (ours.key) rope.name = ours.key;
 
   createEffect(() => {
     const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
@@ -70,7 +68,7 @@ export function SimpleRope(props: SimpleRopeProps): JSX.Element {
 
   return (
     <ParentContext.Provider value={rope}>
-      {props.children}
+      {ours.children}
     </ParentContext.Provider>
   );
 }

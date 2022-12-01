@@ -9,9 +9,7 @@ import { Events, EventTypes } from "./events";
 import { CommonPropKeys, CommonProps, Transform } from "./interfaces";
 import { ParentContext, useParent } from "./ParentContext";
 export interface NineSlicePlaneProps
-  extends Partial<
-      Omit<pxNineSlicePlane, "children" | "name" | keyof Transform>
-    >,
+  extends Partial<Omit<pxNineSlicePlane, "children" | keyof Transform>>,
     CommonProps<pxNineSlicePlane>,
     Transform,
     Partial<Events> {
@@ -28,8 +26,6 @@ export function NineSlicePlane(props: NineSlicePlaneProps): JSX.Element {
     pixis.rightWidth,
     pixis.bottomHeight
   );
-
-  if (ours.key) plane.name = ours.key;
 
   createEffect(() => {
     const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
@@ -61,7 +57,7 @@ export function NineSlicePlane(props: NineSlicePlaneProps): JSX.Element {
   // Add the view to the DOM
   return (
     <ParentContext.Provider value={plane}>
-      {props.children}
+      {ours.children}
     </ParentContext.Provider>
   );
 }

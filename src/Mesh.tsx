@@ -9,7 +9,7 @@ import { Events, EventTypes } from "./events";
 import { CommonPropKeys, CommonProps, Transform } from "./interfaces";
 import { ParentContext, useParent } from "./ParentContext";
 export interface MeshProps
-  extends Partial<Omit<pxMesh, "children" | "name" | keyof Transform>>,
+  extends Partial<Omit<pxMesh, "children" | keyof Transform>>,
     CommonProps<pxMesh>,
     Transform,
     Partial<Events> {
@@ -26,8 +26,6 @@ export function Mesh(props: MeshProps): JSX.Element {
     pixis.state,
     pixis.drawMode
   );
-
-  if (ours.key) mesh.name = ours.key;
 
   createEffect(() => {
     const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
@@ -69,7 +67,7 @@ export function Mesh(props: MeshProps): JSX.Element {
   // Add the view to the DOM
   return (
     <ParentContext.Provider value={mesh}>
-      {props.children}
+      {ours.children}
     </ParentContext.Provider>
   );
 }
