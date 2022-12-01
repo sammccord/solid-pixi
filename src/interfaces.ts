@@ -1,5 +1,7 @@
 import {
   BaseTexture,
+  Container,
+  DisplayObject,
   IAutoDetectOptions,
   IPointData,
   Rectangle,
@@ -44,3 +46,15 @@ export const TransformKeys: (keyof Transform)[] = [
 export type Use<T> = (t: T) => void | Promise<void>;
 
 export type Uses<T> = Use<T> | Use<T>[];
+
+export interface CommonProps<T> {
+  children?: any;
+  key?: string;
+  use?: Uses<T>;
+}
+
+export const CommonPropKeys: (keyof CommonProps<DisplayObject>)[] = [
+  "children",
+  "key",
+  "use",
+];

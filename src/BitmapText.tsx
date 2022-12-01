@@ -1,24 +1,20 @@
 import { BitmapText as pxBitmapText, DisplayObjectEvents } from "pixi.js";
 import { createEffect, JSX, onCleanup, splitProps } from "solid-js";
 import { Events, EventTypes } from "./events";
-import { Transform, Uses } from "./interfaces";
-import { pixiChildren, useDiffChildren } from "./usePixiChildren";
+import { CommonPropKeys, CommonProps, Transform } from "./interfaces";
+import { ParentContext, useParent } from "./ParentContext";
 export interface BitmapTextProps
-  extends Partial<Omit<pxBitmapText, "texture" | "children" | keyof Transform>>,
+  extends Partial<
+      Omit<pxBitmapText, "texture" | "children" | "name" | keyof Transform>
+    >,
+    CommonProps<pxBitmapText>,
     Transform,
     Partial<Events> {
-  children?: any;
-  name: string;
-  use?: Uses<pxBitmapText>;
   text: string;
 }
 
 export function BitmapText(props: BitmapTextProps): JSX.Element {
-  const [ours, events, pixis] = splitProps(
-    props,
-    ["children", "name", "use"],
-    EventTypes
-  );
+  const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes);
   let text: pxBitmapText = new pxBitmapText(props.text, {
     fontName: pixis.fontName,
     fontSize: pixis.fontSize,
@@ -28,7 +24,7 @@ export function BitmapText(props: BitmapTextProps): JSX.Element {
     maxWidth: pixis.maxWidth,
   });
 
-  text.name = ours.name;
+  if (ours.key) text.name = ours.key;
 
   createEffect(() => {
     const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
@@ -51,12 +47,6 @@ export function BitmapText(props: BitmapTextProps): JSX.Element {
     }
   });
 
-  const [, update] = useDiffChildren(text);
-  const resolved = pixiChildren(ours.children);
-  createEffect(() => {
-    update(resolved());
-  });
-
   createEffect(() => {
     if (props.use) {
       if (Array.isArray(props.use)) {
@@ -67,6 +57,16 @@ export function BitmapText(props: BitmapTextProps): JSX.Element {
     }
   });
 
+  const parent = useParent();
+  parent?.addChild(text);
+  onCleanup(() => {
+    parent?.removeChild(text);
+  });
+
   // Add the view to the DOM
-  return text as unknown as JSX.Element;
+  return (
+    <ParentContext.Provider value={text}>
+      {props.children}
+    </ParentContext.Provider>
+  );
 }

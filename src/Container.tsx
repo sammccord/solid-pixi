@@ -1,31 +1,19 @@
-import {
-  Container,
-  Container as pxContainer,
-  DisplayObjectEvents,
-  IPointData,
-} from "pixi.js";
+import { Container as pxContainer, DisplayObjectEvents } from "pixi.js";
 import { createEffect, JSX, onCleanup, splitProps } from "solid-js";
 import { Events, EventTypes } from "./events";
-import { Uses } from "./interfaces";
-import { pixiChildren, useDiffChildren } from "./usePixiChildren";
+import { CommonPropKeys, CommonProps } from "./interfaces";
+import { ParentContext, useParent } from "./ParentContext";
 
 export interface ContainerProps
-  extends Partial<Omit<pxContainer, "children">>,
-    Partial<Events> {
-  children?: any;
-  name: string;
-  use: Uses<pxContainer>;
-}
+  extends Partial<Omit<pxContainer, "children" | "name">>,
+    CommonProps<pxContainer>,
+    Partial<Events> {}
 
-export function Sprite(props: ContainerProps): JSX.Element {
-  const [ours, events, pixis] = splitProps(
-    props,
-    ["children", "name", "use"],
-    EventTypes
-  );
-  let container = new Container();
+export function Container(props: ContainerProps): JSX.Element {
+  const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes);
+  let container = new pxContainer();
 
-  container.name = ours.name;
+  if (ours.key) container.name = ours.key;
 
   createEffect(() => {
     const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
@@ -48,12 +36,6 @@ export function Sprite(props: ContainerProps): JSX.Element {
     }
   });
 
-  const [, update] = useDiffChildren(container);
-  const resolved = pixiChildren(ours.children);
-  createEffect(() => {
-    update(resolved());
-  });
-
   createEffect(() => {
     if (props.use) {
       if (Array.isArray(props.use)) {
@@ -63,6 +45,17 @@ export function Sprite(props: ContainerProps): JSX.Element {
       }
     }
   });
+
+  const parent = useParent();
+  parent?.addChild(container);
+  onCleanup(() => {
+    parent?.removeChild(container);
+  });
+
   // Add the view to the DOM
-  return container as unknown as JSX.Element;
+  return (
+    <ParentContext.Provider value={container}>
+      {props.children}
+    </ParentContext.Provider>
+  );
 }

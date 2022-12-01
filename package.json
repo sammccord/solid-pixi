@@ -26,7 +26,6 @@
     "vite-plugin-solid": "^2.2.6"
   },
   "dependencies": {
-    "lodash.difference": "^4.5.0",
     "pixi.js": "^7.0.4",
     "solid-js": "^1.6.2"
   }

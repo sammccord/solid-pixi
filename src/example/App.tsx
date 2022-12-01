@@ -1,4 +1,4 @@
-import { IPointData, Rectangle, Transform } from "pixi.js";
+import { IPointData, TextStyle } from "pixi.js";
 import {
   createSignal,
   createUniqueId,
@@ -6,8 +6,7 @@ import {
   onCleanup,
   onMount,
 } from "solid-js";
-import { Application, Sprite } from "..";
-import Cool from "./Cool";
+import { Application, Container, Sprite, Text } from "..";
 
 function use(val) {
   console.log(val.name);
@@ -36,11 +35,35 @@ function App() {
 
   return (
     <Application>
-      <Cool />
-      {/* <For each={sprites()}>
+      <Text
+        key="kk"
+        text={sprites().join(" ")}
+        x={50}
+        y={10}
+        style={
+          new TextStyle({
+            fontFamily: "Arial",
+            fontSize: 36,
+            fontStyle: "italic",
+            fontWeight: "bold",
+            fill: ["#ffffff", "#00ff99"], // gradient
+            stroke: "#4a1850",
+            strokeThickness: 5,
+            dropShadow: true,
+            dropShadowColor: "#000000",
+            dropShadowBlur: 4,
+            dropShadowAngle: Math.PI / 6,
+            dropShadowDistance: 6,
+            wordWrap: true,
+            wordWrapWidth: 440,
+            lineJoin: "round",
+          })
+        }
+      />
+      <For each={sprites()}>
         {(id, i) => (
           <Sprite
-            name={id}
+            key={id}
             from="/sprite.png"
             position={i() === 0 ? pos() : { x: 0, y: 0 }}
             interactive={i() % 2 === 0}
@@ -49,7 +72,7 @@ function App() {
             use={use}
           />
         )}
-      </For> */}
+      </For>
     </Application>
   );
 }

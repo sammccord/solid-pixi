@@ -1,34 +1,39 @@
 import {
   BaseTexture,
-  DisplayObject,
   DisplayObjectEvents,
   IBaseTextureOptions,
-  IPointData,
   Sprite as pxSprite,
   SpriteSource,
   Texture,
 } from "pixi.js";
 import { createEffect, JSX, onCleanup, splitProps } from "solid-js";
 import { Events, EventTypes } from "./events";
-import { TextureWithOptions, Transform, Uses } from "./interfaces";
-import { pixiChildren, useDiffChildren } from "./usePixiChildren";
+import {
+  CommonPropKeys,
+  CommonProps,
+  TextureWithOptions,
+  Transform,
+  Uses,
+} from "./interfaces";
+import { ParentContext, useParent } from "./ParentContext";
+
 export interface SpriteProps
-  extends Partial<Omit<pxSprite, "texture" | "children" | keyof Transform>>,
+  extends Partial<
+      Omit<pxSprite, "texture" | "children" | "name" | keyof Transform>
+    >,
+    CommonProps<pxSprite>,
     Transform,
     Partial<Events> {
-  children?: any;
   from?: SpriteSource;
   texture?: TextureWithOptions;
   textureOptions?: IBaseTextureOptions<any> | undefined;
-  name: string;
-  use?: Uses<pxSprite>;
 }
 
 export function Sprite(props: SpriteProps): JSX.Element {
   let sprite: pxSprite;
   const [ours, events, pixis] = splitProps(
     props,
-    ["children", "texture", "from", "textureOptions", "name", "use"],
+    [...CommonPropKeys, "texture", "from", "textureOptions"],
     EventTypes
   );
 
@@ -41,7 +46,7 @@ export function Sprite(props: SpriteProps): JSX.Element {
         : pxSprite.from(props.from!, props.textureOptions);
   }
 
-  sprite.name = ours.name;
+  if (ours.key) sprite.name = ours.key;
 
   createEffect(() => {
     if (ours.texture && ours.texture[0] instanceof BaseTexture)
@@ -72,12 +77,6 @@ export function Sprite(props: SpriteProps): JSX.Element {
     }
   });
 
-  const [, update] = useDiffChildren(sprite);
-  const resolved = pixiChildren(ours.children);
-  createEffect(() => {
-    update(resolved());
-  });
-
   createEffect(() => {
     if (props.use) {
       if (Array.isArray(props.use)) {
@@ -88,6 +87,15 @@ export function Sprite(props: SpriteProps): JSX.Element {
     }
   });
 
-  // Add the view to the DOM
-  return sprite as unknown as JSX.Element;
+  const parent = useParent();
+  parent?.addChild(sprite);
+  onCleanup(() => {
+    parent?.removeChild(sprite);
+  });
+
+  return (
+    <ParentContext.Provider value={sprite}>
+      {props.children}
+    </ParentContext.Provider>
+  );
 }

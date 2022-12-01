@@ -1,25 +1,25 @@
 import { Application as pxApplication, IApplicationOptions } from "pixi.js";
-import {
-  createContext,
-  createEffect,
-  JSX,
-  splitProps,
-  useContext,
-} from "solid-js";
-import { pixiChildren, useDiffChildren } from "./usePixiChildren";
+import { createContext, splitProps, useContext } from "solid-js";
+import { ParentContext } from "./ParentContext";
+
+export const AppContext = createContext<pxApplication>();
+export const useApp = () => useContext(AppContext);
+
 export interface ApplicationProps extends Partial<IApplicationOptions> {
   children?: any;
 }
 
 export function Application(props: ApplicationProps) {
   const [ours, pixis] = splitProps(props, ["children"]);
+
   const app = new pxApplication(pixis);
 
-  const [, update] = useDiffChildren(app.stage);
-  const resolved = pixiChildren(ours.children);
-  createEffect(() => {
-    update(resolved());
-  });
-
-  return app.view as unknown as JSX.Element;
+  return (
+    <AppContext.Provider value={app}>
+      <ParentContext.Provider value={app.stage}>
+        {app && ours.children}
+      </ParentContext.Provider>
+      {app.view}
+    </AppContext.Provider>
+  );
 }

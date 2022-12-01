@@ -5,33 +5,30 @@ import {
 } from "pixi.js";
 import { createEffect, JSX, onCleanup, splitProps } from "solid-js";
 import { Events, EventTypes } from "./events";
-import { Transform, Uses } from "./interfaces";
-import { pixiChildren, useDiffChildren } from "./usePixiChildren";
+import { CommonPropKeys, CommonProps, Transform } from "./interfaces";
+import { ParentContext, useParent } from "./ParentContext";
 
 export interface AnimatedSpriteProps
   extends Partial<
-      Omit<pxAnimatedSprite, "texture" | "children" | keyof Transform>
+      Omit<pxAnimatedSprite, "texture" | "children" | "name" | keyof Transform>
     >,
+    CommonProps<pxAnimatedSprite>,
     Transform,
     Partial<Events> {
-  children?: any;
   fromFrames?: string[];
   fromImages?: string[];
-  textures?: Texture[];
-  name: string;
-  use?: Uses<pxAnimatedSprite>;
 }
 
 export function AnimatedSprite(props: AnimatedSpriteProps): JSX.Element {
   let sprite: pxAnimatedSprite;
   const [ours, events, pixis] = splitProps(
     props,
-    ["children", "textures", "fromFrames", "fromImages", "name", "use"],
+    [...CommonPropKeys, "fromFrames", "fromImages"],
     EventTypes
   );
 
-  if (ours.textures) {
-    sprite = new pxAnimatedSprite(ours.textures, props.autoUpdate);
+  if (pixis.textures) {
+    sprite = new pxAnimatedSprite(pixis.textures, props.autoUpdate);
   } else if (ours.fromFrames) {
     sprite = pxAnimatedSprite.fromFrames(ours.fromFrames);
   } else if (ours.fromImages) {
@@ -40,11 +37,7 @@ export function AnimatedSprite(props: AnimatedSpriteProps): JSX.Element {
     sprite = new pxAnimatedSprite([Texture.EMPTY]);
   }
 
-  sprite.name = ours.name;
-
-  createEffect(() => {
-    if (ours.textures) sprite.textures = ours.textures;
-  });
+  if (ours.key) sprite.name = ours.key;
 
   createEffect(() => {
     const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
@@ -67,12 +60,6 @@ export function AnimatedSprite(props: AnimatedSpriteProps): JSX.Element {
     }
   });
 
-  const [, update] = useDiffChildren(sprite);
-  const resolved = pixiChildren(ours.children);
-  createEffect(() => {
-    update(resolved());
-  });
-
   createEffect(() => {
     if (props.use) {
       if (Array.isArray(props.use)) {
@@ -83,6 +70,16 @@ export function AnimatedSprite(props: AnimatedSpriteProps): JSX.Element {
     }
   });
 
+  const parent = useParent();
+  parent?.addChild(sprite);
+  onCleanup(() => {
+    parent?.removeChild(sprite);
+  });
+
   // Add the view to the DOM
-  return sprite as unknown as JSX.Element;
+  return (
+    <ParentContext.Provider value={sprite}>
+      {props.children}
+    </ParentContext.Provider>
+  );
 }
