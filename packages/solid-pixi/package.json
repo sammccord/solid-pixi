@@ -12,18 +12,22 @@
   },
   "homepage": "https://github.com/sammccord/solid-pixi#readme",
   "license": "MIT",
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "test": "turbo run test"
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/solid-pixi.umd.js",
+  "module": "./dist/solid-pixi.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/solid-pixi.mjs",
+      "require": "./dist/solid-pixi.umd.js"
+    }
   },
-  "devDependencies": {
-    "jsdom": "^20.0.3",
-    "solid-testing-library": "^0.5.0",
-    "turbo": "^1.6.3",
-    "typescript": "^4.6.3",
-    "vite": "^3.2.3",
-    "vite-plugin-solid": "^2.2.6",
-    "vitest": "^0.25.3"
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "pixi.js": "^7.0.0",
+    "solid-js": "^1.0.0"
   }
 }

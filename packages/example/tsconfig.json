@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "references": [
+    {
+      "path": "../solid-pixi"
+    }
+  ],
+  "include": ["src", "src/pages/Container.tsx"],
+  "exclude": ["dist", "node_modules"]
+}

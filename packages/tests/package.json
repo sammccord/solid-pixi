@@ -1,0 +1,9 @@
+{
+  "name": "tests",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "test": "vitest"
+  },
+  "license": "MIT"
+}
