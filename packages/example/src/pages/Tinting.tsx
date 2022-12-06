@@ -1,5 +1,5 @@
-import { ObservablePoint, Rectangle, Texture, Ticker } from "pixi.js";
-import { createEffect, createSignal, For } from "solid-js";
+import { ObservablePoint, Rectangle, Texture } from "pixi.js";
+import { For } from "solid-js";
 import { Application, ExtendedSprite, Sprite, useApp } from "solid-pixi";
 
 const texture = Texture.from("/eggHead.png");

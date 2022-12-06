@@ -1,3 +1,4 @@
+export * from "./Asset";
 export * from "./AnimatedSprite";
 export * from "./Application";
 export * from "./BitmapText";
