@@ -15,7 +15,9 @@ export default function App() {
         <h1>Solid PIXI</h1>
         <p>WIP Custom Renderer for PIXI.js</p>
         <nav>
-          <a href="">Docs</a>
+          <a href="https://solid-pixi-docs.netlify.app/" target="_blank">
+            Docs
+          </a>
         </nav>
       </header>
       <aside>
