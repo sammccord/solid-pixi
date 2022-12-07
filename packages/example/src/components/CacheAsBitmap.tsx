@@ -1,6 +1,4 @@
-import CacheAsBitmapExample from "../components/CacheAsBitmap";
-
-const sampleCode = `import { Assets, IPointData, ObservablePoint, Ticker } from "pixi.js";
+import { Assets, IPointData, ObservablePoint, Ticker } from "pixi.js";
 import { createEffect, createSignal, For, onMount } from "solid-js";
 import { Application, Container, Sprite, useApp, useParent } from "solid-pixi";
 
@@ -12,21 +10,6 @@ const alienFrames = [
   "skully.png",
 ];
 let count = 0;
-
-export default function CacheAsBitmap() {
-  return (
-    <Application
-      use={(app) => {
-        app.stage.interactive = true;
-        app.stop();
-      }}
-    >
-      <Container x={400} y={300}>
-        <Aliens />
-      </Container>
-    </Application>
-  );
-}
 
 function Aliens() {
   const [aliens, setAliens] = createSignal<
@@ -95,15 +78,17 @@ function Aliens() {
   );
 }
 
-`;
-
-export default function CacheAsBitmapPage() {
+export default function CacheAsBitmap() {
   return (
-    <div>
-      <CacheAsBitmapExample />
-      <pre>
-        <code class="language-tsx">{sampleCode}</code>
-      </pre>
-    </div>
+    <Application
+      use={(app) => {
+        app.stage.interactive = true;
+        app.stop();
+      }}
+    >
+      <Container x={400} y={300}>
+        <Aliens />
+      </Container>
+    </Application>
   );
 }

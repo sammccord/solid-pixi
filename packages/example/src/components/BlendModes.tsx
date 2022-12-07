@@ -1,6 +1,4 @@
-import BlendModesExample from "../components/BlendModes";
-
-const sampleCode = `import { BLEND_MODES, ObservablePoint, Rectangle, Texture } from "pixi.js";
+import { BLEND_MODES, ObservablePoint, Rectangle, Texture } from "pixi.js";
 import { For } from "solid-js";
 import {
   Application,
@@ -100,17 +98,5 @@ export default function BlendModes() {
         <Dudes />
       </Container>
     </Application>
-  );
-}
-`;
-
-export default function BlendModesPage() {
-  return (
-    <div>
-      <BlendModesExample />
-      <pre>
-        <code class="language-tsx">{sampleCode}</code>
-      </pre>
-    </div>
   );
 }

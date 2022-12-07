@@ -1,6 +1,4 @@
-import ContainerExample from "../components/Container";
-
-const sampleCode = `import { ObservablePoint, Texture } from "pixi.js";
+import { ObservablePoint, Texture } from "pixi.js";
 import { For } from "solid-js";
 import {
   Application,
@@ -54,17 +52,5 @@ function RotatingHalvedContainer(props: ContainerProps) {
     >
       {props.children}
     </Container>
-  );
-}
-`;
-
-export default function ContainerPage() {
-  return (
-    <div>
-      <ContainerExample />
-      <pre>
-        <code class="language-tsx">{sampleCode}</code>
-      </pre>
-    </div>
   );
 }

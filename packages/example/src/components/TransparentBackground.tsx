@@ -1,6 +1,4 @@
-import TransparentBackgroundExample from "../components/TransparentBackground";
-
-const sampleCode = `import { ObservablePoint, Texture } from "pixi.js";
+import { ObservablePoint, Texture } from "pixi.js";
 import { Application, Sprite, useApp } from "solid-pixi";
 
 const texture = Texture.from("/bunny.png");
@@ -27,18 +25,5 @@ export default function TransparentBackground() {
     <Application backgroundAlpha={0}>
       <Bunny />
     </Application>
-  );
-}
-
-`;
-
-export default function TransparentBackgroundPage() {
-  return (
-    <div>
-      <TransparentBackgroundExample />
-      <pre>
-        <code class="language-tsx">{sampleCode}</code>
-      </pre>
-    </div>
   );
 }

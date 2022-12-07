@@ -1,19 +1,9 @@
-import TintingExample from "../components/Tinting";
-
-const sampleCode = `import { ObservablePoint, Rectangle, Texture } from "pixi.js";
+import { ObservablePoint, Rectangle, Texture } from "pixi.js";
 import { For } from "solid-js";
 import { Application, ExtendedSprite, Sprite, useApp } from "solid-pixi";
 
 const texture = Texture.from("/eggHead.png");
 texture.defaultAnchor = { x: 0.5, y: 0.5 } as ObservablePoint;
-
-export default function Tinting() {
-  return (
-    <Application>
-      <Dudes />
-    </Application>
-  );
-}
 
 function Dudes() {
   const app = useApp();
@@ -84,15 +74,10 @@ function Dudes() {
   );
 }
 
-`;
-
-export default function TintingPage() {
+export default function Tinting() {
   return (
-    <div>
-      <TintingExample />
-      <pre>
-        <code class="language-tsx">{sampleCode}</code>
-      </pre>
-    </div>
+    <Application>
+      <Dudes />
+    </Application>
   );
 }

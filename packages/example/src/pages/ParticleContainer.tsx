@@ -1,4 +1,6 @@
-import { ObservablePoint, Rectangle, Renderer, Texture } from "pixi.js";
+import ParticleContainerExample from "../components/ParticleContainer";
+
+const sampleCode = `import { ObservablePoint, Rectangle, Renderer, Texture } from "pixi.js";
 import { For } from "solid-js";
 import {
   Application,
@@ -18,6 +20,25 @@ type Maggot = {
   speed: number;
   offset: number;
 };
+
+export default function ParticleContainerPage() {
+  return (
+    <Application>
+      <ParticleContainer
+        maxSize={10000}
+        properties={{
+          scale: true,
+          position: true,
+          rotation: true,
+          uvs: true,
+          alpha: true,
+        }}
+      >
+        <Maggots />
+      </ParticleContainer>
+    </Application>
+  );
+}
 
 function Maggots() {
   const app = useApp();
@@ -81,21 +102,15 @@ function Maggots() {
   );
 }
 
+`;
+
 export default function ParticleContainerPage() {
   return (
-    <Application>
-      <ParticleContainer
-        maxSize={10000}
-        properties={{
-          scale: true,
-          position: true,
-          rotation: true,
-          uvs: true,
-          alpha: true,
-        }}
-      >
-        <Maggots />
-      </ParticleContainer>
-    </Application>
+    <div>
+      <ParticleContainerExample />
+      <pre>
+        <code class="language-tsx">{sampleCode}</code>
+      </pre>
+    </div>
   );
 }

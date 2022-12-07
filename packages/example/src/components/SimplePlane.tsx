@@ -1,14 +1,4 @@
-import SimplePlaneExample from "../components/SimplePlane";
-
-const sampleCode = `import { Application, Asset, SimplePlane, useApp } from "solid-pixi";
-
-export default function SimplePlanePage() {
-  return (
-    <Application background="#1099bb">
-      <Grass />
-    </Application>
-  );
-}
+import { Application, Asset, SimplePlane, useApp } from "solid-pixi";
 
 function Grass() {
   const app = useApp();
@@ -41,15 +31,10 @@ function Grass() {
   );
 }
 
-`;
-
 export default function SimplePlanePage() {
   return (
-    <div>
-      <SimplePlaneExample />
-      <pre>
-        <code class="language-tsx">{sampleCode}</code>
-      </pre>
-    </div>
+    <Application background="#1099bb">
+      <Grass />
+    </Application>
   );
 }

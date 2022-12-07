@@ -1,31 +1,28 @@
-import BlendModesExample from "../components/BlendModes";
-
-const sampleCode = `import { BLEND_MODES, ObservablePoint, Rectangle, Texture } from "pixi.js";
+import { ObservablePoint, Rectangle, Renderer, Texture } from "pixi.js";
 import { For } from "solid-js";
 import {
   Application,
-  Container,
   ExtendedSprite,
+  ParticleContainer,
   Sprite,
   useApp,
   useParent,
 } from "solid-pixi";
 
-const background = Texture.from("/bg_rotate.jpg");
+const texture = Texture.from("/maggot_tiny.png");
+texture.defaultAnchor = { x: 0.5, y: 0.5 } as ObservablePoint;
 
-const dude = Texture.from("/flowerTop.png");
-dude.defaultAnchor = { x: 0.5, y: 0.5 } as ObservablePoint;
-
-type Dude = {
+type Maggot = {
   direction: number;
   turningSpeed: number;
   speed: number;
   offset: number;
 };
 
-function Dudes() {
+function Maggots() {
   const app = useApp();
-  const parent = useParent();
+  const container = useParent();
+  const totalSprites = app?.renderer instanceof Renderer ? 10000 : 100;
 
   const dudeBoundsPadding = 100;
   const dudeBounds = new Rectangle(
@@ -35,15 +32,17 @@ function Dudes() {
     app!.screen.height + dudeBoundsPadding * 2
   );
 
+  let tick = 0;
   app?.ticker.add(() => {
-    for (let i = 0; i < parent.children.length; i++) {
-      const dude = parent.children[i] as ExtendedSprite<Dude>;
+    for (let i = 0; i < container.children.length; i++) {
+      const dude = container.children[i] as ExtendedSprite<Maggot>;
+      dude.scale.y = 0.95 + Math.sin(tick + dude.offset) * 0.05;
       dude.direction += dude.turningSpeed * 0.01;
-      dude.x += Math.sin(dude.direction) * dude.speed;
-      dude.y += Math.cos(dude.direction) * dude.speed;
-      dude.rotation = -dude.direction - Math.PI / 2;
+      dude.x += Math.sin(dude.direction) * (dude.speed * dude.scale.y);
+      dude.y += Math.cos(dude.direction) * (dude.speed * dude.scale.y);
+      dude.rotation = -dude.direction + Math.PI;
 
-      // wrap the dudes by testing their bounds...
+      // wrap the maggots
       if (dude.x < dudeBounds.x) {
         dude.x += dudeBounds.width;
       } else if (dude.x > dudeBounds.x + dudeBounds.width) {
@@ -56,16 +55,17 @@ function Dudes() {
         dude.y -= dudeBounds.height;
       }
     }
+
+    tick += 0.1;
   });
 
   return (
-    <For each={Array.from({ length: 20 })}>
+    <For each={Array.from({ length: totalSprites })}>
       {() => {
         const scale = 0.8 + Math.random() * 0.3;
         return (
-          <Sprite<Dude>
-            texture={[dude]}
-            blendMode={BLEND_MODES.ADD}
+          <Sprite<Maggot>
+            texture={[texture]}
             scale={{ x: scale, y: scale }}
             x={Math.random() * app!.screen.width}
             y={Math.random() * app!.screen.height}
@@ -81,36 +81,21 @@ function Dudes() {
   );
 }
 
-function Background() {
-  const app = useApp();
-  return (
-    <Sprite
-      texture={[background]}
-      width={app?.screen.width}
-      height={app?.screen.height}
-    />
-  );
-}
-
-export default function BlendModes() {
+export default function ParticleContainerPage() {
   return (
     <Application>
-      <Background />
-      <Container>
-        <Dudes />
-      </Container>
+      <ParticleContainer
+        maxSize={10000}
+        properties={{
+          scale: true,
+          position: true,
+          rotation: true,
+          uvs: true,
+          alpha: true,
+        }}
+      >
+        <Maggots />
+      </ParticleContainer>
     </Application>
-  );
-}
-`;
-
-export default function BlendModesPage() {
-  return (
-    <div>
-      <BlendModesExample />
-      <pre>
-        <code class="language-tsx">{sampleCode}</code>
-      </pre>
-    </div>
   );
 }
