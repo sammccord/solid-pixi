@@ -1,3 +1,0 @@
-{
-  "redirects": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
-}
