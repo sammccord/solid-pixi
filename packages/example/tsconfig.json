@@ -8,6 +8,6 @@
       "path": "../solid-pixi"
     }
   ],
-  "include": ["src", "src/pages/Container.tsx"],
+  "include": ["src"],
   "exclude": ["dist", "node_modules"]
 }

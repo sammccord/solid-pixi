@@ -47,10 +47,17 @@ importers:
       solid-js: ^1.0.0
     dependencies:
       pixi.js: 7.0.4
-      solid-js: 1.6.2
+      solid-js: 1.6.3
 
   packages/tests:
-    specifiers: {}
+    specifiers:
+      pixi.js: ^7.0.4
+      solid-js: ^1.6.3
+      solid-pixi: workspace:*
+    dependencies:
+      pixi.js: 7.0.4
+      solid-js: 1.6.3
+      solid-pixi: link:../solid-pixi
 
 packages:
 
@@ -1790,6 +1797,12 @@ packages:
     resolution: {integrity: sha512-AZBsj+Yn1xliniTTeuQKG9V7VQVkQ8lZmSKvBjpcVSoZeF7nvt/N5f7Kcsx6QSufioa2YgvBjkIiA0cM0qhotw==}
     dependencies:
       csstype: 3.1.1
+
+  /solid-js/1.6.3:
+    resolution: {integrity: sha512-YoieThdhAKt83O86+DjpKXNlVSU5JYdi21RdYqiEIsWxahOphiAfao8e/zRTLyZEM5ZgyZ3ZHPPgW1HO5537Rw==}
+    dependencies:
+      csstype: 3.1.1
+    dev: false
 
   /solid-refresh/0.4.1:
     resolution: {integrity: sha512-v3tD/OXQcUyXLrWjPW1dXZyeWwP7/+GQNs8YTL09GBq+5FguA6IejJWUvJDrLIA4M0ho9/5zK2e9n+uy+4488g==}

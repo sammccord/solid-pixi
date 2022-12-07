@@ -5,5 +5,10 @@
   "scripts": {
     "test": "vitest"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "solid-pixi": "workspace:*",
+    "pixi.js": "^7.0.4",
+    "solid-js": "^1.6.3"
+  }
 }
