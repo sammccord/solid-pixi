@@ -10,6 +10,9 @@ npm install solid-pixi@alpha.0
 
 ## Basic Usage
 
+- [Basic Examples](https://solid-pixi.netlify.app/)
+- [Examples Source](./packages/example/src/components/)
+
 ```tsx
 import { ObservablePoint, Texture } from "pixi.js";
 import { Application, Sprite, useApp } from "solid-pixi";
@@ -18,9 +21,10 @@ const texture = Texture.from("/bunny.png");
 texture.defaultAnchor = { x: 0.5, y: 0.5 } as ObservablePoint;
 
 /** 
- * Create a new PIXI application, props are 1:1 with PIX.IApplicationOptions for construction.
+ * Create a new PIXI application
+ * Component props are 1:1 with PIXI.IApplicationOptions for construction.
  * 
- * Children will automatically be added to the closest container
+ * Children will automatically be added to the closest parent container
  */
 export default function TransparentBackground() {
   return (
@@ -31,9 +35,12 @@ export default function TransparentBackground() {
 }
 
 /**
- * Included is a hook to access the current PIXI.Application, useful for adding update functions, or accessing the width or height
+ * Included is a hook to access the current PIXI.Application
+ * This is useful for adding tick functions, or accessing global width or height
  * 
- * All prop objects implemented in this library extend their respective PIXI class (with a few exceptions depending on the DisplayObject) so most all props are 1:1 with their PIXI properties; like x and y below.
+ * Component props extend their respective PIXI class so;
+ * <Sprite x={100} /> == new Sprite().x = 100
+ * so most all props are 1:1 with their PIXI counterpart; like x and y below.
  */
 function Bunny() {
   const app = useApp();

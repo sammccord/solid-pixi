@@ -52,7 +52,7 @@ export default function App() {
       </aside>
       <main>
         <Routes>
-          <Route path="/" component={IndexPage} />
+          <Route path="/" component={Container} />
           <Route path="/container" component={Container} />
           <Route
             path="/transparent-background"
