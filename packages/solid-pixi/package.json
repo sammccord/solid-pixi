@@ -1,6 +1,6 @@
 {
   "name": "solid-pixi",
-  "version": "0.0.0-alpha.0",
+  "version": "0.0.0-alpha.1",
   "description": "",
   "repository": {
     "type": "git",
@@ -15,16 +15,17 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/solid-pixi.umd.js",
-  "module": "./dist/solid-pixi.mjs",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/solid-pixi.mjs",
-      "require": "./dist/solid-pixi.umd.js"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.umd.js"
     }
   },
   "scripts": {
-    "build": "vite build"
+    "build": "vite build && tsc --emitDeclarationOnly --declaration"
   },
   "dependencies": {
     "pixi.js": "^7.0.0",
