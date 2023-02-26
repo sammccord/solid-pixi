@@ -7,6 +7,7 @@ import ParticleContainerPage from "./pages/ParticleContainer";
 import SimplePlanePage from "./pages/SimplePlane";
 import Tinting from "./pages/Tinting";
 import TransparentBackground from "./pages/TransparentBackground";
+import AssetPage from "./pages/Asset";
 
 export default function App() {
   return (
@@ -46,6 +47,9 @@ export default function App() {
               <li>
                 <a href="/simple-plane">Simple Plane</a>
               </li>
+              <li>
+                <a href="/asset">Asset</a>
+              </li>
             </ul>
           </li>
         </ul>
@@ -63,6 +67,7 @@ export default function App() {
           <Route path="/particle-container" component={ParticleContainerPage} />
           <Route path="/blendmodes" component={BlendModes} />
           <Route path="/simple-plane" component={SimplePlanePage} />
+          <Route path="/asset" component={AssetPage} />
         </Routes>
       </main>
     </>
