@@ -1,0 +1,38 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:solid/typescript",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "solid",
+    "prettier"
+  ],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 100,
+        "tabWidth": 2,
+        "semi": false,
+        "singleQuote": true,
+        "jsxSingleQuote": true,
+        "trailingComma": "none",
+        "arrowParens": "avoid"
+      }
+    ],
+    "@typescript-eslint/no-var-requires": "off"
+  }
+}
