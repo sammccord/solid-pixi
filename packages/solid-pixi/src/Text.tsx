@@ -19,7 +19,7 @@ export function Text<T extends Record<string, any>>(
   props: TextProps<T>
 ): JSX.Element {
   const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes);
-  let text = new pxText(
+  let text = ours.as || new pxText(
     ours.children,
     pixis.style,
     pixis.canvas

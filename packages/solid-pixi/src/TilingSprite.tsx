@@ -41,7 +41,9 @@ export function TilingSprite<T extends Record<string, any>>(
     EventTypes
   );
 
-  if (!ours.from && !ours.texture) {
+  if(ours.as) {
+    sprite = ours.as
+  } else if (!ours.from && !ours.texture) {
     sprite = new pxTilingSprite(Texture.EMPTY) as ExtendedTilingSprite<T>;
   } else {
     sprite =
