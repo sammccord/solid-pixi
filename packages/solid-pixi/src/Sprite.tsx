@@ -3,6 +3,7 @@ import {
   DisplayObjectEvents,
   IBaseTextureOptions,
   Sprite as pxSprite,
+  SpriteOptions,
   SpriteSource,
   Texture
 } from 'pixi.js'
@@ -11,31 +12,14 @@ import { Events, EventTypes } from './events'
 import { CommonPropKeys, CommonProps, TextureWithOptions, Transform } from './interfaces'
 import { ParentContext, useParent } from './ParentContext'
 
-export type ExtendedSprite<T extends Record<string, any>> = pxSprite & T
-export type SpriteProps<T extends Record<string, any>> = Partial<
-  Omit<pxSprite, 'texture' | 'children' | keyof Transform>
-> &
-  T &
-  CommonProps<ExtendedSprite<T>> &
-  Transform &
-  Partial<Events> & {
-    from?: SpriteSource
-    texture?: TextureWithOptions
-    textureOptions?: IBaseTextureOptions<any> | undefined
-  }
+export type SpriteProps = CommonProps<pxSprite> & SpriteOptions & Events
 
-export function Sprite<T extends Record<string, any>>(props: SpriteProps<T>): JSX.Element {
-  let sprite: ExtendedSprite<T>
-  const [ours, events, pixis] = splitProps(
-    props,
-    [...CommonPropKeys, 'texture', 'from', 'textureOptions'],
-    EventTypes
-  )
+export function Sprite(props: SpriteProps): JSX.Element {
+  let sprite: pxSprite
+  const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes)
 
   if (ours.as) {
     sprite = ours.as
-  } else if (!ours.from && !ours.texture) {
-    sprite = new pxSprite(Texture.EMPTY) as ExtendedSprite<T>
   } else {
     sprite =
       ours.texture && ours.texture[0] instanceof Texture

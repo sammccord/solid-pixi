@@ -1,0 +1,21 @@
+{
+  "name": "docs",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.3.1",
+    "@astrojs/solid-js": "^3.0.2",
+    "astro": "^3.5.2",
+    "pixi.js": "^8.0.0-beta.8",
+    "solid-js": "^1.4.3",
+    "solid-pixi": "workspace:*",
+    "typescript": "^4.9.5"
+  }
+}

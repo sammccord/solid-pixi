@@ -52,7 +52,7 @@ export function AnimatedSprite<T extends Record<string, any>>(
   })
 
   createEffect(() => {
-    for (let key in pixis) {
+    for (const key in pixis) {
       ;(sprite as any)[key] = (pixis as any)[key]
     }
   })

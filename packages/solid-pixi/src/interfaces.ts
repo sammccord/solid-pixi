@@ -1,6 +1,5 @@
 import {
   BaseTexture,
-  Container,
   DisplayObject,
   IAutoDetectOptions,
   IPointData,
@@ -8,7 +7,7 @@ import {
   Resource,
   Texture
 } from 'pixi.js'
-import { Accessor } from 'solid-js'
+import { JSX } from 'solid-js/jsx-runtime'
 
 export type TextureWithOptions = [
   texture: Texture<Resource> | BaseTexture<Resource, IAutoDetectOptions>,
@@ -18,15 +17,6 @@ export type TextureWithOptions = [
   rotate?: number,
   anchor?: IPointData
 ]
-
-export type DirectiveAttributes = {
-  [Key in keyof Directives as `use:${Key}`]?: Directives[Key]
-}
-
-export interface Directives {}
-export interface DirectiveFunctions {
-  [x: string]: (el: Element, accessor: Accessor<any>) => void
-}
 
 export interface Transform {
   position?: IPointData
@@ -38,14 +28,14 @@ export interface Transform {
 
 export const TransformKeys: (keyof Transform)[] = ['position', 'scale', 'skew', 'pivot']
 
-export type Use<T> = ((t: T) => void) | (() => void)
+export type Use<T> = (t: T) => void
 
-export type Uses<T> = Use<T> | Use<T>[]
+export type Uses<T> = Use<T> | Array<Use<T>>
 
-export interface CommonProps<T> {
-  children?: any
-  use?: Uses<T>
-  as?: T
+export interface CommonProps<Component> {
+  children?: JSX.Element
+  use?: Uses<Component>
+  as?: Component
 }
 
 export const CommonPropKeys: (keyof CommonProps<DisplayObject>)[] = ['children', 'use', 'as']
