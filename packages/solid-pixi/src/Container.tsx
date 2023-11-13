@@ -1,17 +1,21 @@
-import { ContainerEvents, ContainerOptions, View, Container as pxContainer } from 'pixi.js'
+import { ContainerOptions, View, Container as pxContainer } from 'pixi.js'
 import { JSX, createEffect, onCleanup, splitProps, untrack } from 'solid-js'
 import { ParentContext, useParent } from './ParentContext'
-import { EventTypes, Events } from './events'
+import { ContainerEventTypes, EventTypes, Events, ContainerEvents } from './events'
 import { CommonPropKeys, CommonProps } from './interfaces'
 
-export type ContainerProps<T extends View = View> = CommonProps<pxContainer> &
-  ContainerOptions<T> &
+export type ExtendedContainer<Data extends object> = pxContainer & Data
+export type ContainerProps<Data extends object> = CommonProps<ExtendedContainer<Data>> &
+  Omit<ContainerOptions<View>, 'children'> &
   Events &
   ContainerEvents
 
-export function Container<T extends View = View>(props: ContainerProps<T>): JSX.Element {
-  const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes)
-  const container = ours.as || new pxContainer()
+export function Container<Data extends object = object>(props: ContainerProps<Data>): JSX.Element {
+  const [ours, events, pixis] = splitProps(props, CommonPropKeys, [
+    ...ContainerEventTypes,
+    ...EventTypes
+  ])
+  const container = ours.as || (new pxContainer(pixis) as ExtendedContainer<Data>)
 
   createEffect(() => {
     for (const prop in pixis) {
@@ -21,8 +25,8 @@ export function Container<T extends View = View>(props: ContainerProps<T>): JSX.
 
   createEffect(() => {
     const cleanups = Object.entries(events).map(([event, handler]: [any, any]) => {
-      container.addEventListener(event, handler)
-      return () => container.removeEventListener(event, handler)
+      container.on(event, handler)
+      return () => container.off(event, handler)
     })
 
     onCleanup(() => {
@@ -34,7 +38,7 @@ export function Container<T extends View = View>(props: ContainerProps<T>): JSX.
 
   createEffect(() => {
     let cleanups: (void | (() => void))[] = []
-    const uses = props.use
+    const uses = props.uses
     if (uses) {
       if (Array.isArray(uses)) {
         cleanups = untrack(() => uses.map(fn => fn(container)))

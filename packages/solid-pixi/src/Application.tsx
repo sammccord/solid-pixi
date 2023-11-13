@@ -1,6 +1,7 @@
-import { ApplicationOptions, Renderer, Application as pxApplication } from 'pixi.js'
+import { ApplicationOptions, Application as pxApplication } from 'pixi.js'
 import {
   JSXElement,
+  Show,
   createContext,
   createEffect,
   createResource,
@@ -22,19 +23,22 @@ export type ApplicationProps = CommonProps<pxApplication> & {
 export function Application(props: ApplicationProps) {
   const [ours, pixis] = splitProps(props, [...CommonPropKeys, 'fallback'])
 
-  const app = ours.as || new pxApplication()
-  const [state] = createResource([app, pixis], ([_app, _pixis]) =>
-    (_app as pxApplication<Renderer>).init(_pixis)
-  )
+  const [app] = createResource([pixis], async ([_pixis]) => {
+    const _app = ours.as || new pxApplication()
+    await _app.init(_pixis)
+    return _app
+  })
 
   createEffect(() => {
+    const _app = app()
+    if (!_app) return
     let cleanups: (void | (() => void))[] = []
-    const uses = props.use
+    const uses = props.uses
     if (uses) {
       if (Array.isArray(uses)) {
-        cleanups = untrack(() => uses.map(fn => fn(app)))
+        cleanups = untrack(() => uses.map(fn => fn(_app)))
       } else {
-        cleanups = untrack(() => [uses(app)])
+        cleanups = untrack(() => [uses(_app)])
       }
     }
 
@@ -42,19 +46,15 @@ export function Application(props: ApplicationProps) {
   })
 
   onCleanup(() => {
-    app.destroy() // ?
+    app()?.destroy() // ?
   })
 
   return (
-    <>
-      {state.loading ? (
-        ours.fallback || null
-      ) : (
-        <AppContext.Provider value={app}>
-          <ParentContext.Provider value={app.stage}>{app && ours.children}</ParentContext.Provider>
-          {app.canvas}
-        </AppContext.Provider>
-      )}
-    </>
+    <Show when={app()} fallback={ours.fallback}>
+      <AppContext.Provider value={app()}>
+        <ParentContext.Provider value={app()!.stage}>{ours.children}</ParentContext.Provider>
+        {app()!.canvas}
+      </AppContext.Provider>
+    </Show>
   )
 }

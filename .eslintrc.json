@@ -10,11 +10,7 @@
     "plugin:solid/typescript",
     "plugin:prettier/recommended"
   ],
-  "plugins": [
-    "@typescript-eslint",
-    "solid",
-    "prettier"
-  ],
+  "plugins": ["@typescript-eslint", "solid", "prettier"],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest",
@@ -28,7 +24,7 @@
         "tabWidth": 2,
         "semi": false,
         "singleQuote": true,
-        "jsxSingleQuote": true,
+        "jsxSingleQuote": false,
         "trailingComma": "none",
         "arrowParens": "avoid"
       }

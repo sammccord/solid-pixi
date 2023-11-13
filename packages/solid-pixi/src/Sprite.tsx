@@ -1,63 +1,52 @@
-import {
-  BaseTexture,
-  DisplayObjectEvents,
-  IBaseTextureOptions,
-  Sprite as pxSprite,
-  SpriteOptions,
-  SpriteSource,
-  Texture
-} from 'pixi.js'
-import { createEffect, JSX, onCleanup, splitProps } from 'solid-js'
+import { Sprite as pxSprite, SpriteOptions } from 'pixi.js'
+import { createEffect, onCleanup, splitProps, untrack } from 'solid-js'
 import { Events, EventTypes } from './events'
-import { CommonPropKeys, CommonProps, TextureWithOptions, Transform } from './interfaces'
+import { CommonPropKeys, CommonProps } from './interfaces'
 import { ParentContext, useParent } from './ParentContext'
 
-export type SpriteProps = CommonProps<pxSprite> & SpriteOptions & Events
+export type ExtendedSprite<Data extends object> = pxSprite & Data
+export type SpriteProps<Data extends object> = CommonProps<ExtendedSprite<Data>> &
+  SpriteOptions &
+  Events &
+  Data
 
-export function Sprite(props: SpriteProps): JSX.Element {
-  let sprite: pxSprite
+export function Sprite<Data extends object = object>(props: SpriteProps<Data>) {
+  let sprite: ExtendedSprite<Data>
   const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes)
 
   if (ours.as) {
     sprite = ours.as
   } else {
-    sprite =
-      ours.texture && ours.texture[0] instanceof Texture
-        ? (new pxSprite(ours.texture[0]) as ExtendedSprite<T>)
-        : (pxSprite.from(props.from!, props.textureOptions) as ExtendedSprite<T>)
+    sprite = new pxSprite(pixis) as ExtendedSprite<Data>
   }
 
   createEffect(() => {
-    if (ours.texture && ours.texture[0] instanceof BaseTexture)
-      sprite.texture = new Texture(ours.texture[0], ...(ours.texture.slice(1) as any))
-  })
-
-  createEffect(() => {
-    const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(events).map(p => {
-      const handler = events[p as unknown as keyof Events]
-      const n = p.split(':')[1] as keyof DisplayObjectEvents
-      sprite.on(n, handler as any)
-      return [n, handler]
-    })
-
-    onCleanup(() => {
-      handlers.forEach(([e, handler]) => sprite.off(e, handler))
-    })
-  })
-
-  createEffect(() => {
-    for (let key in pixis) {
-      ;(sprite as any)[key] = (pixis as any)[key]
+    for (const prop in pixis) {
+      ;(sprite as any)[prop] = (pixis as any)[prop]
     }
   })
 
   createEffect(() => {
+    const cleanups = Object.entries(events).map(([event, handler]: [any, any]) => {
+      sprite.on(event, handler)
+      return () => sprite.off(event, handler)
+    })
+
+    onCleanup(() => {
+      for (const cleanup of cleanups) {
+        cleanup()
+      }
+    })
+  })
+
+  createEffect(() => {
     let cleanups: (void | (() => void))[] = []
-    if (props.use) {
-      if (Array.isArray(props.use)) {
-        cleanups = props.use.map(fn => fn(sprite))
+    const uses = props.uses
+    if (uses) {
+      if (Array.isArray(uses)) {
+        cleanups = untrack(() => uses.map(fn => fn(sprite)))
       } else {
-        cleanups.push(props.use(sprite))
+        cleanups = untrack(() => [uses(sprite)])
       }
     }
 
@@ -65,7 +54,7 @@ export function Sprite(props: SpriteProps): JSX.Element {
   })
 
   const parent = useParent()
-  parent?.addChild(sprite)
+  parent.addChild(sprite)
   onCleanup(() => {
     parent?.removeChild(sprite)
   })
