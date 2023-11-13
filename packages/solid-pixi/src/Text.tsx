@@ -1,73 +1,70 @@
-import { DisplayObjectEvents, Text as pxText } from "pixi.js";
-import { createEffect, JSX, onCleanup, splitProps } from "solid-js";
-import { Events, EventTypes } from "./events";
-import { CommonPropKeys, CommonProps, Transform } from "./interfaces";
-import { useParent } from "./ParentContext";
+import { Text as pxText, TextOptions, TextString } from 'pixi.js'
+import { createEffect, onCleanup, splitProps, untrack } from 'solid-js'
+import { Events, EventTypes } from './events'
+import { CommonPropKeys, CommonProps } from './interfaces'
+import { useParent } from './ParentContext'
 
-export type ExtendedText<T extends Record<string, any>> = pxText & T;
-export type TextProps<T extends Record<string, any>> = Partial<
-  Omit<pxText, "children" | keyof Transform>
-> &
-  T &
-  CommonProps<ExtendedText<T>> &
-  Transform &
-  Partial<Events> & {
-    children: string;
-  };
+export type ExtendedText<Data extends object> = pxText & Data
+export type TextProps<Data extends object> = Omit<CommonProps<ExtendedText<Data>>, 'children'> &
+  Omit<TextOptions, 'text' | 'children'> &
+  Events &
+  Data & {
+    children: TextString
+  }
 
-export function Text<T extends Record<string, any>>(
-  props: TextProps<T>
-): JSX.Element {
-  const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes);
-  let text = ours.as || new pxText(
-    ours.children,
-    pixis.style,
-    pixis.canvas
-  ) as ExtendedText<T>;
+export function Text<Data extends object = object>(props: TextProps<Data>) {
+  let text: ExtendedText<Data>
+  const [ours, events, pixis] = splitProps(props, CommonPropKeys.concat('children'), EventTypes)
 
-  createEffect(() => (text.text = ours.children));
+  if (ours.as) {
+    text = ours.as
+  } else {
+    text = new pxText(pixis) as ExtendedText<Data>
+  }
 
   createEffect(() => {
-    const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
-      events
-    ).map((p) => {
-      const handler = events[p as unknown as keyof Events];
-      const n = p.split(":")[1] as keyof DisplayObjectEvents;
-      text.on(n, handler as any);
-      return [n, handler];
-    });
+    text.text = ours.children
+  })
+
+  createEffect(() => {
+    for (const prop in pixis) {
+      console.log(prop)
+      ;(text as any)[prop] = (pixis as any)[prop]
+    }
+  })
+
+  createEffect(() => {
+    const cleanups = Object.entries(events).map(([event, handler]: [any, any]) => {
+      text.on(event, handler)
+      return () => text.off(event, handler)
+    })
 
     onCleanup(() => {
-      handlers.forEach(([e, handler]) => text.off(e, handler));
-    });
-  });
+      for (const cleanup of cleanups) {
+        cleanup()
+      }
+    })
+  })
 
   createEffect(() => {
-    for (let key in pixis) {
-      (text as any)[key] = (pixis as any)[key];
-    }
-  });
-
-  createEffect(() => {
-    let cleanups: (void | (() => void))[] = [];
-    if (props.use) {
-      if (Array.isArray(props.use)) {
-        cleanups = props.use.map((fn) => fn(text));
+    let cleanups: (void | (() => void))[] = []
+    const uses = props.uses
+    if (uses) {
+      if (Array.isArray(uses)) {
+        cleanups = untrack(() => uses.map(fn => fn(text)))
       } else {
-        cleanups.push(props.use(text));
+        cleanups = untrack(() => [uses(text)])
       }
     }
 
-    onCleanup(() =>
-      cleanups.forEach((cleanup) => typeof cleanup === "function" && cleanup())
-    );
-  });
+    onCleanup(() => cleanups.forEach(cleanup => typeof cleanup === 'function' && cleanup()))
+  })
 
-  const parent = useParent();
-  parent?.addChild(text);
+  const parent = useParent()
+  parent.addChild(text)
   onCleanup(() => {
-    parent?.removeChild(text);
-  });
+    parent?.removeChild(text)
+  })
 
-  return null;
+  return null
 }

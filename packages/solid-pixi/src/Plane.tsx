@@ -8,8 +8,7 @@ export type ExtendedContainer<Data extends object> = pxContainer & Data
 export type ContainerProps<Data extends object> = CommonProps<ExtendedContainer<Data>> &
   Omit<ContainerOptions<View>, 'children'> &
   Events &
-  ContainerEvents &
-  Data
+  ContainerEvents
 
 export function Container<Data extends object = object>(props: ContainerProps<Data>): JSX.Element {
   const [ours, events, pixis] = splitProps(props, CommonPropKeys, [

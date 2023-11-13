@@ -28,7 +28,7 @@
     "build": "vite build && tsc --emitDeclarationOnly --declaration"
   },
   "dependencies": {
-    "pixi.js": "^8.0.0-beta.8",
+    "pixi.js": "8.0.0-beta.8",
     "solid-js": "^1.8.5"
   }
 }

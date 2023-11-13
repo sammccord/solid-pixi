@@ -16,10 +16,7 @@
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "skipLibCheck": true,
-    "removeComments": true,
-    "paths": {
-      "solid-pixi": ["./packages/solid-pixi/src/index.tsx"]
-    }
+    "removeComments": true
   },
   "exclude": ["dist", "node_modules"]
 }
