@@ -1,5 +1,5 @@
 import { AssetInitOptions, Assets as pxAssets } from 'pixi.js'
-import { JSX, Show, createResource, onCleanup, splitProps } from 'solid-js'
+import { JSX, Show, createResource, splitProps } from 'solid-js'
 import { CommonProps } from './interfaces'
 
 export type AssetsLoader = {

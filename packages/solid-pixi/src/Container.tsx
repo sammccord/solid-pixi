@@ -42,9 +42,9 @@ export function Container<Data extends object = object>(props: ContainerProps<Da
     const uses = props.uses
     if (uses) {
       if (Array.isArray(uses)) {
-        cleanups = untrack(() => uses.map(fn => fn(container)))
+        cleanups = uses.map(fn => fn(container))
       } else {
-        cleanups = untrack(() => [uses(container)])
+        cleanups = [uses(container)]
       }
     }
 

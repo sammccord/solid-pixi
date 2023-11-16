@@ -95,9 +95,9 @@ export function Graphics<Data extends object = object>(props: GraphicsProps<Data
     const uses = props.uses
     if (uses) {
       if (Array.isArray(uses)) {
-        cleanups = untrack(() => uses.map(fn => fn(graphics)))
+        cleanups = uses.map(fn => fn(graphics))
       } else {
-        cleanups = untrack(() => [uses(graphics)])
+        cleanups = [uses(graphics)]
       }
     }
 

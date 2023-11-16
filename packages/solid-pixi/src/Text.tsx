@@ -50,9 +50,9 @@ export function Text<Data extends object = object>(props: TextProps<Data>) {
     const uses = props.uses
     if (uses) {
       if (Array.isArray(uses)) {
-        cleanups = untrack(() => uses.map(fn => fn(text)))
+        cleanups = uses.map(fn => fn(text))
       } else {
-        cleanups = untrack(() => [uses(text)])
+        cleanups = [uses(text)]
       }
     }
 

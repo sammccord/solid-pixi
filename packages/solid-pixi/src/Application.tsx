@@ -36,9 +36,9 @@ export function Application(props: ApplicationProps) {
     const uses = props.uses
     if (uses) {
       if (Array.isArray(uses)) {
-        cleanups = untrack(() => uses.map(fn => fn(_app)))
+        cleanups = uses.map(fn => fn(_app))
       } else {
-        cleanups = untrack(() => [uses(_app)])
+        cleanups = [uses(_app)]
       }
     }
 

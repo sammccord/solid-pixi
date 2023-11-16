@@ -1,15 +1,9 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
+    "strict": false,
     "jsx": "preserve",
-    "jsxImportSource": "solid-js",
-    "paths": {
-      "solid-pixi": ["../solid-pixi/src/index.tsx"]
-    }
+    "jsxImportSource": "solid-js"
   },
-  "references": [
-    {
-      "path": "../solid-pixi"
-    }
-  ]
+  "include": ["src/**/*.ts", "src/**/*.astro", "../solid-pixi"]
 }
