@@ -107,7 +107,8 @@ export function Graphics<Data extends object = object>(props: GraphicsProps<Data
   const parent = useParent()
   parent.addChild(graphics)
   onCleanup(() => {
-    parent?.removeChild(graphics)
+    parent.removeChild(graphics)
+    graphics.destroy()
   })
 
   return null

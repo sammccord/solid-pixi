@@ -28,7 +28,6 @@ export function Text<Data extends object = object>(props: TextProps<Data>) {
 
   createEffect(() => {
     for (const prop in pixis) {
-      console.log(prop)
       ;(text as any)[prop] = (pixis as any)[prop]
     }
   })
