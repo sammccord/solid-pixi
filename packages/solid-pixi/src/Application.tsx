@@ -7,7 +7,6 @@ import {
   createResource,
   onCleanup,
   splitProps,
-  untrack,
   useContext
 } from 'solid-js'
 import { ParentContext } from './ParentContext'

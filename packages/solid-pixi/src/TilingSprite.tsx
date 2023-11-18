@@ -1,118 +1,63 @@
-import {
-  BaseTexture,
-  DisplayObjectEvents,
-  IBaseTextureOptions,
-  ISize,
-  Texture,
-  TextureSource,
-  TilingSprite as pxTilingSprite,
-} from "pixi.js";
-import { createEffect, JSX, onCleanup, splitProps } from "solid-js";
-import { Events, EventTypes } from "./events";
-import {
-  CommonPropKeys,
-  CommonProps,
-  TextureWithOptions,
-  Transform,
-} from "./interfaces";
-import { ParentContext, useParent } from "./ParentContext";
+import { TilingSpriteOptions, TilingSprite as pxTilingSprite } from 'pixi.js'
+import { createEffect, onCleanup, splitProps, untrack } from 'solid-js'
+import { ParentContext, useParent } from './ParentContext'
+import { EventTypes, Events } from './events'
+import { CommonPropKeys, CommonProps } from './interfaces'
 
-export type ExtendedTilingSprite<T extends Record<string, any>> =
-  pxTilingSprite & T;
-export type TilingSpriteProps<T extends Record<string, any>> = Partial<
-  Omit<pxTilingSprite, "children" | "texture" | keyof Transform>
-> &
-  T &
-  CommonProps<ExtendedTilingSprite<T>> &
-  Transform &
-  Partial<Events> & {
-    from?: TextureSource | Texture;
-    texture?: TextureWithOptions;
-    textureOptions?: ISize & IBaseTextureOptions;
-  };
+export type ExtendedTilingSprite<Data extends object> = pxTilingSprite & Data
+export type TilingSpriteProps<Data extends object> = CommonProps<ExtendedTilingSprite<Data>> &
+  TilingSpriteOptions &
+  Events &
+  Data
 
-export function TilingSprite<T extends Record<string, any>>(
-  props: TilingSpriteProps<T>
-): JSX.Element {
-  let sprite: ExtendedTilingSprite<T>;
-  const [ours, events, pixis] = splitProps(
-    props,
-    [...CommonPropKeys, "texture", "from", "textureOptions"],
-    EventTypes
-  );
+export function TilingSprite<Data extends object = object>(props: TilingSpriteProps<Data>) {
+  let sprite: ExtendedTilingSprite<Data>
+  const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes)
 
-  if(ours.as) {
+  if (ours.as) {
     sprite = ours.as
-  } else if (!ours.from && !ours.texture) {
-    sprite = new pxTilingSprite(Texture.EMPTY) as ExtendedTilingSprite<T>;
   } else {
-    sprite =
-      ours.texture && ours.texture[0] instanceof Texture
-        ? (new pxTilingSprite(
-            ours.texture[0],
-            ours.textureOptions?.width,
-            ours.textureOptions?.height
-          ) as ExtendedTilingSprite<T>)
-        : (pxTilingSprite.from(
-            props.from!,
-            props.textureOptions || { width: 0, height: 0 }
-          ) as ExtendedTilingSprite<T>);
+    sprite = new pxTilingSprite(pixis) as ExtendedTilingSprite<Data>
   }
 
   createEffect(() => {
-    if (ours.texture && ours.texture[0] instanceof BaseTexture)
-      sprite.texture = new Texture(
-        ours.texture[0],
-        ...(ours.texture.slice(1) as any)
-      );
-  });
+    for (const prop in pixis) {
+      ;(sprite as any)[prop] = (pixis as any)[prop]
+    }
+  })
 
   createEffect(() => {
-    const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(
-      events
-    ).map((p) => {
-      const handler = events[p as unknown as keyof Events];
-      const n = p.split(":")[1] as keyof DisplayObjectEvents;
-      sprite.on(n, handler as any);
-      return [n, handler];
-    });
+    const cleanups = Object.entries(events).map(([event, handler]: [any, any]) => {
+      sprite.on(event, handler)
+      return () => sprite.off(event, handler)
+    })
 
     onCleanup(() => {
-      handlers.forEach(([e, handler]) => sprite.off(e, handler));
-    });
-  });
+      for (const cleanup of cleanups) {
+        cleanup()
+      }
+    })
+  })
 
   createEffect(() => {
-    for (let key in pixis) {
-      (sprite as any)[key] = (pixis as any)[key];
-    }
-  });
-
-  createEffect(() => {
-    let cleanups: (void | (() => void))[] = [];
-    if (props.use) {
-      if (Array.isArray(props.use)) {
-        cleanups = props.use.map((fn) => fn(sprite));
+    let cleanups: (void | (() => void))[] = []
+    const uses = props.uses
+    if (uses) {
+      if (Array.isArray(uses)) {
+        cleanups = untrack(() => uses.map(fn => fn(sprite)))
       } else {
-        cleanups.push(props.use(sprite));
+        cleanups = untrack(() => [uses(sprite)])
       }
     }
 
-    onCleanup(() =>
-      cleanups.forEach((cleanup) => typeof cleanup === "function" && cleanup())
-    );
-  });
+    onCleanup(() => cleanups.forEach(cleanup => typeof cleanup === 'function' && cleanup()))
+  })
 
-  const parent = useParent();
-  parent?.addChild(sprite);
+  const parent = useParent()
+  parent.addChild(sprite)
   onCleanup(() => {
-    parent?.removeChild(sprite);
-  });
+    parent?.removeChild(sprite)
+  })
 
-  // Add the view to the DOM
-  return (
-    <ParentContext.Provider value={sprite}>
-      {ours.children}
-    </ParentContext.Provider>
-  );
+  return <ParentContext.Provider value={sprite}>{ours.children}</ParentContext.Provider>
 }

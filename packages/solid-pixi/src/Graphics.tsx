@@ -1,10 +1,11 @@
-import { Graphics as pxGraphics, GraphicsOptions } from 'pixi.js'
+import { Graphics as pxGraphics, GraphicsOptions, GraphicsContext } from 'pixi.js'
 import { createEffect, onCleanup, splitProps, untrack } from 'solid-js'
 import { Events, EventTypes } from './events'
 import { CommonPropKeys, CommonProps } from './interfaces'
 import { ParentContext, useParent } from './ParentContext'
 
 export type DrawCall =
+  | ['texture', ...Parameters<pxGraphics['texture']>]
   | ['fill', ...Parameters<pxGraphics['fill']>]
   | ['stroke', ...Parameters<pxGraphics['stroke']>]
   | ['texture', ...Parameters<pxGraphics['texture']>]
@@ -51,11 +52,12 @@ export type GraphicsProps<Data extends object> = CommonProps<ExtendedGraphics<Da
   Omit<GraphicsOptions, 'children'> &
   Events & {
     draw?: DrawCalls
+    context?: GraphicsContext
   }
 
 export function Graphics<Data extends object = object>(props: GraphicsProps<Data>) {
   let graphics: ExtendedGraphics<Data>
-  const [ours, draw, events, pixis] = splitProps(props, CommonPropKeys, ['draw'], EventTypes)
+  const [ours, events, pixis] = splitProps(props, [...CommonPropKeys, 'draw'], EventTypes)
 
   if (ours.as) {
     graphics = ours.as
@@ -70,9 +72,9 @@ export function Graphics<Data extends object = object>(props: GraphicsProps<Data
   })
 
   createEffect(() => {
-    if (draw.draw) {
-      draw.draw.forEach(([method, ...args]) => {
-        untrack(() => (graphics[method] as any).bind(graphics)(...args))
+    if (ours.draw) {
+      ours.draw.forEach(([method, ...args]) => {
+        ;(graphics[method] as any).bind(graphics)(...args)
       })
     }
   })
