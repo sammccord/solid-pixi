@@ -1,68 +1,52 @@
-import { DisplayObjectEvents, Geometry, Mesh as pxMesh, MeshMaterial } from 'pixi.js'
-import { createEffect, JSX, onCleanup, splitProps } from 'solid-js'
-import { Events, EventTypes } from './events'
-import { CommonPropKeys, CommonProps, Transform } from './interfaces'
+import { MeshOptions, Mesh as pxMesh } from 'pixi.js'
+import { createEffect, onCleanup, splitProps, untrack } from 'solid-js'
 import { ParentContext, useParent } from './ParentContext'
+import { EventTypes, Events } from './events'
+import { CommonPropKeys, CommonProps } from './interfaces'
 
-// export interface MeshProps
-//   extends Partial<Omit<pxMesh, "children" | keyof Transform>>,
-//     CommonProps<pxMesh>,
-//     Transform,
-//     Partial<Events> {
-//   geometry: Geometry;
-//   shader: MeshMaterial;
-// }
+export type ExtendedMesh<Data extends object> = pxMesh & Data
+export type MeshProps<Data extends object> = CommonProps<ExtendedMesh<Data>> &
+  MeshOptions &
+  Events &
+  Data
 
-export type ExtendedMesh<T extends Record<string, any>> = pxMesh & T
-export type MeshProps<T extends Record<string, any>> = Partial<
-  Omit<pxMesh, 'children' | 'geometry' | 'shader' | keyof Transform>
-> &
-  T &
-  CommonProps<ExtendedMesh<T>> &
-  Transform &
-  Partial<Events> & {
-    geometry: Geometry
-    shader: MeshMaterial
-  }
-
-export function Mesh<T extends Record<string, any>>(props: MeshProps<T>): JSX.Element {
+export function Mesh<Data extends object = object>(props: MeshProps<Data>) {
+  let mesh: ExtendedMesh<Data>
   const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes)
 
-  let mesh =
-    ours.as ||
-    (new pxMesh(
-      pixis.geometry,
-      pixis.material || pixis.shader,
-      pixis.state,
-      pixis.drawMode
-    ) as any as ExtendedMesh<T>)
+  if (ours.as) {
+    mesh = ours.as
+  } else {
+    mesh = new pxMesh(pixis) as ExtendedMesh<Data>
+  }
 
   createEffect(() => {
-    const handlers: [keyof DisplayObjectEvents, any][] = Object.keys(events).map(p => {
-      const handler = events[p as unknown as keyof Events]
-      const n = p.split(':')[1] as keyof DisplayObjectEvents
-      mesh.on(n, handler as any)
-      return [n, handler]
-    })
-
-    onCleanup(() => {
-      handlers.forEach(([e, handler]) => mesh.off(e, handler))
-    })
-  })
-
-  createEffect(() => {
-    for (let key in pixis) {
-      ;(mesh as any)[key] = (pixis as any)[key]
+    for (const prop in pixis) {
+      ;(Mesh as any)[prop] = (pixis as any)[prop]
     }
   })
 
   createEffect(() => {
+    const cleanups = Object.entries(events).map(([event, handler]: [any, any]) => {
+      mesh.on(event, handler)
+      return () => mesh.off(event, handler)
+    })
+
+    onCleanup(() => {
+      for (const cleanup of cleanups) {
+        cleanup()
+      }
+    })
+  })
+
+  createEffect(() => {
     let cleanups: (void | (() => void))[] = []
-    if (props.use) {
-      if (Array.isArray(props.use)) {
-        cleanups = props.use.map(fn => fn(mesh))
+    const uses = props.uses
+    if (uses) {
+      if (Array.isArray(uses)) {
+        cleanups = untrack(() => uses.map(fn => fn(mesh)))
       } else {
-        cleanups.push(props.use(mesh))
+        cleanups = untrack(() => [uses(mesh)])
       }
     }
 
@@ -70,11 +54,10 @@ export function Mesh<T extends Record<string, any>>(props: MeshProps<T>): JSX.El
   })
 
   const parent = useParent()
-  parent?.addChild(mesh)
+  parent.addChild(mesh)
   onCleanup(() => {
     parent?.removeChild(mesh)
   })
 
-  // Add the view to the DOM
   return <ParentContext.Provider value={mesh}>{ours.children}</ParentContext.Provider>
 }
