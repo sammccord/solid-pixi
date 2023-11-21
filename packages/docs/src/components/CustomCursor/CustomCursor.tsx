@@ -16,9 +16,8 @@ function ClickContainer() {
     <Sprite
       texture={Texture.from('https://v2-pixijs.com/assets/bunny.png')}
       interactive
+      cursor={hoverIcon}
       scale={{ x: 3, y: 3 }}
-      pointerdown={() => {}}
-      pointerover={() => {}}
       anchor={{ x: 0.5, y: 0.5 } as PointLike}
       x={app.screen.width / 2}
       y={app.screen.height / 2}
@@ -30,7 +29,14 @@ export function CustomCursor() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Application background="#1099bb" resizeTo={window}>
-        <Assets load={[['https://v2-pixijs.com/assets/bunny.png']]}>
+        <Assets
+          load={[
+            [
+              'https://v2-pixijs.com/assets/bunny.png',
+              'https://v2-pixijs.com/assets/bunny_saturated.png'
+            ]
+          ]}
+        >
           <ClickContainer />
         </Assets>
       </Application>

@@ -1,6 +1,6 @@
 {
   "name": "solid-pixi",
-  "version": "0.0.0-alpha.6",
+  "version": "0.0.0-alpha.8",
   "description": "",
   "repository": {
     "type": "git",
@@ -19,15 +19,63 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
+    "./AnimatedSprite": {
+      "require": "./dist/AnimatedSprite.umd.js",
+      "import": "./dist/AnimatedSprite.mjs"
+    },
+    "./events": {
+      "require": "./dist/events.umd.js",
+      "import": "./dist/events.mjs"
+    },
+    "./interfaces": {
+      "require": "./dist/interfaces.umd.js",
+      "import": "./dist/interfaces.mjs"
+    },
+    "./ParentContext": {
+      "require": "./dist/ParentContext.umd.js",
+      "import": "./dist/ParentContext.mjs"
+    },
+    "./Application": {
+      "require": "./dist/Application.umd.js",
+      "import": "./dist/Application.mjs"
+    },
+    "./Assets": {
+      "require": "./dist/Assets.umd.js",
+      "import": "./dist/Assets.mjs"
+    },
+    "./Container": {
+      "require": "./dist/Container.umd.js",
+      "import": "./dist/Container.mjs"
+    },
+    "./Graphics": {
+      "require": "./dist/Graphics.umd.js",
+      "import": "./dist/Graphics.mjs"
+    },
+    "./Mesh": {
+      "require": "./dist/Mesh.umd.js",
+      "import": "./dist/Mesh.mjs"
+    },
+    "./Sprite": {
+      "require": "./dist/Sprite.umd.js",
+      "import": "./dist/Sprite.mjs"
+    },
+    "./Text": {
+      "require": "./dist/Text.umd.js",
+      "import": "./dist/Text.mjs"
+    },
+    "./TilingSprite": {
+      "require": "./dist/TilingSprite.umd.js",
+      "import": "./dist/TilingSprite.mjs"
+    },
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.umd.js"
+      "require": "./dist/index.umd.js",
+      "import": "./dist/index.mjs"
     }
   },
   "scripts": {
-    "build": "vite build && tsc --emitDeclarationOnly --declaration"
+    "build": "vite build && tsc --emitDeclarationOnly"
   },
-  "dependencies": {
+  "peerDependencies": {
     "pixi.js": "8.0.0-beta.8",
     "solid-js": "^1.8.5"
   }

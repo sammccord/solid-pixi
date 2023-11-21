@@ -1,22 +1,21 @@
 {
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2020"],
-    "target": "ES2020",
-    "module": "ES2020",
-    "strict": true,
-    "composite": true,
-    "moduleResolution": "node",
-    "preserveConstEnums": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2022",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "incremental": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
     "declaration": true,
-    "allowJs": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "isolatedModules": true,
-    "skipLibCheck": true,
-    "removeComments": true
+    "declarationMap": true,
+    "moduleResolution": "Bundler",
+    "module": "ESNext",
+    "lib": ["es2022", "dom", "dom.iterable"]
   },
   "exclude": ["dist", "node_modules"]
 }
