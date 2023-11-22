@@ -13,7 +13,7 @@
     "noUncheckedIndexedAccess": true,
     "declaration": true,
     "declarationMap": true,
-    "moduleResolution": "Bundler",
+    "moduleResolution": "Node",
     "module": "ESNext",
     "lib": ["es2022", "dom", "dom.iterable"]
   },

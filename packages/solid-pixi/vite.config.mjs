@@ -22,17 +22,16 @@ function writeExports() {
 export default defineConfig({
   plugins: [solidPlugin(), writeExports()],
   build: {
-    target: 'esnext',
     lib: {
       // Could also be a dictionary or array of multiple entry points
       entry: files.map(f => resolve(__dirname, `src/${f}`)),
       name: 'SolidPIXI',
       // the proper extensions will be added
       fileName: (module, name) => {
-        const outPath = `${name}${module === 'es' ? '.umd.js' : '.mjs'}`
+        const outPath = `${name}${module === 'es' ? '.mjs' : '.umd.js'}`
         const exp = name.startsWith('index') ? '.' : `./${name}`
         if (!packageJson.exports[exp]) packageJson.exports[exp] = {}
-        packageJson.exports[exp][module === 'es' ? 'require' : 'import'] = `./dist/${outPath}`
+        packageJson.exports[exp][module === 'es' ? 'import' : 'require'] = `./dist/${outPath}`
         packageJson.exports[exp]['types'] = `./dist/${name}.d.ts`
         return outPath
       }
