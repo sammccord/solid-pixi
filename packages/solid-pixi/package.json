@@ -1,6 +1,6 @@
 {
   "name": "solid-pixi",
-  "version": "0.0.0-alpha.8",
+  "version": "0.0.0-alpha.9",
   "description": "",
   "repository": {
     "type": "git",
@@ -21,55 +21,68 @@
   "exports": {
     "./AnimatedSprite": {
       "require": "./dist/AnimatedSprite.umd.js",
-      "import": "./dist/AnimatedSprite.mjs"
+      "import": "./dist/AnimatedSprite.mjs",
+      "types": "./dist/AnimatedSprite.d.ts"
     },
     "./events": {
       "require": "./dist/events.umd.js",
-      "import": "./dist/events.mjs"
+      "import": "./dist/events.mjs",
+      "types": "./dist/events.d.ts"
     },
     "./interfaces": {
       "require": "./dist/interfaces.umd.js",
-      "import": "./dist/interfaces.mjs"
+      "import": "./dist/interfaces.mjs",
+      "types": "./dist/interfaces.d.ts"
     },
     "./ParentContext": {
       "require": "./dist/ParentContext.umd.js",
-      "import": "./dist/ParentContext.mjs"
+      "import": "./dist/ParentContext.mjs",
+      "types": "./dist/ParentContext.d.ts"
     },
     "./Application": {
       "require": "./dist/Application.umd.js",
-      "import": "./dist/Application.mjs"
+      "import": "./dist/Application.mjs",
+      "types": "./dist/Application.d.ts"
     },
     "./Assets": {
       "require": "./dist/Assets.umd.js",
-      "import": "./dist/Assets.mjs"
+      "import": "./dist/Assets.mjs",
+      "types": "./dist/Assets.d.ts"
     },
     "./Container": {
       "require": "./dist/Container.umd.js",
-      "import": "./dist/Container.mjs"
+      "import": "./dist/Container.mjs",
+      "types": "./dist/Container.d.ts"
     },
     "./Graphics": {
       "require": "./dist/Graphics.umd.js",
-      "import": "./dist/Graphics.mjs"
+      "import": "./dist/Graphics.mjs",
+      "types": "./dist/Graphics.d.ts"
     },
     "./Mesh": {
       "require": "./dist/Mesh.umd.js",
-      "import": "./dist/Mesh.mjs"
+      "import": "./dist/Mesh.mjs",
+      "types": "./dist/Mesh.d.ts"
     },
     "./Sprite": {
       "require": "./dist/Sprite.umd.js",
-      "import": "./dist/Sprite.mjs"
+      "import": "./dist/Sprite.mjs",
+      "types": "./dist/Sprite.d.ts"
     },
     "./Text": {
       "require": "./dist/Text.umd.js",
-      "import": "./dist/Text.mjs"
+      "import": "./dist/Text.mjs",
+      "types": "./dist/Text.d.ts"
     },
     "./TilingSprite": {
       "require": "./dist/TilingSprite.umd.js",
-      "import": "./dist/TilingSprite.mjs"
+      "import": "./dist/TilingSprite.mjs",
+      "types": "./dist/TilingSprite.d.ts"
     },
     ".": {
       "require": "./dist/index.umd.js",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
     }
   },
   "scripts": {

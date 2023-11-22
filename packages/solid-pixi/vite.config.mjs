@@ -33,6 +33,7 @@ export default defineConfig({
         const exp = name.startsWith('index') ? '.' : `./${name}`
         if (!packageJson.exports[exp]) packageJson.exports[exp] = {}
         packageJson.exports[exp][module === 'es' ? 'require' : 'import'] = `./dist/${outPath}`
+        packageJson.exports[exp]['types'] = `./dist/${name}.d.ts`
         return outPath
       }
     },
