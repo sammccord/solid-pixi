@@ -11,14 +11,9 @@ export type MeshProps<Data extends object> = CommonProps<ExtendedMesh<Data>> &
   Data
 
 export function Mesh<Data extends object = object>(props: MeshProps<Data>) {
-  let mesh: ExtendedMesh<Data>
   const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes)
 
-  if (ours.as) {
-    mesh = ours.as
-  } else {
-    mesh = new pxMesh(pixis) as ExtendedMesh<Data>
-  }
+  const mesh = (ours.as || new pxMesh(pixis)) as ExtendedMesh<Data>
 
   createEffect(() => {
     for (const prop in pixis) {

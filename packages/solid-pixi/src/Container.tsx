@@ -1,11 +1,11 @@
 import { ContainerOptions, View, Container as pxContainer } from 'pixi.js'
-import { JSX, createEffect, onCleanup, splitProps, untrack } from 'solid-js'
+import { JSX, createEffect, onCleanup, splitProps } from 'solid-js'
 import { ParentContext, useParent } from './ParentContext'
 import { ContainerEventTypes, EventTypes, Events, ContainerEvents } from './events'
 import { CommonPropKeys, CommonProps } from './interfaces'
 
 export type ExtendedContainer<Data extends object> = pxContainer & Data
-export type ContainerProps<Data extends object> = CommonProps<ExtendedContainer<Data>> &
+export type ContainerProps<Data extends object> = CommonProps<pxContainer, Data> &
   Omit<ContainerOptions<View>, 'children'> &
   Events &
   ContainerEvents &
@@ -16,7 +16,7 @@ export function Container<Data extends object = object>(props: ContainerProps<Da
     ...ContainerEventTypes,
     ...EventTypes
   ])
-  const container = ours.as || (new pxContainer(pixis) as ExtendedContainer<Data>)
+  const container = (ours.as || new pxContainer(pixis)) as ExtendedContainer<Data>
 
   createEffect(() => {
     for (const prop in pixis) {

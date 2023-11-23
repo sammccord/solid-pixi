@@ -5,20 +5,14 @@ import { CommonPropKeys, CommonProps } from './interfaces'
 import { ParentContext, useParent } from './ParentContext'
 
 export type ExtendedSprite<Data extends object> = pxSprite & Data
-export type SpriteProps<Data extends object> = CommonProps<ExtendedSprite<Data>> &
+export type SpriteProps<Data extends object> = CommonProps<pxSprite, Data> &
   SpriteOptions &
   Events &
   Data
 
 export function Sprite<Data extends object = object>(props: SpriteProps<Data>) {
-  let sprite: ExtendedSprite<Data>
   const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes)
-
-  if (ours.as) {
-    sprite = ours.as
-  } else {
-    sprite = new pxSprite(pixis) as ExtendedSprite<Data>
-  }
+  const sprite = (ours.as || new pxSprite(pixis)) as ExtendedSprite<Data>
 
   createEffect(() => {
     for (const prop in pixis) {

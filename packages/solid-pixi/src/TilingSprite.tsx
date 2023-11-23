@@ -5,20 +5,15 @@ import { EventTypes, Events } from './events'
 import { CommonPropKeys, CommonProps } from './interfaces'
 
 export type ExtendedTilingSprite<Data extends object> = pxTilingSprite & Data
-export type TilingSpriteProps<Data extends object> = CommonProps<ExtendedTilingSprite<Data>> &
+export type TilingSpriteProps<Data extends object> = CommonProps<pxTilingSprite, Data> &
   TilingSpriteOptions &
   Events &
   Data
 
 export function TilingSprite<Data extends object = object>(props: TilingSpriteProps<Data>) {
-  let sprite: ExtendedTilingSprite<Data>
   const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes)
 
-  if (ours.as) {
-    sprite = ours.as
-  } else {
-    sprite = new pxTilingSprite(pixis) as ExtendedTilingSprite<Data>
-  }
+  const sprite = (ours.as || new pxTilingSprite(pixis)) as ExtendedTilingSprite<Data>
 
   createEffect(() => {
     for (const prop in pixis) {

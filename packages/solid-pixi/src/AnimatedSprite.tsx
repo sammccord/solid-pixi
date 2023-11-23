@@ -5,7 +5,7 @@ import { CommonPropKeys, CommonProps } from './interfaces'
 import { ParentContext, useParent } from './ParentContext'
 
 export type ExtendedAnimatedSprite<Data extends object> = pxAnimatedSprite & Data
-export type AnimatedSpriteProps<Data extends object> = CommonProps<ExtendedAnimatedSprite<Data>> &
+export type AnimatedSpriteProps<Data extends object> = CommonProps<pxAnimatedSprite, Data> &
   Omit<SpriteOptions, 'texture'> & {
     textures: Texture[] | FrameObject[]
     autoUpdate?: boolean
@@ -19,14 +19,10 @@ export type AnimatedSpriteProps<Data extends object> = CommonProps<ExtendedAnima
   Data
 
 export function AnimatedSprite<Data extends object = object>(props: AnimatedSpriteProps<Data>) {
-  let sprite: ExtendedAnimatedSprite<Data>
   const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes)
 
-  if (ours.as) {
-    sprite = ours.as
-  } else {
-    sprite = new pxAnimatedSprite(pixis.textures, pixis.autoUpdate) as ExtendedAnimatedSprite<Data>
-  }
+  const sprite = (ours.as ||
+    new pxAnimatedSprite(pixis.textures, pixis.autoUpdate)) as ExtendedAnimatedSprite<Data>
 
   createEffect(() => {
     for (const prop in pixis) {

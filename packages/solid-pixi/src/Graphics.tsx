@@ -1,8 +1,8 @@
-import { Graphics as pxGraphics, GraphicsOptions, GraphicsContext } from 'pixi.js'
-import { createEffect, onCleanup, splitProps, untrack } from 'solid-js'
-import { Events, EventTypes } from './events'
+import { GraphicsContext, GraphicsOptions, Graphics as pxGraphics } from 'pixi.js'
+import { createEffect, onCleanup, splitProps } from 'solid-js'
+import { useParent } from './ParentContext'
+import { EventTypes, Events } from './events'
 import { CommonPropKeys, CommonProps } from './interfaces'
-import { ParentContext, useParent } from './ParentContext'
 
 export type DrawCall =
   | ['texture', ...Parameters<pxGraphics['texture']>]
@@ -37,18 +37,10 @@ export type DrawCall =
   | ['transform', ...Parameters<pxGraphics['transform']>]
   | ['translateTransform', ...Parameters<pxGraphics['translateTransform']>]
   | ['clear', ...Parameters<pxGraphics['clear']>]
-  | ['beginFill', ...Parameters<pxGraphics['beginFill']>]
-  | ['endFill', ...Parameters<pxGraphics['endFill']>]
-  | ['drawCircle', ...Parameters<pxGraphics['drawCircle']>]
-  | ['drawEllipse', ...Parameters<pxGraphics['drawEllipse']>]
-  | ['drawPolygon', ...Parameters<pxGraphics['drawPolygon']>]
-  | ['drawRect', ...Parameters<pxGraphics['drawRect']>]
-  | ['drawRoundedRect', ...Parameters<pxGraphics['drawRoundedRect']>]
-  | ['drawStar', ...Parameters<pxGraphics['drawStar']>]
 
 export type DrawCalls = Array<DrawCall>
 export type ExtendedGraphics<Data extends object> = pxGraphics & Data
-export type GraphicsProps<Data extends object> = CommonProps<ExtendedGraphics<Data>> &
+export type GraphicsProps<Data extends object> = CommonProps<pxGraphics, Data> &
   Omit<GraphicsOptions, 'children'> &
   Events & {
     draw?: DrawCalls
@@ -56,14 +48,9 @@ export type GraphicsProps<Data extends object> = CommonProps<ExtendedGraphics<Da
   }
 
 export function Graphics<Data extends object = object>(props: GraphicsProps<Data>) {
-  let graphics: ExtendedGraphics<Data>
   const [ours, events, pixis] = splitProps(props, [...CommonPropKeys, 'draw'], EventTypes)
 
-  if (ours.as) {
-    graphics = ours.as
-  } else {
-    graphics = new pxGraphics(pixis) as ExtendedGraphics<Data>
-  }
+  const graphics = (ours.as || new pxGraphics(pixis)) as ExtendedGraphics<Data>
 
   createEffect(() => {
     for (const prop in pixis) {

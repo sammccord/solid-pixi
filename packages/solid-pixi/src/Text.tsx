@@ -1,11 +1,11 @@
 import { Text as pxText, TextOptions, TextString } from 'pixi.js'
-import { createEffect, onCleanup, splitProps, untrack } from 'solid-js'
+import { createEffect, onCleanup, splitProps } from 'solid-js'
 import { Events, EventTypes } from './events'
 import { CommonPropKeys, CommonProps } from './interfaces'
 import { useParent } from './ParentContext'
 
 export type ExtendedText<Data extends object> = pxText & Data
-export type TextProps<Data extends object> = Omit<CommonProps<ExtendedText<Data>>, 'children'> &
+export type TextProps<Data extends object> = Omit<CommonProps<pxText, Data>, 'children'> &
   Omit<TextOptions, 'text' | 'children'> &
   Events &
   Data & {
@@ -13,14 +13,8 @@ export type TextProps<Data extends object> = Omit<CommonProps<ExtendedText<Data>
   }
 
 export function Text<Data extends object = object>(props: TextProps<Data>) {
-  let text: ExtendedText<Data>
   const [ours, events, pixis] = splitProps(props, CommonPropKeys.concat('children'), EventTypes)
-
-  if (ours.as) {
-    text = ours.as
-  } else {
-    text = new pxText(pixis) as ExtendedText<Data>
-  }
+  const text = (ours.as || new pxText(pixis)) as ExtendedText<Data>
 
   createEffect(() => {
     text.text = ours.children
