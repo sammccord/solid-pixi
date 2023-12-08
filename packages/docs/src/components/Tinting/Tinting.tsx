@@ -81,12 +81,10 @@ function Dudes() {
 
 export function Tinting() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application resizeTo={window}>
-        <Assets load={[['https://v2-pixijs.com/assets/eggHead.png']]}>
-          <Dudes />
-        </Assets>
-      </Application>
-    </Suspense>
+    <Application resizeTo={window}>
+      <Assets load={[['https://v2-pixijs.com/assets/eggHead.png']]}>
+        <Dudes />
+      </Assets>
+    </Application>
   )
 }

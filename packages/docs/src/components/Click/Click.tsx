@@ -1,5 +1,5 @@
 import { Texture, type PointLike } from 'pixi.js'
-import { Suspense, createSignal } from 'solid-js'
+import { createSignal } from 'solid-js'
 import { Application, Assets, Sprite, useApplication } from '../../../../solid-pixi/src/index'
 
 function ClickContainer() {
@@ -23,12 +23,10 @@ function ClickContainer() {
 
 export function Click() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application background="#1099bb" resizeTo={window}>
-        <Assets load={[['https://v2-pixijs.com/assets/bunny.png']]}>
-          <ClickContainer />
-        </Assets>
-      </Application>
-    </Suspense>
+    <Application background="#1099bb" resizeTo={window}>
+      <Assets load={[['https://v2-pixijs.com/assets/bunny.png']]}>
+        <ClickContainer />
+      </Assets>
+    </Application>
   )
 }

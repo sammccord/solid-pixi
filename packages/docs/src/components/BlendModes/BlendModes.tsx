@@ -96,22 +96,17 @@ function Background() {
 
 export function BlendModes() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application resizeTo={window}>
-        <Assets
-          load={[
-            [
-              'https://v2-pixijs.com/assets/eggHead.png',
-              'https://v2-pixijs.com/assets/bg_rotate.jpg'
-            ]
-          ]}
-        >
-          <Background />
-          <Container>
-            <Dudes />
-          </Container>
-        </Assets>
-      </Application>
-    </Suspense>
+    <Application resizeTo={window}>
+      <Assets
+        load={[
+          ['https://v2-pixijs.com/assets/eggHead.png', 'https://v2-pixijs.com/assets/bg_rotate.jpg']
+        ]}
+      >
+        <Background />
+        <Container>
+          <Dudes />
+        </Container>
+      </Assets>
+    </Application>
   )
 }

@@ -35,12 +35,10 @@ function SwapContainer() {
 
 export function AnimatedSpriteExplosion() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application background="#1099bb" resizeTo={window}>
-        <Assets load={[['https://v2-pixijs.com/assets/spritesheet/mc.json']]}>
-          <SwapContainer />
-        </Assets>
-      </Application>
-    </Suspense>
+    <Application background="#1099bb" resizeTo={window}>
+      <Assets load={[['https://v2-pixijs.com/assets/spritesheet/mc.json']]}>
+        <SwapContainer />
+      </Assets>
+    </Application>
   )
 }

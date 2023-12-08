@@ -30,12 +30,10 @@ function TilingSpriteContainer() {
 
 export function Example() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application resizeTo={window}>
-        <Assets load={[['https://v2-pixijs.com/assets/p2.jpeg']]}>
-          <TilingSpriteContainer />
-        </Assets>
-      </Application>
-    </Suspense>
+    <Application resizeTo={window}>
+      <Assets load={[['https://v2-pixijs.com/assets/p2.jpeg']]}>
+        <TilingSpriteContainer />
+      </Assets>
+    </Application>
   )
 }

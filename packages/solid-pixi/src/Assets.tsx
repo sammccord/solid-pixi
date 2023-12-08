@@ -1,11 +1,10 @@
 import { AssetInitOptions, Assets as pxAssets } from 'pixi.js'
-import { JSX, NoInfer, ResourceOptions, Show, createResource, splitProps } from 'solid-js'
+import { JSX, Show, Suspense, createMemo, createResource, splitProps } from 'solid-js'
 import { CommonProps } from './interfaces'
 
 export type AssetsLoader = {
   fallback?: JSX.Element
   init?: AssetInitOptions
-  resourceOptions?: ResourceOptions<NoInfer<unknown>, unknown>
   add?: Parameters<(typeof pxAssets)['add']>
   load?: Parameters<(typeof pxAssets)['load']>
   addBundle?: Parameters<(typeof pxAssets)['addBundle']>
@@ -17,35 +16,62 @@ export type AssetsLoader = {
 
 export type AssetsProps = Pick<CommonProps, 'children'> & AssetsLoader
 
-export function Assets(props: AssetsProps) {
-  const [ours, pixis] = splitProps(props, ['children', 'fallback', 'resourceOptions'])
+type ResourceSignals = [
+  AssetInitOptions | undefined,
+  Parameters<(typeof pxAssets)['add']> | undefined,
+  Parameters<(typeof pxAssets)['addBundle']> | undefined,
+  Array<Parameters<(typeof pxAssets)['addBundle']>> | undefined,
+  Parameters<(typeof pxAssets)['load']> | undefined,
+  Parameters<(typeof pxAssets)['loadBundle']> | undefined,
+  Parameters<(typeof pxAssets)['backgroundLoad']> | undefined,
+  Parameters<(typeof pxAssets)['backgroundLoadBundle']> | undefined
+]
 
-  const [loaders] = createResource(
-    pixis,
-    (_pixis, { refetching }) => {
-      console.log(_pixis, refetching)
+export function Assets(props: AssetsProps) {
+  const [ours, _loaders] = splitProps(props, ['children', 'fallback'])
+
+  const loaders = createMemo<ResourceSignals>(() => [
+    _loaders.init,
+    _loaders.add,
+    _loaders.addBundle,
+    _loaders.addBundles,
+    _loaders.load,
+    _loaders.loadBundle,
+    _loaders.backgroundLoad,
+    _loaders.backgroundLoadBundle
+  ])
+
+  const [resource] = createResource(
+    loaders,
+    async ([
+      init,
+      add,
+      addBundle,
+      addBundles,
+      load,
+      loadBundle,
+      backgroundLoad,
+      backgroundLoadBundle
+    ]) => {
       const promises: Promise<any>[] = []
-      if (!_pixis) return
-      if (_pixis.init) {
-        promises.push(pxAssets.init(_pixis.init))
+      if (init) {
+        await pxAssets.init(init)
       } else {
-        if (_pixis.add) pxAssets.add(..._pixis.add)
-        if (_pixis.addBundle) pxAssets.addBundle(..._pixis.addBundle)
-        if (_pixis.addBundles) _pixis.addBundles.forEach(bundle => pxAssets.addBundle(...bundle))
-        if (_pixis.load) promises.push(pxAssets.load(..._pixis.load))
-        if (_pixis.loadBundle) promises.push(pxAssets.loadBundle(..._pixis.loadBundle))
-        if (_pixis.backgroundLoad) promises.push(pxAssets.backgroundLoad(..._pixis.backgroundLoad))
-        if (_pixis.backgroundLoadBundle)
-          promises.push(pxAssets.backgroundLoadBundle(..._pixis.backgroundLoadBundle))
+        if (add) pxAssets.add(add)
+        if (addBundle) pxAssets.addBundle(...addBundle)
+        if (addBundles) addBundles.forEach(bundle => pxAssets.addBundle(...bundle))
+        if (load) promises.push(pxAssets.load(...load))
+        if (loadBundle) promises.push(pxAssets.loadBundle(...loadBundle))
+        if (backgroundLoad) pxAssets.backgroundLoad(...backgroundLoad)
+        if (backgroundLoadBundle) pxAssets.backgroundLoadBundle(...backgroundLoadBundle)
       }
-      return Promise.all(promises)
-    },
-    ours.resourceOptions as any
+      await Promise.all(promises)
+    }
   )
 
   return (
-    <Show when={loaders()} fallback={ours.fallback}>
-      {ours.children}
-    </Show>
+    <Suspense fallback={ours.fallback}>
+      <Show when={resource()}>{ours.children}</Show>
+    </Suspense>
   )
 }

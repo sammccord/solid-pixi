@@ -1,6 +1,6 @@
 {
   "name": "solid-pixi",
-  "version": "0.0.0-alpha.11",
+  "version": "0.0.0-alpha.12.1",
   "description": "",
   "repository": {
     "type": "git",
@@ -83,13 +83,18 @@
       "require": "./dist/index.umd.js",
       "import": "./dist/index.mjs",
       "types": "./dist/index.d.ts"
+    },
+    "./Spritesheet": {
+      "import": "./dist/Spritesheet.mjs",
+      "types": "./dist/Spritesheet.d.ts",
+      "require": "./dist/Spritesheet.umd.js"
     }
   },
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly"
   },
   "peerDependencies": {
-    "pixi.js": "8.0.0-beta.8",
+    "pixi.js": "8.0.0-beta.12",
     "solid-js": "^1.8.5"
   }
 }

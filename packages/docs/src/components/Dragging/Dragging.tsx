@@ -1,5 +1,4 @@
-import { Texture, type PointLike, SCALE_MODES } from 'pixi.js'
-import { Suspense, createSignal } from 'solid-js'
+import { Texture, type PointLike } from 'pixi.js'
 import { Application, Assets, Sprite, useApplication } from '../../../../solid-pixi/src/index'
 
 function DraggingContainer() {
@@ -52,12 +51,10 @@ function DraggingContainer() {
 
 export function Dragging() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application background="#1099bb" resizeTo={window}>
-        <Assets load={[['https://v2-pixijs.com/assets/bunny.png']]}>
-          <DraggingContainer />
-        </Assets>
-      </Application>
-    </Suspense>
+    <Application background="#1099bb" resizeTo={window}>
+      <Assets load={[['https://v2-pixijs.com/assets/bunny.png']]}>
+        <DraggingContainer />
+      </Assets>
+    </Application>
   )
 }

@@ -33,19 +33,14 @@ function SwapContainer() {
 
 export function TextureSwap() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application background="#1099bb" resizeTo={window}>
-        <Assets
-          load={[
-            [
-              'https://v2-pixijs.com/assets/flowerTop.png',
-              'https://v2-pixijs.com/assets/eggHead.png'
-            ]
-          ]}
-        >
-          <SwapContainer />
-        </Assets>
-      </Application>
-    </Suspense>
+    <Application background="#1099bb" resizeTo={window}>
+      <Assets
+        load={[
+          ['https://v2-pixijs.com/assets/flowerTop.png', 'https://v2-pixijs.com/assets/eggHead.png']
+        ]}
+      >
+        <SwapContainer />
+      </Assets>
+    </Application>
   )
 }

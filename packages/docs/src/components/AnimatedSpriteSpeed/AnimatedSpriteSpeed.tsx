@@ -56,12 +56,10 @@ function SpeedContainer() {
 
 export function AnimatedSpriteSpeed() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application resizeTo={window}>
-        <Assets load={[['https://v2-pixijs.com/assets/spritesheet/0123456789.json']]}>
-          <SpeedContainer />
-        </Assets>
-      </Application>
-    </Suspense>
+    <Application resizeTo={window}>
+      <Assets load={[['https://v2-pixijs.com/assets/spritesheet/0123456789.json']]}>
+        <SpeedContainer />
+      </Assets>
+    </Application>
   )
 }

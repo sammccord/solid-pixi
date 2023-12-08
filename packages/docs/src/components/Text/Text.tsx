@@ -81,10 +81,8 @@ function TextContainer() {
 
 export function TextExample() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application background="#1099bb" resizeTo={window}>
-        <TextContainer />
-      </Application>
-    </Suspense>
+    <Application background="#1099bb" resizeTo={window}>
+      <TextContainer />
+    </Application>
   )
 }

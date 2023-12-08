@@ -38,10 +38,8 @@ export function GraphicsContainer() {
 
 export function DynamicGraphics() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application resizeTo={window}>
-        <GraphicsContainer />
-      </Application>
-    </Suspense>
+    <Application resizeTo={window}>
+      <GraphicsContainer />
+    </Application>
   )
 }

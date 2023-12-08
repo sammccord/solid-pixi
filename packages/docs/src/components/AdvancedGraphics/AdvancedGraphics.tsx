@@ -93,12 +93,10 @@ export function GraphicsContainer() {
 
 export function AdvancedGraphics() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application resizeTo={window}>
-        <Assets load={[['https://v2-pixijs.com/assets/bg_rotate.jpg']]}>
-          <GraphicsContainer />
-        </Assets>
-      </Application>
-    </Suspense>
+    <Application resizeTo={window}>
+      <Assets load={[['https://v2-pixijs.com/assets/bg_rotate.jpg']]}>
+        <GraphicsContainer />
+      </Assets>
+    </Application>
   )
 }

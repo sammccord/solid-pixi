@@ -46,12 +46,10 @@ function BunniesContainer() {
 
 export function ContainerExample() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application background="#1099bb" resizeTo={window}>
-        <Assets load={[['https://v2-pixijs.com/assets/bunny.png']]}>
-          <BunniesContainer />
-        </Assets>
-      </Application>
-    </Suspense>
+    <Application background="#1099bb" resizeTo={window}>
+      <Assets load={[['https://v2-pixijs.com/assets/bunny.png']]}>
+        <BunniesContainer />
+      </Assets>
+    </Application>
   )
 }

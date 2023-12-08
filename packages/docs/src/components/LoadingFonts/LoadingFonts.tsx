@@ -10,7 +10,6 @@ const bundle = {
 }
 
 function Font(props: { fontFamily: string; y: number }) {
-  console.log(props.fontFamily)
   return (
     <Text
       x={10}
@@ -29,14 +28,18 @@ function Font(props: { fontFamily: string; y: number }) {
 
 export function LoadingFonts() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application background="#1099bb" resizeTo={window}>
-        <Assets addBundle={['fonts', bundle]} loadBundle={['fonts']}>
-          <For each={Object.keys(bundle)}>
-            {(fontFamily, i) => <Font y={i() * 150} fontFamily={fontFamily} />}
-          </For>
-        </Assets>
-      </Application>
-    </Suspense>
+    <Application background="#1099bb" resizeTo={window}>
+      <Assets
+        addBundle={[
+          'fonts',
+          Object.entries(bundle).map(([name, url]) => ({ alias: name, src: url }))
+        ]}
+        loadBundle={['fonts']}
+      >
+        <For each={Object.keys(bundle)}>
+          {(fontFamily, i) => <Font y={i() * 150} fontFamily={fontFamily} />}
+        </For>
+      </Assets>
+    </Application>
   )
 }

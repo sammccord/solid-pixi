@@ -27,12 +27,10 @@ function TextContainer() {
 
 export function BitmapText() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application background="#1099bb" resizeTo={window}>
-        <Assets load={[['https://v2-pixijs.com/assets/bitmap-font/desyrel.xml']]}>
-          <TextContainer />
-        </Assets>
-      </Application>
-    </Suspense>
+    <Application background="#1099bb" resizeTo={window}>
+      <Assets load={[['https://v2-pixijs.com/assets/bitmap-font/desyrel.xml']]}>
+        <TextContainer />
+      </Assets>
+    </Application>
   )
 }

@@ -27,19 +27,17 @@ function ClickContainer() {
 
 export function CustomCursor() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application background="#1099bb" resizeTo={window}>
-        <Assets
-          load={[
-            [
-              'https://v2-pixijs.com/assets/bunny.png',
-              'https://v2-pixijs.com/assets/bunny_saturated.png'
-            ]
-          ]}
-        >
-          <ClickContainer />
-        </Assets>
-      </Application>
-    </Suspense>
+    <Application background="#1099bb" resizeTo={window}>
+      <Assets
+        load={[
+          [
+            'https://v2-pixijs.com/assets/bunny.png',
+            'https://v2-pixijs.com/assets/bunny_saturated.png'
+          ]
+        ]}
+      >
+        <ClickContainer />
+      </Assets>
+    </Application>
   )
 }

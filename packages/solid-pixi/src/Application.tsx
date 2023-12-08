@@ -2,6 +2,7 @@ import { ApplicationOptions, Application as pxApplication } from 'pixi.js'
 import {
   JSXElement,
   Show,
+  Suspense,
   createContext,
   createEffect,
   createResource,
@@ -49,11 +50,13 @@ export function Application(props: ApplicationProps) {
   })
 
   return (
-    <Show when={app()} fallback={ours.fallback}>
-      <AppContext.Provider value={app()}>
-        <ParentContext.Provider value={app()!.stage}>{ours.children}</ParentContext.Provider>
-        {app()!.canvas}
-      </AppContext.Provider>
-    </Show>
+    <Suspense fallback={ours.fallback}>
+      <Show when={app()}>
+        <AppContext.Provider value={app()}>
+          <ParentContext.Provider value={app()!.stage}>{ours.children}</ParentContext.Provider>
+          {app()!.canvas}
+        </AppContext.Provider>
+      </Show>
+    </Suspense>
   )
 }

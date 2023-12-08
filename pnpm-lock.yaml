@@ -84,8 +84,8 @@ importers:
         specifier: ^3.5.6
         version: 3.5.6(@types/node@18.18.11)(typescript@5.3.2)
       pixi.js:
-        specifier: 8.0.0-beta.8
-        version: 8.0.0-beta.8
+        specifier: 8.0.0-beta.12
+        version: 8.0.0-beta.12
       sharp:
         specifier: ^0.32.6
         version: 0.32.6
@@ -102,8 +102,8 @@ importers:
   packages/solid-pixi:
     dependencies:
       pixi.js:
-        specifier: 8.0.0-beta.8
-        version: 8.0.0-beta.8
+        specifier: 8.0.0-beta.12
+        version: 8.0.0-beta.12
       solid-js:
         specifier: ^1.8.5
         version: 1.8.5
@@ -111,8 +111,8 @@ importers:
   packages/tests:
     dependencies:
       pixi.js:
-        specifier: 8.0.0-beta.8
-        version: 8.0.0-beta.8
+        specifier: 8.0.0-beta.12
+        version: 8.0.0-beta.12
       solid-js:
         specifier: ^1.8.5
         version: 1.8.5
@@ -6148,8 +6148,8 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /pixi.js@8.0.0-beta.8:
-    resolution: {integrity: sha512-9FzzC502McI7U7dqT1BrvJOTlBbV02g2vVS2SzW2phUoFw5Ub36i1LUAxgh6STzCbDQw2SgF0D6tkyxvS3sNXQ==}
+  /pixi.js@8.0.0-beta.12:
+    resolution: {integrity: sha512-MKdi+3EgkMAFg3QLg1JHNQJ8ZsWihJlj2xpm1UdKHVXCZ9aifuMSB3K+8+WSMXC3AwOpGJ4vHJ3T1R2Qs8lVVw==}
     dependencies:
       '@pixi/colord': 2.9.6
       '@types/css-font-loading-module': 0.0.8

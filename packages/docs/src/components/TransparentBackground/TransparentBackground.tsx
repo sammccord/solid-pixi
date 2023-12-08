@@ -25,12 +25,10 @@ function BunniesContainer() {
 
 export function TransparentBackground() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Application backgroundAlpha={0} resizeTo={window}>
-        <Assets load={[['https://v2-pixijs.com/assets/bunny.png']]}>
-          <BunniesContainer />
-        </Assets>
-      </Application>
-    </Suspense>
+    <Application backgroundAlpha={0} resizeTo={window}>
+      <Assets load={[['https://v2-pixijs.com/assets/bunny.png']]}>
+        <BunniesContainer />
+      </Assets>
+    </Application>
   )
 }
