@@ -41,7 +41,7 @@ export function Assets(props: AssetsProps) {
     _loaders.backgroundLoadBundle
   ])
 
-  const [resource] = createResource(
+  const [resource, {}] = createResource(
     loaders,
     async ([
       init,
@@ -54,18 +54,16 @@ export function Assets(props: AssetsProps) {
       backgroundLoadBundle
     ]) => {
       const promises: Promise<any>[] = []
-      if (init) {
-        await pxAssets.init(init)
-      } else {
-        if (add) pxAssets.add(add)
-        if (addBundle) pxAssets.addBundle(...addBundle)
-        if (addBundles) addBundles.forEach(bundle => pxAssets.addBundle(...bundle))
-        if (load) promises.push(pxAssets.load(...load))
-        if (loadBundle) promises.push(pxAssets.loadBundle(...loadBundle))
-        if (backgroundLoad) pxAssets.backgroundLoad(...backgroundLoad)
-        if (backgroundLoadBundle) pxAssets.backgroundLoadBundle(...backgroundLoadBundle)
-      }
-      await Promise.all(promises)
+      if (init) await pxAssets.init(init)
+      if (add) pxAssets.add(add)
+      if (addBundle) pxAssets.addBundle(...addBundle)
+      if (addBundles) addBundles.forEach(bundle => pxAssets.addBundle(...bundle))
+      if (backgroundLoad) pxAssets.backgroundLoad(...backgroundLoad)
+      if (backgroundLoadBundle) pxAssets.backgroundLoadBundle(...backgroundLoadBundle)
+      if (load) promises.push(pxAssets.load(...load))
+      if (loadBundle) promises.push(pxAssets.loadBundle(...loadBundle))
+      await Promise.allSettled(promises)
+      return true
     }
   )
 

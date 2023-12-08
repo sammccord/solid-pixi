@@ -1,6 +1,7 @@
 import { BindableTexture, SpritesheetData, Spritesheet as pxSpritesheet } from 'pixi.js'
 import {
   JSX,
+  Show,
   Suspense,
   createContext,
   createMemo,
@@ -54,9 +55,11 @@ export function SpriteSheet<
 
   return (
     <Suspense fallback={ours.fallback}>
-      <SpritesheetContext.Provider value={spritesheet()}>
-        {ours.children}
-      </SpritesheetContext.Provider>
+      <Show when={spritesheet()}>
+        <SpritesheetContext.Provider value={spritesheet()}>
+          {ours.children}
+        </SpritesheetContext.Provider>
+      </Show>
     </Suspense>
   )
 }
