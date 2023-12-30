@@ -13,6 +13,8 @@ function SwapContainer() {
   const app = useApplication()
   const spritesheet = useSpritesheet()
 
+  console.log('!!!', pxAssets, spritesheet)
+
   return (
     <For each={Array.from({ length: 50 })}>
       {() => {
@@ -35,7 +37,14 @@ function SwapContainer() {
 export function Spritesheet() {
   return (
     <Application background="#1099bb" resizeTo={window}>
-      <Assets load={[['https://v2-pixijs.com/assets/spritesheet/mc.json']]}>
+      <Assets
+        load={[
+          [
+            'https://v2-pixijs.com/assets/spritesheet/mc.png',
+            'https://v2-pixijs.com/assets/spritesheet/mc.json'
+          ]
+        ]}
+      >
         <SpriteSheet
           texture={Texture.from('https://v2-pixijs.com/assets/spritesheet/mc.png')}
           data={pxAssets.get('https://v2-pixijs.com/assets/spritesheet/mc.json').data}
