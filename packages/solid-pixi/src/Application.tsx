@@ -52,10 +52,15 @@ export function Application(props: ApplicationProps) {
   return (
     <Suspense fallback={ours.fallback}>
       <Show when={app()}>
-        <AppContext.Provider value={app()}>
-          <ParentContext.Provider value={app()!.stage}>{ours.children}</ParentContext.Provider>
-          {app()!.canvas}
-        </AppContext.Provider>
+        {a => {
+          const _app = a()
+          return (
+            <AppContext.Provider value={_app}>
+              <ParentContext.Provider value={_app.stage}>{ours.children}</ParentContext.Provider>
+              {_app.canvas}
+            </AppContext.Provider>
+          )
+        }}
       </Show>
     </Suspense>
   )

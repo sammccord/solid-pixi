@@ -1,6 +1,5 @@
-import { AssetInitOptions, Assets as pxAssets } from 'pixi.js'
-import { JSX, Show, Suspense, createMemo, createResource, splitProps } from 'solid-js'
-import { CommonProps } from './interfaces'
+import { AssetInitOptions, type Spritesheet, type Texture, Assets as pxAssets } from 'pixi.js'
+import { JSX, Show, Suspense, createMemo, createResource, splitProps, untrack } from 'solid-js'
 
 export type AssetsLoader = {
   fallback?: JSX.Element
@@ -14,7 +13,7 @@ export type AssetsLoader = {
   backgroundLoadBundle?: Parameters<(typeof pxAssets)['backgroundLoadBundle']>
 }
 
-export type AssetsProps = Pick<CommonProps, 'children'> & AssetsLoader
+export type AssetsProps<T = JSX.Element> = AssetsLoader & { children: T }
 
 type ResourceSignals = [
   AssetInitOptions | undefined,
@@ -27,7 +26,10 @@ type ResourceSignals = [
   Parameters<(typeof pxAssets)['backgroundLoadBundle']> | undefined
 ]
 
-export function Assets(props: AssetsProps) {
+export function Assets<
+  T extends Record<string, Texture | Spritesheet | FontFace | Record<string, any> | string>,
+  TRenderFunction extends (assets: T) => JSX.Element = (assets: T) => JSX.Element
+>(props: AssetsProps<TRenderFunction | JSX.Element>) {
   const [ours, _loaders] = splitProps(props, ['children', 'fallback'])
 
   const loaders = createMemo<ResourceSignals>(() => [
@@ -62,14 +64,29 @@ export function Assets(props: AssetsProps) {
       if (backgroundLoadBundle) pxAssets.backgroundLoadBundle(...backgroundLoadBundle)
       if (load) promises.push(pxAssets.load(...load))
       if (loadBundle) promises.push(pxAssets.loadBundle(...loadBundle))
-      await Promise.allSettled(promises)
-      return true
+      return Promise.allSettled(promises)
     }
   )
 
   return (
     <Suspense fallback={ours.fallback}>
-      <Show when={resource()}>{ours.children}</Show>
+      <Show when={resource()} keyed>
+        {resources => {
+          const child = props.children
+          const fn = typeof child === 'function' && child.length > 0
+          return fn
+            ? untrack(() => {
+                const assets = {}
+                resources.forEach(result => {
+                  if (result.status === 'fulfilled') {
+                    Object.assign(assets, result.value)
+                  }
+                })
+                return (child as any)(assets)
+              })
+            : child
+        }}
+      </Show>
     </Suspense>
   )
 }

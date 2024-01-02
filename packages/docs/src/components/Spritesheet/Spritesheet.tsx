@@ -13,8 +13,6 @@ function SwapContainer() {
   const app = useApplication()
   const spritesheet = useSpritesheet()
 
-  console.log('!!!', pxAssets, spritesheet)
-
   return (
     <For each={Array.from({ length: 50 })}>
       {() => {
