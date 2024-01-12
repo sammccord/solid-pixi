@@ -84,8 +84,8 @@ importers:
         specifier: ^3.5.6
         version: 3.5.6(@types/node@18.18.11)(typescript@5.3.2)
       pixi.js:
-        specifier: 8.0.0-rc
-        version: 8.0.0-rc
+        specifier: 8.0.0-rc.3
+        version: 8.0.0-rc.3
       sharp:
         specifier: ^0.32.6
         version: 0.32.6
@@ -102,8 +102,8 @@ importers:
   packages/solid-pixi:
     dependencies:
       pixi.js:
-        specifier: 8.0.0-rc
-        version: 8.0.0-rc
+        specifier: 8.0.0-rc.3
+        version: 8.0.0-rc.3
       solid-js:
         specifier: ^1.8.5
         version: 1.8.5
@@ -111,8 +111,8 @@ importers:
   packages/tests:
     dependencies:
       pixi.js:
-        specifier: 8.0.0-rc
-        version: 8.0.0-rc
+        specifier: 8.0.0-rc.3
+        version: 8.0.0-rc.3
       solid-js:
         specifier: ^1.8.5
         version: 1.8.5
@@ -1542,8 +1542,8 @@ packages:
     resolution: {integrity: sha512-qQR1dr2rGIHYlJulmr8Ioq3De0Le9E4MJ5AiaeAETJJpndT1uUNHsGFK3L/UIu+rbkQSdj8J/w2bCsBZc/Y5fQ==}
     dev: true
 
-  /@types/css-font-loading-module@0.0.8:
-    resolution: {integrity: sha512-PdJeLlCJj/ShOA+c0dXdZ/e1P0Cdjhip+dRBtPaigOqwKd0DiFx3NeO6T2E7AQ5JszSR3dub3YkQjc2hcQyxSw==}
+  /@types/css-font-loading-module@0.0.12:
+    resolution: {integrity: sha512-x2tZZYkSxXqWvTDgveSynfjq/T2HyiZHXb00j/+gy19yp70PHCizM48XFdjBCWH7eHBD0R5i/pw9yMBP/BH5uA==}
     dev: false
 
   /@types/debug@4.1.12:
@@ -1865,8 +1865,8 @@ packages:
     resolution: {integrity: sha512-JT5CvrIYYCrmB+dCana8sUqJEcGB1ZDXNLMQ2+42bW995WmNoenijWMUdZfwmuQUTQcEVVIa2OecZzTYWUW9Cg==}
     dev: false
 
-  /@webgpu/types@0.1.39:
-    resolution: {integrity: sha512-sSVNnZpvHMnVX4KLAIx6RSQj2jTIoA4NCQTayarQskTqfrflWVXBZttEhIYWg4mJBW9No8q0g2PFCx2QEnIj/Q==}
+  /@webgpu/types@0.1.40:
+    resolution: {integrity: sha512-/BBkHLS6/eQjyWhY2H7Dx5DHcVrS2ICj9owvSRdgtQT6KcafLZA86tPze0xAOsd4FbsYKCUBUQyNi87q7gV7kw==}
     dev: false
 
   /@xmldom/xmldom@0.8.10:
@@ -6148,13 +6148,13 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /pixi.js@8.0.0-rc:
-    resolution: {integrity: sha512-AW1TWj+TfQ6XbAiJD6cC0Y5wGQ3qXkKacxulnuKg9BkR2Cl40jF94nW37D63i2ZUwqw4Pz3+vmbpzTPky41C/w==}
+  /pixi.js@8.0.0-rc.3:
+    resolution: {integrity: sha512-IZp8wO6W5iOMv/UpVXsCMOyvOh23UG4XNqqbgq0nZz0aaT03njax7Nfj3i6J7r3HlfGTfLW0yWGAIq7VlVSvuA==}
     dependencies:
       '@pixi/colord': 2.9.6
-      '@types/css-font-loading-module': 0.0.8
+      '@types/css-font-loading-module': 0.0.12
       '@types/earcut': 2.1.4
-      '@webgpu/types': 0.1.39
+      '@webgpu/types': 0.1.40
       '@xmldom/xmldom': 0.8.10
       earcut: 2.2.4
       eventemitter3: 5.0.1

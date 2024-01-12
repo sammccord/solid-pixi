@@ -1,6 +1,6 @@
 {
   "name": "solid-pixi",
-  "version": "0.0.0-rc.1",
+  "version": "0.0.0-rc.3",
   "description": "",
   "repository": {
     "type": "git",
@@ -94,7 +94,7 @@
     "build": "vite build && tsc --emitDeclarationOnly"
   },
   "peerDependencies": {
-    "pixi.js": "8.0.0-rc",
+    "pixi.js": "8.0.0-rc.3",
     "solid-js": "^1.8.5"
   }
 }
