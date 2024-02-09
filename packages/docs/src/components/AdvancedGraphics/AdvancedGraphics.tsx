@@ -1,5 +1,4 @@
 import { Sprite } from 'pixi.js'
-import { Suspense } from 'solid-js'
 import { Application, Assets, Graphics } from '../../../../solid-pixi/src/index'
 
 export function GraphicsContainer() {
@@ -68,10 +67,9 @@ export function GraphicsContainer() {
       />
       {/* Hole */}
       <Graphics
-        fillStyle={0x00ff00}
         draw={[
           ['rect', 350, 350, 150, 150],
-          ['fill'],
+          ['fill', 0x00ff00],
           ['circle', 375, 375, 25],
           ['circle', 425, 425, 25],
           ['circle', 475, 475, 25],
@@ -80,10 +78,9 @@ export function GraphicsContainer() {
       />
       {/* Line Texture */}
       <Graphics
-        fillStyle={0xff0000}
         draw={[
           ['rect', 80, 350, 150, 150],
-          ['fill'],
+          ['fill', 0xff000],
           ['stroke', { texture: sprite.texture, width: 20 }]
         ]}
       />

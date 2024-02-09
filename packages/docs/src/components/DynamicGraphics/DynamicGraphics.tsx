@@ -19,7 +19,6 @@ export function GraphicsContainer() {
       <Graphics
         x={400}
         y={300}
-        fillStyle={{ color: 0xffff00, alpha: 0.5 }}
         rotation={count() * 0.1}
         draw={[
           ['clear'],
@@ -28,7 +27,7 @@ export function GraphicsContainer() {
           ['lineTo', 120 + Math.sin(count()) * 20, 100 + Math.cos(count()) * 20],
           ['lineTo', -120 + Math.cos(count()) * 20, 100 + Math.sin(count()) * 20],
           ['lineTo', -120 + Math.sin(count()) * 20, -100 + Math.cos(count()) * 20],
-          ['fill'],
+          ['fill', { color: 0xffff00, alpha: 0.5 }],
           ['stroke', { width: 10, color: 0xff0000 }]
         ]}
       />

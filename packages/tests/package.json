@@ -7,7 +7,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "pixi.js": "8.0.0-rc.3",
+    "pixi.js": "8.0.0-rc.9",
     "solid-js": "^1.8.5",
     "solid-pixi": "workspace:*"
   }
