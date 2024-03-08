@@ -1,8 +1,8 @@
-import { GraphicsContext, GraphicsOptions, Graphics as pxGraphics } from 'pixi.js'
+import { GraphicsContext, type GraphicsOptions, Graphics as pxGraphics } from 'pixi.js'
 import { createEffect, onCleanup, splitProps } from 'solid-js'
 import { useParent } from './ParentContext'
-import { EventTypes, Events } from './events'
-import { CommonPropKeys, CommonProps } from './interfaces'
+import { EventTypes, type Events } from './events'
+import { CommonPropKeys, type CommonProps } from './interfaces'
 
 export type DrawCall =
   | ['texture', ...Parameters<pxGraphics['texture']>]

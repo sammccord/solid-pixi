@@ -1,7 +1,12 @@
-import { FrameObject, AnimatedSprite as pxAnimatedSprite, SpriteOptions, Texture } from 'pixi.js'
+import {
+  type FrameObject,
+  AnimatedSprite as pxAnimatedSprite,
+  type SpriteOptions,
+  Texture
+} from 'pixi.js'
 import { createEffect, onCleanup, splitProps, untrack } from 'solid-js'
-import { Events, EventTypes } from './events'
-import { CommonPropKeys, CommonProps } from './interfaces'
+import { type Events, EventTypes } from './events'
+import { CommonPropKeys, type CommonProps } from './interfaces'
 import { ParentContext, useParent } from './ParentContext'
 
 export type ExtendedAnimatedSprite<Data extends object> = pxAnimatedSprite & Data

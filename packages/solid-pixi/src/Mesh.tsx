@@ -1,8 +1,8 @@
-import { MeshOptions, Mesh as pxMesh } from 'pixi.js'
+import { type MeshOptions, Mesh as pxMesh } from 'pixi.js'
 import { createEffect, onCleanup, splitProps, untrack } from 'solid-js'
 import { ParentContext, useParent } from './ParentContext'
-import { EventTypes, Events } from './events'
-import { CommonPropKeys, CommonProps } from './interfaces'
+import { EventTypes, type Events } from './events'
+import { CommonPropKeys, type CommonProps } from './interfaces'
 
 export type ExtendedMesh<Data extends object> = pxMesh & Data
 export type MeshProps<Data extends object> = CommonProps<ExtendedMesh<Data>> &

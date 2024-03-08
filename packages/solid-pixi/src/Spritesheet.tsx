@@ -1,6 +1,6 @@
-import { BindableTexture, SpritesheetData, Spritesheet as pxSpritesheet } from 'pixi.js'
+import { type BindableTexture, type SpritesheetData, Spritesheet as pxSpritesheet } from 'pixi.js'
 import {
-  JSX,
+  type JSX,
   Show,
   Suspense,
   createContext,
@@ -9,7 +9,7 @@ import {
   splitProps,
   useContext
 } from 'solid-js'
-import { CommonPropKeys, CommonProps } from './interfaces'
+import { CommonPropKeys, type CommonProps } from './interfaces'
 
 export type ExtendedSpritesheet<S extends SpritesheetData, Data extends object> = pxSpritesheet<S> &
   Data

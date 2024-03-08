@@ -1,6 +1,6 @@
-import { ApplicationOptions, Application as pxApplication } from 'pixi.js'
+import { type ApplicationOptions, Application as pxApplication } from 'pixi.js'
 import {
-  JSXElement,
+  type JSXElement,
   Show,
   Suspense,
   createContext,
@@ -11,7 +11,7 @@ import {
   useContext
 } from 'solid-js'
 import { ParentContext } from './ParentContext'
-import { CommonPropKeys, CommonProps } from './interfaces'
+import { CommonPropKeys, type CommonProps } from './interfaces'
 
 export const AppContext = createContext<pxApplication>()
 export const useApplication = () => useContext(AppContext)

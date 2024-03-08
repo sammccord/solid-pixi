@@ -1,4 +1,4 @@
-import { Renderable } from 'pixi.js'
+import { type Renderable } from 'pixi.js'
 import { JSX } from 'solid-js/jsx-runtime'
 
 export type Use<T> = (t: T) => void

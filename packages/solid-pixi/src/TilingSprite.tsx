@@ -1,8 +1,8 @@
-import { TilingSpriteOptions, TilingSprite as pxTilingSprite } from 'pixi.js'
+import { type TilingSpriteOptions, TilingSprite as pxTilingSprite } from 'pixi.js'
 import { createEffect, onCleanup, splitProps, untrack } from 'solid-js'
 import { ParentContext, useParent } from './ParentContext'
-import { EventTypes, Events } from './events'
-import { CommonPropKeys, CommonProps } from './interfaces'
+import { EventTypes, type Events } from './events'
+import { CommonPropKeys, type CommonProps } from './interfaces'
 
 export type ExtendedTilingSprite<Data extends object> = pxTilingSprite & Data
 export type TilingSpriteProps<Data extends object> = CommonProps<pxTilingSprite, Data> &

@@ -1,5 +1,5 @@
-import { AssetInitOptions, type Spritesheet, type Texture, Assets as pxAssets } from 'pixi.js'
-import { JSX, Show, Suspense, createMemo, createResource, splitProps, untrack } from 'solid-js'
+import { type AssetInitOptions, type Spritesheet, type Texture, Assets as pxAssets } from 'pixi.js'
+import { type JSX, Show, Suspense, createMemo, createResource, splitProps, untrack } from 'solid-js'
 
 export type AssetsLoader = {
   fallback?: JSX.Element

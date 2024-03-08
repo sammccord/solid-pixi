@@ -10,7 +10,7 @@
   "bugs": {
     "url": "https://github.com/sammccord/solid-pixi/issues"
   },
-  "homepage": "https://github.com/sammccord/solid-pixi#readme",
+  "homepage": "https://sammccord.github.io/solid-pixi",
   "license": "MIT",
   "scripts": {
     "build": "turbo run build",
@@ -41,13 +41,8 @@
     "vitest": "^0.25.8"
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": [
-      "eslint --fix",
-      "pretty-quick --write"
-    ],
-    "*.{json,md}": [
-      "pretty-quick --write"
-    ]
+    "*.{js,ts,tsx}": ["eslint --fix", "pretty-quick --write"],
+    "*.{json,md}": ["pretty-quick --write"]
   },
   "config": {
     "unsafe-perm": true,
