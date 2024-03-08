@@ -45,10 +45,6 @@ export function Application(props: ApplicationProps) {
     onCleanup(() => cleanups.forEach(cleanup => typeof cleanup === 'function' && cleanup()))
   })
 
-  onCleanup(() => {
-    app()?.destroy() // ?
-  })
-
   return (
     <Suspense fallback={ours.fallback}>
       <Show when={app()}>

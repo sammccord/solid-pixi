@@ -10,14 +10,14 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.3.1",
-    "@astrojs/solid-js": "^3.0.2",
-    "@astrojs/starlight": "^0.12.1",
-    "astro": "^3.5.6",
-    "pixi.js": "8.0.0-rc.9",
-    "solid-pixi": "workspace:*",
+    "@astrojs/check": "^0.3.4",
+    "@astrojs/solid-js": "^4.0.1",
+    "@astrojs/starlight": "^0.21.1",
+    "astro": "^4.4.15",
+    "pixi.js": "8.0.0",
     "sharp": "^0.32.6",
-    "solid-js": "^1.8.5",
-    "typescript": "^5.3.2"
+    "solid-js": "^1.8.15",
+    "solid-pixi": "workspace:*",
+    "typescript": "^5.4.2"
   }
 }

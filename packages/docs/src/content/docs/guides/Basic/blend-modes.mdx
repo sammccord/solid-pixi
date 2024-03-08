@@ -3,6 +3,10 @@ title: Blend Modes
 description: A guide in my new Starlight docs site.
 ---
 
+import { Code } from '@astrojs/starlight/components';
+import importedCode from '/src/components/BlendModes/BlendModes.tsx?raw';
 import BlendModes from '../../../../components/BlendModes/index.astro'
 
 <BlendModes />
+
+<Code code={importedCode} lang="ts" title="src/components/BlendModes/BlendModes.tsx" />

@@ -4,5 +4,9 @@ description: A guide in my new Starlight docs site.
 ---
 
 import Example from '../../../../components/Interactivity/index.astro'
+import { Code } from '@astrojs/starlight/components';
+import importedCode from '/src/components/Interactivity/Interactivity.tsx?raw';
 
 <Example />
+
+<Code code={importedCode} lang="ts" title="src/components/Interactivity/Interactivity.tsx" />

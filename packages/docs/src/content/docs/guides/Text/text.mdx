@@ -3,6 +3,10 @@ title: Text
 description: A guide in my new Starlight docs site.
 ---
 
-import Text from '../../../../components/Text/index.astro'
+import Example from '../../../../components/Text/index.astro'
+import { Code } from '@astrojs/starlight/components';
+import importedCode from '/src/components/Text/Text.tsx?raw';
 
-<Text />
+<Example />
+
+<Code code={importedCode} lang="ts" title="src/components/Text/Text.tsx" />

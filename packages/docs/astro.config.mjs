@@ -4,6 +4,8 @@ import { defineConfig } from 'astro/config'
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://sammccord.github.io',
+  base: '/solid-pixi',
   integrations: [
     starlight({
       title: 'Solid Pixi',
@@ -14,13 +16,13 @@ export default defineConfig({
         {
           label: 'Guides',
           autogenerate: {
-            directory: 'guides'
+            directory: 'reference'
           }
         },
         {
-          label: 'Reference',
+          label: 'Examples',
           autogenerate: {
-            directory: 'reference'
+            directory: 'guides'
           }
         }
       ]
