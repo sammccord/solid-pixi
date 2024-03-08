@@ -1,6 +1,6 @@
 {
   "name": "solid-pixi",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "repository": {
     "type": "git",
@@ -12,7 +12,9 @@
   },
   "homepage": "https://sammccord.github.io/solid-pixi",
   "license": "MIT",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/index.umd.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -89,6 +91,7 @@
     }
   },
   "scripts": {
+    "prepublishOnly": "rm -rf dist && npm run build",
     "build": "vite build && tsc --emitDeclarationOnly"
   },
   "peerDependencies": {
