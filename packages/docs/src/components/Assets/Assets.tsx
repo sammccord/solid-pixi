@@ -11,8 +11,8 @@ export function AssetsLoading() {
         flowerTop: Texture
         sprites: Texture
         spritesheet: Spritesheet
-        '/text.txt': string
-        '/json.json': { ip: string }
+        '/solid-pixi/text.txt': string
+        '/solid-pixi/json.json': { ip: string }
         eggHead?: Texture
       }>
         init={{
@@ -56,8 +56,8 @@ export function AssetsLoading() {
           [
             'https://v2-pixijs.com/assets/eggHead.png',
             'https://v2-pixijs.com/assets/webfont-loader/ChaChicle.ttf',
-            '/json.json',
-            '/text.txt'
+            '/solid-pixi/json.json',
+            '/solid-pixi/text.txt'
           ]
         ]}
       >
