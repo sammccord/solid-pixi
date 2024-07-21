@@ -5,8 +5,8 @@ import { Application, Assets, Sprite, useApplication } from '../../../../solid-p
 function ClickContainer() {
   const app = useApplication()
 
-  const defaultIcon = "url('https://v2-pixijs.com/assets/bunny.png'),auto"
-  const hoverIcon = "url('https://v2-pixijs.com/assets/bunny_saturated.png'),auto"
+  const defaultIcon = "url('https://pixijs.com/assets/bunny.png'),auto"
+  const hoverIcon = "url('https://pixijs.com/assets/bunny_saturated.png'),auto"
 
   // Add custom cursor styles
   app.renderer.events.cursorStyles.default = defaultIcon
@@ -14,7 +14,7 @@ function ClickContainer() {
 
   return (
     <Sprite
-      texture={Texture.from('https://v2-pixijs.com/assets/bunny.png')}
+      texture={Texture.from('https://pixijs.com/assets/bunny.png')}
       interactive
       cursor={hoverIcon}
       scale={{ x: 3, y: 3 }}
@@ -31,8 +31,8 @@ export function CustomCursor() {
       <Assets
         load={[
           [
-            'https://v2-pixijs.com/assets/bunny.png',
-            'https://v2-pixijs.com/assets/bunny_saturated.png'
+            'https://pixijs.com/assets/bunny.png',
+            'https://pixijs.com/assets/bunny_saturated.png'
           ]
         ]}
       >

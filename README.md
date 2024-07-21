@@ -24,7 +24,7 @@ function ClickContainer() {
 
   return (
     <Sprite
-      texture={Texture.from('https://v2-pixijs.com/assets/bunny.png')}
+      texture={Texture.from('https://pixijs.com/assets/bunny.png')}
       interactive
       pointerdown={() => {
         setScale(s => s * 1.25)
@@ -40,7 +40,7 @@ function ClickContainer() {
 export function Click() {
   return (
     <Application background="#1099bb" resizeTo={window}>
-      <Assets load={[['https://v2-pixijs.com/assets/bunny.png']]}>
+      <Assets load={[['https://pixijs.com/assets/bunny.png']]}>
         <ClickContainer />
       </Assets>
     </Application>

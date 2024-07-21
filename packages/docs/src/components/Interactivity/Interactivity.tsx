@@ -5,9 +5,9 @@ import { Application, Assets, Sprite, useApplication } from '../../../../solid-p
 function InteractivityContainer() {
   const app = useApplication()
 
-  const textureButton = Texture.from('https://v2-pixijs.com/assets/button.png')
-  const textureButtonDown = Texture.from('https://v2-pixijs.com/assets/button_down.png')
-  const textureButtonOver = Texture.from('https://v2-pixijs.com/assets/button_over.png')
+  const textureButton = Texture.from('https://pixijs.com/assets/button.png')
+  const textureButtonDown = Texture.from('https://pixijs.com/assets/button_down.png')
+  const textureButtonOver = Texture.from('https://pixijs.com/assets/button_over.png')
 
   let isOver = false,
     isDown = false
@@ -65,9 +65,9 @@ export function Interactivity() {
       <Assets
         load={[
           [
-            'https://v2-pixijs.com/assets/button.png',
-            'https://v2-pixijs.com/assets/button_down.png',
-            'https://v2-pixijs.com/assets/button_over.png'
+            'https://pixijs.com/assets/button.png',
+            'https://pixijs.com/assets/button_down.png',
+            'https://pixijs.com/assets/button_over.png'
           ]
         ]}
       >

@@ -13,7 +13,7 @@ import {
 function Dudes() {
   const parent = useParent()
   const app = useApplication()
-  const texture = Texture.from('https://v2-pixijs.com/assets/eggHead.png')
+  const texture = Texture.from('https://pixijs.com/assets/eggHead.png')
   const dudes = Array.from({ length: 20 }).map(() => {
     const scale = 0.8 + Math.random() * 0.3
     return {
@@ -87,7 +87,7 @@ function Background() {
   const app = useApplication()
   return (
     <Sprite
-      texture={Texture.from('https://v2-pixijs.com/assets/bg_rotate.jpg')}
+      texture={Texture.from('https://pixijs.com/assets/bg_rotate.jpg')}
       width={app?.stage.width}
       height={app?.stage.height}
     />
@@ -99,7 +99,7 @@ export function BlendModes() {
     <Application resizeTo={window}>
       <Assets
         load={[
-          ['https://v2-pixijs.com/assets/eggHead.png', 'https://v2-pixijs.com/assets/bg_rotate.jpg']
+          ['https://pixijs.com/assets/eggHead.png', 'https://pixijs.com/assets/bg_rotate.jpg']
         ]}
       >
         <Background />

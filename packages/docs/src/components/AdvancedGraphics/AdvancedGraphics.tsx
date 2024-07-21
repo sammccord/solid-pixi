@@ -2,7 +2,7 @@ import { Sprite } from 'pixi.js'
 import { Application, Assets, Graphics } from '../../../../solid-pixi/src/index'
 
 export function GraphicsContainer() {
-  const sprite = Sprite.from('https://v2-pixijs.com/assets/bg_rotate.jpg')
+  const sprite = Sprite.from('https://pixijs.com/assets/bg_rotate.jpg')
   return (
     <>
       <Graphics
@@ -91,7 +91,7 @@ export function GraphicsContainer() {
 export function AdvancedGraphics() {
   return (
     <Application resizeTo={window}>
-      <Assets load={[['https://v2-pixijs.com/assets/bg_rotate.jpg']]}>
+      <Assets load={[['https://pixijs.com/assets/bg_rotate.jpg']]}>
         <GraphicsContainer />
       </Assets>
     </Application>

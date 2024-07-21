@@ -20,7 +20,7 @@ function SpeedContainer() {
     const texture = Texture.from(framekey)
     const time = (
       (
-        pxAssets.get('https://v2-pixijs.com/assets/spritesheet/0123456789.json')
+        pxAssets.get('https://pixijs.com/assets/spritesheet/0123456789.json')
           .data as SpritesheetData
       ).frames[framekey] as any
     ).duration
@@ -57,7 +57,7 @@ function SpeedContainer() {
 export function AnimatedSpriteSpeed() {
   return (
     <Application resizeTo={window}>
-      <Assets load={[['https://v2-pixijs.com/assets/spritesheet/0123456789.json']]}>
+      <Assets load={[['https://pixijs.com/assets/spritesheet/0123456789.json']]}>
         <SpeedContainer />
       </Assets>
     </Application>

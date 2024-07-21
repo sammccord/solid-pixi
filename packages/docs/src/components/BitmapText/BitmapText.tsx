@@ -28,7 +28,7 @@ function TextContainer() {
 export function BitmapText() {
   return (
     <Application background="#1099bb" resizeTo={window}>
-      <Assets load={[['https://v2-pixijs.com/assets/bitmap-font/desyrel.xml']]}>
+      <Assets load={[['https://pixijs.com/assets/bitmap-font/desyrel.xml']]}>
         <TextContainer />
       </Assets>
     </Application>

@@ -4,7 +4,7 @@ import { Application, Assets, Sprite, useApplication } from '../../../../solid-p
 function DraggingContainer() {
   const app = useApplication()
 
-  const texture = Texture.from('https://v2-pixijs.com/assets/bunny.png')
+  const texture = Texture.from('https://pixijs.com/assets/bunny.png')
 
   let dragTarget = null
 
@@ -52,7 +52,7 @@ function DraggingContainer() {
 export function Dragging() {
   return (
     <Application background="#1099bb" resizeTo={window}>
-      <Assets load={[['https://v2-pixijs.com/assets/bunny.png']]}>
+      <Assets load={[['https://pixijs.com/assets/bunny.png']]}>
         <DraggingContainer />
       </Assets>
     </Application>

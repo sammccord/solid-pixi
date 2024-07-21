@@ -11,8 +11,8 @@ import {
 function SwapContainer() {
   const app = useApplication()
   const textures = [
-    Texture.from('https://v2-pixijs.com/assets/flowerTop.png'),
-    Texture.from('https://v2-pixijs.com/assets/eggHead.png')
+    Texture.from('https://pixijs.com/assets/flowerTop.png'),
+    Texture.from('https://pixijs.com/assets/eggHead.png')
   ]
   const [texture, setTexture] = createSignal(0)
 
@@ -36,7 +36,7 @@ export function TextureSwap() {
     <Application background="#1099bb" resizeTo={window}>
       <Assets
         load={[
-          ['https://v2-pixijs.com/assets/flowerTop.png', 'https://v2-pixijs.com/assets/eggHead.png']
+          ['https://pixijs.com/assets/flowerTop.png', 'https://pixijs.com/assets/eggHead.png']
         ]}
       >
         <SwapContainer />

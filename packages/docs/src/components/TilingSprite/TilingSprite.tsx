@@ -4,7 +4,7 @@ import { Application, Assets, TilingSprite, useApplication } from '../../../../s
 
 function TilingSpriteContainer() {
   const app = useApplication()
-  const texture = Texture.from('https://v2-pixijs.com/assets/p2.jpeg')
+  const texture = Texture.from('https://pixijs.com/assets/p2.jpeg')
 
   let count = 0
 
@@ -31,7 +31,7 @@ function TilingSpriteContainer() {
 export function Example() {
   return (
     <Application resizeTo={window}>
-      <Assets load={[['https://v2-pixijs.com/assets/p2.jpeg']]}>
+      <Assets load={[['https://pixijs.com/assets/p2.jpeg']]}>
         <TilingSpriteContainer />
       </Assets>
     </Application>
