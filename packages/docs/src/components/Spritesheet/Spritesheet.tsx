@@ -38,14 +38,14 @@ export function Spritesheet() {
       <Assets
         load={[
           [
-            'https://v2-pixijs.com/assets/spritesheet/mc.png',
-            'https://v2-pixijs.com/assets/spritesheet/mc.json'
+            'https://pixijs.com/assets/spritesheet/mc.png',
+            'https://pixijs.com/assets/spritesheet/mc.json'
           ]
         ]}
       >
         <SpriteSheet
-          texture={Texture.from('https://v2-pixijs.com/assets/spritesheet/mc.png')}
-          data={pxAssets.get('https://v2-pixijs.com/assets/spritesheet/mc.json').data}
+          texture={Texture.from('https://pixijs.com/assets/spritesheet/mc.png')}
+          data={pxAssets.get('https://pixijs.com/assets/spritesheet/mc.json').data}
         >
           <SwapContainer />
         </SpriteSheet>

@@ -4,7 +4,7 @@ import { Application, Assets, Sprite, useApplication } from '../../../../solid-p
 
 function BunniesContainer() {
   const app = useApplication()
-  const texture = Texture.from('https://v2-pixijs.com/assets/bunny.png')
+  const texture = Texture.from('https://pixijs.com/assets/bunny.png')
 
   return (
     <Sprite
@@ -26,7 +26,7 @@ function BunniesContainer() {
 export function TransparentBackground() {
   return (
     <Application backgroundAlpha={0} resizeTo={window}>
-      <Assets load={[['https://v2-pixijs.com/assets/bunny.png']]}>
+      <Assets load={[['https://pixijs.com/assets/bunny.png']]}>
         <BunniesContainer />
       </Assets>
     </Application>

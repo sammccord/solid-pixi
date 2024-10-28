@@ -3,10 +3,10 @@ import { For, Suspense } from 'solid-js'
 import { Application, Assets, Text } from '../../../../solid-pixi/src/index'
 
 const bundle = {
-  ChaChicle: 'https://v2-pixijs.com/assets/webfont-loader/ChaChicle.ttf',
-  Lineal: 'https://v2-pixijs.com/assets/webfont-loader/Lineal.otf',
-  'Dotrice Regular': 'https://v2-pixijs.com/assets/webfont-loader/Dotrice-Regular.woff',
-  Crosterian: 'https://v2-pixijs.com/assets/webfont-loader/Crosterian.woff2'
+  ChaChicle: 'https://pixijs.com/assets/webfont-loader/ChaChicle.ttf',
+  Lineal: 'https://pixijs.com/assets/webfont-loader/Lineal.otf',
+  'Dotrice Regular': 'https://pixijs.com/assets/webfont-loader/Dotrice-Regular.woff',
+  Crosterian: 'https://pixijs.com/assets/webfont-loader/Crosterian.woff2'
 }
 
 function Font(props: { fontFamily: string; y: number }) {

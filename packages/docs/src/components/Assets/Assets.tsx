@@ -24,17 +24,17 @@ export function AssetsLoading() {
                   {
                     name: 'flowerTop',
                     alias: 'flowerTop',
-                    src: 'https://v2-pixijs.com/assets/flowerTop.png'
+                    src: 'https://pixijs.com/assets/flowerTop.png'
                   },
                   {
                     name: 'sprites',
                     alias: 'sprites',
-                    src: 'https://v2-pixijs.com/assets/spritesheet/mc.png'
+                    src: 'https://pixijs.com/assets/spritesheet/mc.png'
                   },
                   {
                     name: 'spritesheet',
                     alias: 'spritesheet',
-                    src: 'https://v2-pixijs.com/assets/spritesheet/mc.json'
+                    src: 'https://pixijs.com/assets/spritesheet/mc.json'
                   }
                 ]
               },
@@ -44,7 +44,7 @@ export function AssetsLoading() {
                   {
                     name: 'eggHead',
                     alias: 'eggHead',
-                    src: 'https://v2-pixijs.com/assets/eggHead.png'
+                    src: 'https://pixijs.com/assets/eggHead.png'
                   }
                 ]
               }
@@ -54,8 +54,8 @@ export function AssetsLoading() {
         loadBundle={[`${state()}-screen`]}
         load={[
           [
-            'https://v2-pixijs.com/assets/eggHead.png',
-            'https://v2-pixijs.com/assets/webfont-loader/ChaChicle.ttf',
+            'https://pixijs.com/assets/eggHead.png',
+            'https://pixijs.com/assets/webfont-loader/ChaChicle.ttf',
             '/solid-pixi/json.json',
             '/solid-pixi/text.txt'
           ]

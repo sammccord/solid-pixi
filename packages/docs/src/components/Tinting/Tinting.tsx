@@ -10,7 +10,7 @@ import {
 
 function Dudes() {
   const app = useApplication()
-  const texture = Texture.from('https://v2-pixijs.com/assets/eggHead.png')
+  const texture = Texture.from('https://pixijs.com/assets/eggHead.png')
   const dudes = Array.from({ length: 20 }).map(() => {
     const scale = 0.8 + Math.random() * 0.3
     return {
@@ -82,7 +82,7 @@ function Dudes() {
 export function Tinting() {
   return (
     <Application resizeTo={window}>
-      <Assets load={[['https://v2-pixijs.com/assets/eggHead.png']]}>
+      <Assets load={[['https://pixijs.com/assets/eggHead.png']]}>
         <Dudes />
       </Assets>
     </Application>

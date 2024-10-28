@@ -10,7 +10,7 @@ import {
 
 function BunniesContainer() {
   const app = useApplication()
-  const texture = Texture.from('https://v2-pixijs.com/assets/bunny.png')
+  const texture = Texture.from('https://pixijs.com/assets/bunny.png')
 
   return (
     <Container
@@ -47,7 +47,7 @@ function BunniesContainer() {
 export function ContainerExample() {
   return (
     <Application background="#1099bb" resizeTo={window}>
-      <Assets load={[['https://v2-pixijs.com/assets/bunny.png']]}>
+      <Assets load={[['https://pixijs.com/assets/bunny.png']]}>
         <BunniesContainer />
       </Assets>
     </Application>
