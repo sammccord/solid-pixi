@@ -11,13 +11,13 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.3.4",
-    "@astrojs/solid-js": "^4.0.1",
-    "@astrojs/starlight": "^0.21.1",
-    "astro": "^4.4.15",
-    "pixi.js": "^8.0.0",
+    "@astrojs/solid-js": "^4.4.4",
+    "@astrojs/starlight": "^0.21.5",
+    "astro": "^4.16.14",
+    "pixi.js": "^8.5.2",
     "sharp": "^0.32.6",
-    "solid-js": "^1.8.15",
+    "solid-js": "^1.9.3",
     "solid-pixi": "workspace:*",
-    "typescript": "^5.4.2"
+    "typescript": "^5.7.2"
   }
 }
