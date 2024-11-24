@@ -1,4 +1,4 @@
-import { Texture, type PointLike } from 'pixi.js'
+import { type PointLike, Texture } from 'pixi.js'
 import { Suspense, createSignal } from 'solid-js'
 import { Application, Assets, Sprite, useApplication } from '../../../../solid-pixi/src/index'
 
@@ -30,10 +30,7 @@ export function CustomCursor() {
     <Application background="#1099bb" resizeTo={window}>
       <Assets
         load={[
-          [
-            'https://pixijs.com/assets/bunny.png',
-            'https://pixijs.com/assets/bunny_saturated.png'
-          ]
+          ['https://pixijs.com/assets/bunny.png', 'https://pixijs.com/assets/bunny_saturated.png']
         ]}
       >
         <ClickContainer />

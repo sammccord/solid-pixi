@@ -1,8 +1,8 @@
-import { Text as pxText, type TextOptions, type TextString } from 'pixi.js'
+import { type TextOptions, type TextString, Text as pxText } from 'pixi.js'
 import { createEffect, onCleanup, splitProps } from 'solid-js'
-import { type Events, EventTypes } from './events'
-import { CommonPropKeys, type CommonProps } from './interfaces'
 import { useParent } from './ParentContext'
+import { EventTypes, type Events } from './events'
+import { CommonPropKeys, type CommonProps } from './interfaces'
 
 export type ExtendedText<Data extends object> = pxText & Data
 export type TextProps<Data extends object> = Omit<CommonProps<pxText, Data>, 'children'> &

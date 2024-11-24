@@ -12,9 +12,7 @@
   },
   "homepage": "https://sammccord.github.io/solid-pixi",
   "license": "MIT",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "main": "./dist/index.umd.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -95,7 +93,7 @@
     "build": "vite build && tsc --emitDeclarationOnly"
   },
   "peerDependencies": {
-    "pixi.js": "8.0.0",
+    "pixi.js": "8",
     "solid-js": "^1.8.5"
   }
 }

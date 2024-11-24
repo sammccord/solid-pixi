@@ -7,10 +7,7 @@
       "outputs": ["dist/**"]
     },
     "test": {
-      "inputs": [
-        "packages/tests/src/**/*.test.ts",
-        "packages/tests/src/**/*.test.tsx"
-      ],
+      "inputs": ["packages/tests/src/**/*.test.ts", "packages/tests/src/**/*.test.tsx"],
       "outputs": []
     },
     "dev": {

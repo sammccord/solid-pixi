@@ -1,4 +1,4 @@
-import { Texture, type PointLike } from 'pixi.js'
+import { type PointLike, Texture } from 'pixi.js'
 import { createSignal } from 'solid-js'
 import { Application, Assets, Sprite, useApplication } from '../../../../solid-pixi/src/index'
 

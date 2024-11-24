@@ -1,10 +1,10 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 
+import fs from 'fs'
+import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import solidPlugin from 'vite-plugin-solid'
-import { resolve } from 'path'
-import fs from 'fs'
 
 const files = fs.readdirSync(resolve(__dirname, 'src'))
 const packageJsonPath = resolve(__dirname, 'package.json')

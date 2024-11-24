@@ -1,6 +1,6 @@
+import { type PointLike, TextStyle } from 'pixi.js'
 import { Suspense, createEffect, createSignal, onCleanup } from 'solid-js'
-import { TextStyle, type PointLike } from 'pixi.js'
-import { Application, useApplication, Text, Container } from '../../../../solid-pixi/src/index'
+import { Application, Container, Text, useApplication } from '../../../../solid-pixi/src/index'
 
 function TextContainer() {
   const [skew, setSkew] = createSignal(Math.random())

@@ -1,11 +1,11 @@
-import { Texture, type PointLike, Assets as pxAssets } from 'pixi.js'
+import { type PointLike, Texture, Assets as pxAssets } from 'pixi.js'
 import { For, Suspense, createEffect } from 'solid-js'
 import {
-  Sprite,
   Application,
   Assets,
-  useApplication,
+  Sprite,
   SpriteSheet,
+  useApplication,
   useSpritesheet
 } from '../../../../solid-pixi/src/index'
 

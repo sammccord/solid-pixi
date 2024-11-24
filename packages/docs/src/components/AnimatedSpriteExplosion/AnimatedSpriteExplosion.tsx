@@ -1,4 +1,4 @@
-import { Texture, type PointLike } from 'pixi.js'
+import { type PointLike, Texture } from 'pixi.js'
 import { For, Suspense } from 'solid-js'
 import {
   AnimatedSprite,

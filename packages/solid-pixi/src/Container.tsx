@@ -1,7 +1,7 @@
-import { Container as pxContainer, type ContainerOptions } from 'pixi.js'
-import { createEffect, onCleanup, splitProps, type JSX } from 'solid-js'
+import { type ContainerOptions, Container as pxContainer } from 'pixi.js'
+import { type JSX, createEffect, onCleanup, splitProps } from 'solid-js'
 import { ParentContext, useParent } from './ParentContext'
-import { ContainerEventTypes, EventTypes, type ContainerEvents, type Events } from './events'
+import { ContainerEventTypes, type ContainerEvents, EventTypes, type Events } from './events'
 import { CommonPropKeys, type CommonProps } from './interfaces'
 
 export type ExtendedContainer<Data extends object> = pxContainer & Data

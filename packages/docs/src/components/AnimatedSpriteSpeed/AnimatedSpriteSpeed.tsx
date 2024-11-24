@@ -1,9 +1,9 @@
 import {
-  Texture,
   type PointLike,
-  Assets as pxAssets,
   type SpriteSheetJson,
-  type SpritesheetData
+  type SpritesheetData,
+  Texture,
+  Assets as pxAssets
 } from 'pixi.js'
 import { For, Suspense } from 'solid-js'
 import {
