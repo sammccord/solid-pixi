@@ -3,7 +3,7 @@
   "changelog": [
     "@changesets/cli/changelog",
     {
-      "repo": "boostxyz/boost-protocol"
+      "repo": "solid-pixi"
     }
   ],
   "commit": false,
