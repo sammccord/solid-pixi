@@ -16,6 +16,8 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "test": "turbo run test",
+    "changeset:release": "turbo run build && changeset publish",
+    "changeset:version": "changeset version && pnpm install --lockfile-only",
     "publish-packages": "pnpm changeset publish"
   },
   "devDependencies": {
