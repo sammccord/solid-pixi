@@ -20,6 +20,8 @@ jobs:
           fetch-depth: 2
       - name: Install dependencies
         uses: ./.github/actions/install-dependencies
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Version Pull Request
         uses: changesets/action@v1
@@ -37,6 +39,10 @@ jobs:
     timeout-minutes: 20
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - name: Install dependencies
         uses: ./.github/actions/install-dependencies
         env:
