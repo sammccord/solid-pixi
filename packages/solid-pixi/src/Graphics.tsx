@@ -79,19 +79,16 @@ export function Graphics<Data extends object = object>(props: GraphicsProps<Data
     })
   })
 
-  createEffect(() => {
-    let cleanups: (void | (() => void))[] = []
-    const uses = props.uses
-    if (uses) {
-      if (Array.isArray(uses)) {
-        cleanups = uses.map(fn => fn(graphics))
-      } else {
-        cleanups = [uses(graphics)]
-      }
-    }
-
-    onCleanup(() => cleanups.forEach(cleanup => typeof cleanup === 'function' && cleanup()))
-  })
+  if (ours.ref) {
+    createEffect(() => {
+      if (typeof ours.ref === 'function') {
+        const cleanup = ours.ref(graphics)
+        if (cleanup as unknown) {
+          onCleanup(() => (cleanup as unknown as () => void)())
+        }
+      } else (ours.ref as any) = graphics
+    })
+  }
 
   const parent = useParent()
   parent.addChild(graphics)

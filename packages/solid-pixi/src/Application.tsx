@@ -29,21 +29,18 @@ export function Application(props: ApplicationProps) {
     return _app
   })
 
-  createEffect(() => {
-    const _app = app()
-    if (!_app) return
-    let cleanups: (void | (() => void))[] = []
-    const uses = props.uses
-    if (uses) {
-      if (Array.isArray(uses)) {
-        cleanups = uses.map(fn => fn(_app))
-      } else {
-        cleanups = [uses(_app)]
-      }
-    }
-
-    onCleanup(() => cleanups.forEach(cleanup => typeof cleanup === 'function' && cleanup()))
-  })
+  if (ours.ref) {
+    createEffect(() => {
+      const _app = app()
+      if (!_app) return
+      if (typeof ours.ref === 'function') {
+        const cleanup = ours.ref(_app)
+        if (cleanup as unknown) {
+          onCleanup(() => (cleanup as unknown as () => void)())
+        }
+      } else (ours.ref as any) = _app
+    })
+  }
 
   return (
     <Suspense fallback={ours.fallback}>

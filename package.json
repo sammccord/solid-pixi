@@ -15,10 +15,12 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "publish-packages": "pnpm changeset publish"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@changesets/cli": "^2.27.10",
     "@commitlint/cli": "^17.8.1",
     "@commitlint/config-conventional": "^17.8.1",
     "@typescript-eslint/eslint-plugin": "^5.62.0",

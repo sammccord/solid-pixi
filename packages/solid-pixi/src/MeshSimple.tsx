@@ -1,30 +1,32 @@
-import { type MeshOptions, Mesh as pxMesh } from 'pixi.js'
+import { type MeshOptions, Texture, MeshSimple as pxMeshSimple } from 'pixi.js'
 import { createEffect, onCleanup, splitProps } from 'solid-js'
 import { ParentContext, useParent } from './ParentContext'
 import { EventTypes, type Events } from './events'
 import { CommonPropKeys, type CommonProps } from './interfaces'
 
-export type ExtendedMesh<Data extends object> = pxMesh & Data
-export type MeshProps<Data extends object> = CommonProps<ExtendedMesh<Data>> &
+export type ExtendedMeshSimple<Data extends object> = pxMeshSimple & Data
+export type MeshSimpleProps<Data extends object> = CommonProps<ExtendedMeshSimple<Data>> &
   MeshOptions &
   Events &
-  Data
+  Data & {
+    texture: Texture
+  }
 
-export function Mesh<Data extends object = object>(props: MeshProps<Data>) {
+export function MeshSimple<Data extends object = object>(props: MeshSimpleProps<Data>) {
   const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes)
 
-  const mesh = (ours.as || new pxMesh(pixis)) as ExtendedMesh<Data>
+  const meshSimple = (ours.as || new pxMeshSimple(pixis)) as ExtendedMeshSimple<Data>
 
   createEffect(() => {
     for (const prop in pixis) {
-      ;(Mesh as any)[prop] = (pixis as any)[prop]
+      ;(meshSimple as any)[prop] = (pixis as any)[prop]
     }
   })
 
   createEffect(() => {
     const cleanups = Object.entries(events).map(([event, handler]: [any, any]) => {
-      mesh.on(event, handler)
-      return () => mesh.off(event, handler)
+      meshSimple.addEventListener(event, handler)
+      return () => meshSimple.removeEventListener(event, handler)
     })
 
     onCleanup(() => {
@@ -37,19 +39,19 @@ export function Mesh<Data extends object = object>(props: MeshProps<Data>) {
   if (ours.ref) {
     createEffect(() => {
       if (typeof ours.ref === 'function') {
-        const cleanup = ours.ref(mesh)
+        const cleanup = ours.ref(meshSimple)
         if (cleanup as unknown) {
           onCleanup(() => (cleanup as unknown as () => void)())
         }
-      } else (ours.ref as any) = mesh
+      } else (ours.ref as any) = meshSimple
     })
   }
 
   const parent = useParent()
-  parent.addChild(mesh)
+  parent.addChild(meshSimple)
   onCleanup(() => {
-    parent?.removeChild(mesh)
+    parent?.removeChild(meshSimple as any)
   })
 
-  return <ParentContext.Provider value={mesh}>{ours.children}</ParentContext.Provider>
+  return <ParentContext.Provider value={meshSimple}>{ours.children}</ParentContext.Provider>
 }

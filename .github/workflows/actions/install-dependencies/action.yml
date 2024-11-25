@@ -1,0 +1,39 @@
+name: "Install dependencies"
+description: "Prepare repository and all dependencies"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: pnpm/action-setup@v4
+      name: Install pnpm
+      with:
+        version: 9.4.0
+        run_install: false
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: "pnpm"
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        save-always: true
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-deps-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-deps-
+    - uses: actions/cache@v4
+      name: Setup turbo cache
+      with:
+        save-always: true
+        path: .cache
+        key: ${{ runner.os }}-turbo-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-turbo-
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install

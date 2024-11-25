@@ -1,11 +1,4 @@
-import {
-  type PointLike,
-  type SpriteSheetJson,
-  type SpritesheetData,
-  Texture,
-  Assets as pxAssets
-} from 'pixi.js'
-import { For, Suspense } from 'solid-js'
+import { type PointLike, type SpritesheetData, Texture, Assets as pxAssets } from 'pixi.js'
 import {
   AnimatedSprite,
   Application,
@@ -35,7 +28,7 @@ function SpeedContainer() {
         animationSpeed={0.5}
         anchor={{ x: 0.5, y: 0.5 } as PointLike}
         scale={{ x: 4, y: 4 }}
-        uses={slow => {
+        ref={slow => {
           slow.x = (app.screen.width - slow.width) / 2
           slow.play()
         }}
@@ -45,7 +38,7 @@ function SpeedContainer() {
         y={app.screen.height / 2}
         anchor={{ x: 0.5, y: 0.5 } as PointLike}
         scale={{ x: 4, y: 4 }}
-        uses={fast => {
+        ref={fast => {
           fast.x = (app.screen.width + fast.width) / 2
           fast.play()
         }}

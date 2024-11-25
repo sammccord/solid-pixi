@@ -1,20 +1,20 @@
-import { type TextOptions, type TextString, Text as pxText } from 'pixi.js'
+import { type HTMLTextOptions, type TextString, HTMLText as pxHTMLText } from 'pixi.js'
 import { createEffect, onCleanup, splitProps } from 'solid-js'
 import { useParent } from './ParentContext'
 import { EventTypes, type Events } from './events'
 import { CommonPropKeys, type CommonProps } from './interfaces'
 
-export type ExtendedText<Data extends object> = pxText & Data
-export type TextProps<Data extends object> = Omit<CommonProps<pxText, Data>, 'children'> &
-  Omit<TextOptions, 'text' | 'children'> &
+export type ExtendedHTMLText<Data extends object> = pxHTMLText & Data
+export type HTMLTextProps<Data extends object> = Omit<CommonProps<pxHTMLText, Data>, 'children'> &
+  Omit<HTMLTextOptions, 'text' | 'children'> &
   Events &
   Data & {
     children: TextString
   }
 
-export function Text<Data extends object = object>(props: TextProps<Data>) {
+export function HTMLText<Data extends object = object>(props: HTMLTextProps<Data>) {
   const [ours, events, pixis] = splitProps(props, CommonPropKeys.concat('children'), EventTypes)
-  const text = (ours.as || new pxText(pixis)) as ExtendedText<Data>
+  const text = (ours.as || new pxHTMLText(pixis)) as ExtendedHTMLText<Data>
 
   createEffect(() => {
     text.text = ours.children

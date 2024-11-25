@@ -1,5 +1,4 @@
 import { Texture } from 'pixi.js'
-import { Suspense } from 'solid-js'
 import { Application, Assets, TilingSprite, useApplication } from '../../../../solid-pixi/src/index'
 
 function TilingSpriteContainer() {
@@ -13,7 +12,7 @@ function TilingSpriteContainer() {
       texture={texture}
       width={app!.screen.width}
       height={app!.screen.height}
-      uses={tilingSprite => {
+      ref={tilingSprite => {
         app.ticker.add(() => {
           count += 0.005
 

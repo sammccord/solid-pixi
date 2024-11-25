@@ -37,19 +37,16 @@ export function Container<Data extends object = object>(props: ContainerProps<Da
     })
   })
 
-  createEffect(() => {
-    let cleanups: (void | (() => void))[] = []
-    const uses = props.uses
-    if (uses) {
-      if (Array.isArray(uses)) {
-        cleanups = uses.map(fn => fn(container))
-      } else {
-        cleanups = [uses(container)]
-      }
-    }
-
-    onCleanup(() => cleanups.forEach(cleanup => typeof cleanup === 'function' && cleanup()))
-  })
+  if (ours.ref) {
+    createEffect(() => {
+      if (typeof ours.ref === 'function') {
+        const cleanup = ours.ref(container)
+        if (cleanup as unknown) {
+          onCleanup(() => (cleanup as unknown as () => void)())
+        }
+      } else (ours.ref as any) = container
+    })
+  }
 
   const parent = useParent()
   parent.addChild(container)

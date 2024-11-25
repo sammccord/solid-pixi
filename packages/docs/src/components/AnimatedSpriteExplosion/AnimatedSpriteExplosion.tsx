@@ -1,5 +1,5 @@
 import { type PointLike, Texture } from 'pixi.js'
-import { For, Suspense } from 'solid-js'
+import { For } from 'solid-js'
 import {
   AnimatedSprite,
   Application,
@@ -25,7 +25,7 @@ function SwapContainer() {
             anchor={{ x: 0.5, y: 0.5 } as PointLike}
             rotation={Math.random() * Math.PI}
             scale={{ x: scale, y: scale }}
-            uses={ref => ref.gotoAndPlay((Math.random() * 26) | 0)}
+            ref={ref => ref.gotoAndPlay((Math.random() * 26) | 0)}
           />
         )
       }}

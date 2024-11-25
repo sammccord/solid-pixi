@@ -4,7 +4,7 @@ import {
   Texture,
   AnimatedSprite as pxAnimatedSprite
 } from 'pixi.js'
-import { createEffect, onCleanup, splitProps, untrack } from 'solid-js'
+import { createEffect, onCleanup, splitProps } from 'solid-js'
 import { ParentContext, useParent } from './ParentContext'
 import { EventTypes, type Events } from './events'
 import { CommonPropKeys, type CommonProps } from './interfaces'
@@ -48,19 +48,16 @@ export function AnimatedSprite<Data extends object = object>(props: AnimatedSpri
     })
   })
 
-  createEffect(() => {
-    let cleanups: (void | (() => void))[] = []
-    const uses = props.uses
-    if (uses) {
-      if (Array.isArray(uses)) {
-        cleanups = untrack(() => uses.map(fn => fn(sprite)))
-      } else {
-        cleanups = untrack(() => [uses(sprite)])
-      }
-    }
-
-    onCleanup(() => cleanups.forEach(cleanup => typeof cleanup === 'function' && cleanup()))
-  })
+  if (ours.ref) {
+    createEffect(() => {
+      if (typeof ours.ref === 'function') {
+        const cleanup = ours.ref(sprite)
+        if (cleanup as unknown) {
+          onCleanup(() => (cleanup as unknown as () => void)())
+        }
+      } else (ours.ref as any) = sprite
+    })
+  }
 
   const parent = useParent()
   parent.addChild(sprite)

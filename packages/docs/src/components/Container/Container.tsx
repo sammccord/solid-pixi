@@ -1,5 +1,5 @@
-import { type PointLike, Texture } from 'pixi.js'
-import { For, Suspense } from 'solid-js'
+import { type PointLike, Texture, Ticker } from 'pixi.js'
+import { For } from 'solid-js'
 import {
   Application,
   Assets,
@@ -16,19 +16,19 @@ function BunniesContainer() {
     <Container
       x={app!.screen.width / 2}
       y={app!.screen.height / 2}
-      uses={[
-        container => {
-          container.pivot = { x: 100, y: 100 }
-        },
-        container => {
-          // Listen for animate update
-          app!.ticker.add(delta => {
-            // rotate the container!
-            // use delta to create frame-independent transform
-            container.rotation -= 0.001 * delta.deltaMS
-          })
+      ref={container => {
+        container.pivot = { x: 100, y: 100 }
+        const handler = (delta: Ticker) => {
+          // rotate the container!
+          // use delta to create frame-independent transform
+          container.rotation -= 0.001 * delta.deltaMS
         }
-      ]}
+        app!.ticker.add(handler)
+
+        return () => {
+          app!.ticker.remove(handler)
+        }
+      }}
     >
       <For each={Array.from({ length: 25 })} fallback={<></>}>
         {(_, i) => (

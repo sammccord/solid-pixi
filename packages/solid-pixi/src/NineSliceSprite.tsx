@@ -1,19 +1,19 @@
-import { type TilingSpriteOptions, TilingSprite as pxTilingSprite } from 'pixi.js'
+import { type NineSliceSpriteOptions, NineSliceSprite as pxNineSliceSprite } from 'pixi.js'
 import { createEffect, onCleanup, splitProps } from 'solid-js'
 import { ParentContext, useParent } from './ParentContext'
 import { EventTypes, type Events } from './events'
 import { CommonPropKeys, type CommonProps } from './interfaces'
 
-export type ExtendedTilingSprite<Data extends object> = pxTilingSprite & Data
-export type TilingSpriteProps<Data extends object> = CommonProps<pxTilingSprite, Data> &
-  TilingSpriteOptions &
+export type ExtendedNineSliceSprite<Data extends object> = pxNineSliceSprite & Data
+export type NineSliceSpriteProps<Data extends object> = CommonProps<pxNineSliceSprite, Data> &
+  NineSliceSpriteOptions &
   Events &
   Data
 
-export function TilingSprite<Data extends object = object>(props: TilingSpriteProps<Data>) {
+export function NineSliceSprite<Data extends object = object>(props: NineSliceSpriteProps<Data>) {
   const [ours, events, pixis] = splitProps(props, CommonPropKeys, EventTypes)
 
-  const sprite = (ours.as || new pxTilingSprite(pixis)) as ExtendedTilingSprite<Data>
+  const sprite = (ours.as || new pxNineSliceSprite(pixis)) as ExtendedNineSliceSprite<Data>
 
   createEffect(() => {
     for (const prop in pixis) {
