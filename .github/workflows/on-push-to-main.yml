@@ -51,6 +51,8 @@ jobs:
       - name: Build
         run: npx turbo build --cache-dir=".cache" --filter="./packages/*"
 
+      - run: git update-index --assume-unchanged .npmrc
+
       - name: Create .npmrc
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
