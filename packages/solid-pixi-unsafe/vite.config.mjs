@@ -39,13 +39,13 @@ export default defineConfig({
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-      external: ['solid-js', 'pixi.js'],
+      external: ['solid-js', 'pixi-unsafe'],
       output: {
         // Provide global variables to use in the UMD build
         // for externalized deps
         globals: {
           'solid-js': 'solid',
-          'pixi.js': 'PIXI'
+          'pixi-unsafe': 'PIXI'
         }
       }
     }

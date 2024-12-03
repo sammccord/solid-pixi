@@ -1,6 +1,6 @@
 {
   "name": "solid-pixi-unsafe",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "repository": {
     "type": "git",
@@ -12,9 +12,7 @@
   },
   "homepage": "https://sammccord.github.io/solid-pixi",
   "license": "MIT",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "main": "./dist/index.umd.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
