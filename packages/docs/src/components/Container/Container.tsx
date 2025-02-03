@@ -1,55 +1,61 @@
 import { type PointLike, Texture, Ticker } from 'pixi.js'
-import { For } from 'solid-js'
 import {
   Application,
-  Assets,
-  Container,
-  Sprite,
-  useApplication
+  For,
+  P,
+  Stage,
+  Suspense,
+  render,
+  useApplication,
+  useAsset
 } from '../../../../solid-pixi/src/index'
 
-function BunniesContainer() {
-  const app = useApplication()
-  const texture = Texture.from('https://pixijs.com/assets/bunny.png')
+render(() => <ContainerExample canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
+function ContainerExample(props) {
   return (
-    <Container
-      x={app!.screen.width / 2}
-      y={app!.screen.height / 2}
-      ref={container => {
-        container.pivot = { x: 100, y: 100 }
-        const handler = (delta: Ticker) => {
-          // rotate the container!
-          // use delta to create frame-independent transform
-          container.rotation -= 0.001 * delta.deltaMS
-        }
-        app!.ticker.add(handler)
-
-        return () => {
-          app!.ticker.remove(handler)
-        }
-      }}
-    >
-      <For each={Array.from({ length: 25 })} fallback={<></>}>
-        {(_, i) => (
-          <Sprite
-            texture={texture}
-            anchor={{ x: 0.5, y: 0.5 } as PointLike}
-            x={(i() % 5) * 40}
-            y={Math.floor(i() / 5) * 40}
-          />
-        )}
-      </For>
-    </Container>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
+      <Stage>
+        <BunniesContainer />
+      </Stage>
+    </Application>
   )
 }
 
-export function ContainerExample() {
+function BunniesContainer() {
+  const app = useApplication()
+  const [resource] = useAsset('https://pixijs.com/assets/bunny.png')
+
   return (
-    <Application background="#1099bb" resizeTo={window}>
-      <Assets load={[['https://pixijs.com/assets/bunny.png']]}>
-        <BunniesContainer />
-      </Assets>
-    </Application>
+    <Suspense>
+      <P.Container
+        x={app!.screen.width / 2}
+        y={app!.screen.height / 2}
+        ref={container => {
+          container.pivot = { x: 100, y: 100 }
+          const handler = (delta: Ticker) => {
+            // rotate the container!
+            // use delta to create frame-independent transform
+            container.rotation -= 0.001 * delta.deltaMS
+          }
+          app!.ticker.add(handler)
+
+          return () => {
+            app!.ticker.remove(handler)
+          }
+        }}
+      >
+        <For each={Array.from({ length: 25 })} fallback={<></>}>
+          {(_, i) => (
+            <P.Sprite
+              texture={resource()}
+              anchor={{ x: 0.5, y: 0.5 } as PointLike}
+              x={(i() % 5) * 40}
+              y={Math.floor(i() / 5) * 40}
+            />
+          )}
+        </For>
+      </P.Container>
+    </Suspense>
   )
 }

@@ -1,12 +1,18 @@
 import { type PointLike, Texture } from 'pixi.js'
-import { For, Suspense, createSignal } from 'solid-js'
+import { createSignal } from 'solid-js'
 import {
   Application,
   Assets,
-  Container,
-  Sprite,
-  useApplication
+  For,
+  P,
+  Stage,
+  Suspense,
+  render,
+  useApplication,
+  useAsset
 } from '../../../../solid-pixi/src/index'
+
+render(() => <TextureSwap canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 function SwapContainer() {
   const app = useApplication()
@@ -17,29 +23,31 @@ function SwapContainer() {
   const [texture, setTexture] = createSignal(0)
 
   return (
-    <Sprite
+    <P.Sprite
       texture={textures[texture()]}
       interactive
-      pointerdown={() => {
+      onpointerdown={() => {
         console.log(texture())
         setTexture(1 - texture())
       }}
       anchor={{ x: 0.5, y: 0.5 } as PointLike}
-      x={app.screen.width / 2}
-      y={app.screen.height / 2}
+      x={app!.screen.width / 2}
+      y={app!.screen.height / 2}
     />
   )
 }
 
-export function TextureSwap() {
+function TextureSwap(props) {
   return (
-    <Application background="#1099bb" resizeTo={window}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Assets
         load={[
           ['https://pixijs.com/assets/flowerTop.png', 'https://pixijs.com/assets/eggHead.png']
         ]}
       >
-        <SwapContainer />
+        <Stage>
+          <SwapContainer />
+        </Stage>
       </Assets>
     </Application>
   )

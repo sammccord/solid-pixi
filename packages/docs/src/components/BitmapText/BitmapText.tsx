@@ -1,10 +1,21 @@
 import { TextStyle } from 'pixi.js'
-import { Suspense } from 'solid-js'
-import { Application, Assets, Text } from '../../../../solid-pixi/src/index'
+import {
+  Application,
+  Assets,
+  For,
+  P,
+  Stage,
+  Suspense,
+  render,
+  useApplication,
+  useAsset
+} from '../../../../solid-pixi/src/index'
+
+render(() => <BitmapText canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 function TextContainer() {
   return (
-    <Text
+    <P.Text
       x={50}
       y={220}
       style={
@@ -20,17 +31,20 @@ function TextContainer() {
         })
       }
     >
-      bitmap fonts are supported!\nWoo yay!
-    </Text>
+      {`bitmap fonts are supported!
+        Woo yay!`}
+    </P.Text>
   )
 }
 
-export function BitmapText() {
+function BitmapText(props) {
   return (
-    <Application background="#1099bb" resizeTo={window}>
-      <Assets load={[['https://pixijs.com/assets/bitmap-font/desyrel.xml']]}>
-        <TextContainer />
-      </Assets>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
+      <Stage>
+        <Assets load={[['https://pixijs.com/assets/bitmap-font/desyrel.xml']]}>
+          <TextContainer />
+        </Assets>
+      </Stage>
     </Application>
   )
 }

@@ -1,5 +1,17 @@
 import { Texture } from 'pixi.js'
-import { Application, Assets, TilingSprite, useApplication } from '../../../../solid-pixi/src/index'
+import {
+  Application,
+  Assets,
+  For,
+  P,
+  Stage,
+  Suspense,
+  render,
+  useApplication,
+  useAsset
+} from '../../../../solid-pixi/src/index'
+
+render(() => <TilingSpriteExample canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 function TilingSpriteContainer() {
   const app = useApplication()
@@ -8,12 +20,12 @@ function TilingSpriteContainer() {
   let count = 0
 
   return (
-    <TilingSprite
+    <P.TilingSprite
       texture={texture}
       width={app!.screen.width}
       height={app!.screen.height}
       ref={tilingSprite => {
-        app.ticker.add(() => {
+        app!.ticker.add(() => {
           count += 0.005
 
           tilingSprite.tileScale.x = 2 + Math.sin(count)
@@ -27,11 +39,13 @@ function TilingSpriteContainer() {
   )
 }
 
-export function Example() {
+function TilingSpriteExample(props) {
   return (
-    <Application resizeTo={window}>
+    <Application resizeTo={window} canvas={props.canvas}>
       <Assets load={[['https://pixijs.com/assets/p2.jpeg']]}>
-        <TilingSpriteContainer />
+        <Stage>
+          <TilingSpriteContainer />
+        </Stage>
       </Assets>
     </Application>
   )

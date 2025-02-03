@@ -59,11 +59,9 @@ export function SpriteSheet<
 
   return (
     <Suspense fallback={ours.fallback}>
-      <Show when={spritesheet()}>
-        <SpritesheetContext.Provider value={spritesheet()}>
-          {ours.children}
-        </SpritesheetContext.Provider>
-      </Show>
+      <SpritesheetContext.Provider value={spritesheet()}>
+        {ours.children}
+      </SpritesheetContext.Provider>
     </Suspense>
   )
 }

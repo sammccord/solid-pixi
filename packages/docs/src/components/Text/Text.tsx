@@ -1,6 +1,8 @@
-import { type PointLike, TextStyle } from 'pixi.js'
+import { TextStyle } from 'pixi.js'
 import { createSignal, onCleanup } from 'solid-js'
-import { Application, Container, Text } from '../../../../solid-pixi/src/index'
+import { Application, P, Stage, render } from '../../../../solid-pixi/src/index'
+
+render(() => <TextExample canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 function TextContainer() {
   const [skew, setSkew] = createSignal(Math.random())
@@ -13,13 +15,12 @@ function TextContainer() {
   })
 
   return (
-    <Container>
-      <Text x={50} y={100}>
-        Basic text in pixi
-      </Text>
-      <Text
+    <P.Container>
+      <P.Text x={50} y={100} text={'Basic text in pixi'}></P.Text>
+      <P.Text
         x={50}
         y={220}
+        text={'Rich text with a lot of options and across multiple lines'}
         style={
           new TextStyle({
             fontFamily: 'Arial',
@@ -42,18 +43,17 @@ function TextContainer() {
             wordWrapWidth: 440
           })
         }
-      >
-        Rich text with a lot of options and across multiple lines
-      </Text>
-      <Text
+      ></P.Text>
+      <P.Text
         x={300}
         y={480}
-        anchor={{ x: 0.5, y: 0.5 } as PointLike}
+        anchor={{ x: 0.5, y: 0.5 }}
         ref={r => {
           const sk = skew()
           r.skew.x = sk
           r.skew.y = -sk
         }}
+        text={'SKEW IS COOL'}
         style={
           new TextStyle({
             fontFamily: 'Arial',
@@ -73,17 +73,17 @@ function TextContainer() {
             fontWeight: 'lighter'
           })
         }
-      >
-        SKEW IS COOL
-      </Text>
-    </Container>
+      ></P.Text>
+    </P.Container>
   )
 }
 
-export function TextExample() {
+function TextExample(props) {
   return (
-    <Application background="#1099bb" resizeTo={window}>
-      <TextContainer />
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
+      <Stage>
+        <TextContainer />
+      </Stage>
     </Application>
   )
 }

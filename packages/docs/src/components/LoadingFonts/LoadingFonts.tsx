@@ -1,6 +1,18 @@
 import { TextStyle } from 'pixi.js'
 import { For, Suspense } from 'solid-js'
-import { Application, Assets, Text } from '../../../../solid-pixi/src/index'
+import {
+  Application,
+  Assets,
+  For,
+  P,
+  Stage,
+  Suspense,
+  render,
+  useApplication,
+  useAsset
+} from '../../../../solid-pixi/src/index'
+
+render(() => <LoadingFonts canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 const bundle = {
   ChaChicle: 'https://pixijs.com/assets/webfont-loader/ChaChicle.ttf',
@@ -11,7 +23,7 @@ const bundle = {
 
 function Font(props: { fontFamily: string; y: number }) {
   return (
-    <Text
+    <P.Text
       x={10}
       y={props.y}
       style={
@@ -22,24 +34,26 @@ function Font(props: { fontFamily: string; y: number }) {
       }
     >
       {props.fontFamily}
-    </Text>
+    </P.Text>
   )
 }
 
-export function LoadingFonts() {
+function LoadingFonts(props) {
   return (
-    <Application background="#1099bb" resizeTo={window}>
-      <Assets
-        addBundle={[
-          'fonts',
-          Object.entries(bundle).map(([name, url]) => ({ alias: name, src: url }))
-        ]}
-        loadBundle={['fonts']}
-      >
-        <For each={Object.keys(bundle)}>
-          {(fontFamily, i) => <Font y={i() * 150} fontFamily={fontFamily} />}
-        </For>
-      </Assets>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
+      <Stage>
+        <Assets
+          addBundle={[
+            'fonts',
+            Object.entries(bundle).map(([name, url]) => ({ alias: name, src: url }))
+          ]}
+          loadBundle={['fonts']}
+        >
+          <For each={Object.keys(bundle)}>
+            {(fontFamily, i) => <Font y={i() * 150} fontFamily={fontFamily} />}
+          </For>
+        </Assets>
+      </Stage>
     </Application>
   )
 }
