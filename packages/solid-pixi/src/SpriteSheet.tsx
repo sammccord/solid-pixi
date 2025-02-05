@@ -1,5 +1,12 @@
 import { type BindableTexture, type SpritesheetData, Spritesheet as pxSpritesheet } from 'pixi.js'
-import { JSX, createContext, createMemo, createResource, splitProps, useContext } from 'solid-js'
+import {
+  type JSX,
+  createContext,
+  createMemo,
+  createResource,
+  splitProps,
+  useContext
+} from 'solid-js'
 import { CommonPropKeys, type CommonProps } from './interfaces'
 import { Show, Suspense } from './runtime'
 

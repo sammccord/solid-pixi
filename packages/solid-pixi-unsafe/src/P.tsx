@@ -1,4 +1,4 @@
-import * as pixi from 'pixi.js'
+import * as pixi from 'pixi-unsafe'
 import { type Ref, splitProps } from 'solid-js'
 import { CommonPropKeys } from './interfaces'
 import { insert, spread } from './runtime'

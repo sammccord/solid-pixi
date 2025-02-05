@@ -1,11 +1,5 @@
-import { Assets, Spritesheet, Texture, type UnresolvedAsset } from 'pixi.js'
-import {
-  type Accessor,
-  type Resource,
-  type ResourceActions,
-  createResource,
-  createSignal
-} from 'solid-js'
+import { Assets, Spritesheet, Texture, UnresolvedAsset } from 'pixi-unsafe'
+import { Accessor, Resource, ResourceActions, createResource, createSignal } from 'solid-js'
 
 type MaybeAccessor<T> = T | Accessor<T>
 

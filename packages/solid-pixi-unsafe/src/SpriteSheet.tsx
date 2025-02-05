@@ -5,8 +5,6 @@ import {
 } from 'pixi-unsafe'
 import {
   type JSX,
-  Show,
-  Suspense,
   createContext,
   createMemo,
   createResource,
@@ -14,6 +12,7 @@ import {
   useContext
 } from 'solid-js'
 import { CommonPropKeys, type CommonProps } from './interfaces'
+import { Show, Suspense } from './runtime'
 
 export type ExtendedSpritesheet<S extends SpritesheetData, Data extends object> = pxSpritesheet<S> &
   Data
@@ -59,9 +58,11 @@ export function SpriteSheet<
 
   return (
     <Suspense fallback={ours.fallback}>
-      <SpritesheetContext.Provider value={spritesheet()}>
-        {ours.children}
-      </SpritesheetContext.Provider>
+      <Show when={spritesheet()}>
+        <SpritesheetContext.Provider value={spritesheet()}>
+          {ours.children}
+        </SpritesheetContext.Provider>
+      </Show>
     </Suspense>
   )
 }

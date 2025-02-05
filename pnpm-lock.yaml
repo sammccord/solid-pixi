@@ -117,15 +117,6 @@ importers:
   packages/solid-pixi:
     dependencies:
       pixi.js:
-        specifier: '8'
-        version: 8.7.3
-      solid-js:
-        specifier: ^1.8.5
-        version: 1.9.4
-
-  packages/solid-pixi-experimental:
-    dependencies:
-      pixi.js:
         specifier: ^8.7.0
         version: 8.7.3
       solid-js:
@@ -135,23 +126,11 @@ importers:
   packages/solid-pixi-unsafe:
     dependencies:
       pixi-unsafe:
-        specifier: '8'
-        version: 8.6.2
+        specifier: ^8.7.3
+        version: 8.7.3
       solid-js:
         specifier: ^1.8.5
         version: 1.9.4
-
-  packages/tests:
-    dependencies:
-      pixi.js:
-        specifier: 8.0.0
-        version: 8.0.0
-      solid-js:
-        specifier: ^1.9.4
-        version: 1.9.4
-      solid-pixi:
-        specifier: workspace:*
-        version: link:../solid-pixi
 
 packages:
 
@@ -3690,11 +3669,8 @@ packages:
     resolution: {integrity: sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==}
     engines: {node: '>=6'}
 
-  pixi-unsafe@8.6.2:
-    resolution: {integrity: sha512-kVOXOx6/XtXNIfV54vYr9QAxDPFbG7d2hiNAtr68PBj/lQbTsLRXcs/vEqYsQTTKM8AGcFfSENs0ihCObKfKVg==}
-
-  pixi.js@8.0.0:
-    resolution: {integrity: sha512-MX8cNEomyluT6EwVinMY+AKW37AKIDFi0DPWvQ59vU1P8jZpKy/tj+uyns8iyjK+F5wtc04AF/p9CH03iAO2lw==}
+  pixi-unsafe@8.7.3:
+    resolution: {integrity: sha512-sBExgAHPGO3VKLlfLFAZI81oPPz4My8eQrxF27kG5icOp4UWPX21W1BnXjbbvUjh79xEYucPLJSalwvKv929Ew==}
 
   pixi.js@8.7.3:
     resolution: {integrity: sha512-wfWlhJYnGx1s4f2yoouevQjaeacbJ12LTkJGa+n9AIYNIjOnmJylBtZ2mARX7iFk3mr2xv0wuo//XPe2hk5OBw==}
@@ -9395,19 +9371,7 @@ snapshots:
 
   pify@4.0.1: {}
 
-  pixi-unsafe@8.6.2:
-    dependencies:
-      '@pixi/colord': 2.9.6
-      '@types/css-font-loading-module': 0.0.12
-      '@types/earcut': 2.1.4
-      '@webgpu/types': 0.1.53
-      '@xmldom/xmldom': 0.8.10
-      earcut: 2.2.4
-      eventemitter3: 5.0.1
-      ismobilejs: 1.1.1
-      parse-svg-path: 0.1.2
-
-  pixi.js@8.0.0:
+  pixi-unsafe@8.7.3:
     dependencies:
       '@pixi/colord': 2.9.6
       '@types/css-font-loading-module': 0.0.12

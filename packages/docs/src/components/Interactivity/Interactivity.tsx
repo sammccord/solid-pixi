@@ -2,6 +2,7 @@ import { type PointLike, Texture } from 'pixi.js'
 import { createSignal } from 'solid-js'
 import {
   Application,
+  Assets,
   For,
   P,
   Stage,
@@ -29,11 +30,11 @@ function InteractivityContainer() {
       texture={texture()}
       interactive
       cursor="pointer"
-      pointerdown={() => {
+      onpointerdown={() => {
         isDown = true
         setTexture(textureButtonDown)
       }}
-      pointerup={() => {
+      onpointerup={() => {
         isDown = false
         if (isOver) {
           setTexture(textureButtonOver)
@@ -41,7 +42,7 @@ function InteractivityContainer() {
           setTexture(textureButton)
         }
       }}
-      pointerupoutside={() => {
+      onpointerupoutside={() => {
         isDown = false
         if (isOver) {
           setTexture(textureButtonOver)
@@ -49,14 +50,14 @@ function InteractivityContainer() {
           setTexture(textureButton)
         }
       }}
-      pointerover={() => {
+      onpointerover={() => {
         isOver = true
         if (isDown) {
           return
         }
         setTexture(textureButtonOver)
       }}
-      pointerout={() => {
+      onpointerout={() => {
         isOver = false
         if (isDown) {
           return
@@ -70,10 +71,10 @@ function InteractivityContainer() {
   )
 }
 
-export function Interactivity(props) {
+function Interactivity(props) {
   return (
     <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
-      {/* <Assets
+      <Assets
         load={[
           [
             'https://pixijs.com/assets/button.png',
@@ -81,11 +82,11 @@ export function Interactivity(props) {
             'https://pixijs.com/assets/button_over.png'
           ]
         ]}
-      > */}
-      <Stage>
-        <InteractivityContainer />
-      </Stage>
-      {/* </Assets> */}
+      >
+        <Stage>
+          <InteractivityContainer />
+        </Stage>
+      </Assets>
     </Application>
   )
 }

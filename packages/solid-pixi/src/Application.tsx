@@ -1,6 +1,6 @@
-import { ApplicationOptions, Application as PixiApplication } from 'pixi.js'
+import { type ApplicationOptions, Application as PixiApplication } from 'pixi.js'
 import {
-  JSXElement,
+  type JSXElement,
   Show,
   Suspense,
   createContext,
@@ -8,7 +8,7 @@ import {
   splitProps,
   useContext
 } from 'solid-js'
-import { CommonPropKeys, CommonProps } from './interfaces'
+import { CommonPropKeys, type CommonProps } from './interfaces'
 import { effect } from './runtime'
 
 export const AppContext = createContext<PixiApplication>()

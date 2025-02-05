@@ -1,4 +1,4 @@
-import { Text } from 'pixi.js'
+import { Text } from 'pixi-unsafe'
 import { type JSXElement, createRenderEffect } from 'solid-js'
 import { createRenderer } from 'solid-js/universal'
 import { P } from './P'
@@ -25,7 +25,7 @@ export const {
   replaceText(textNode: Text, value) {
     textNode.text = value
   },
-  setProperty(node, name, value, _prev) {
+  setProperty(node, name, value, prev) {
     if (name !== 'size') {
       node[name] = value
     } else {
