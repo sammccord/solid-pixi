@@ -6,5 +6,5 @@
     "solid-pixi": "1.0.0",
     "solid-pixi-unsafe": "1.0.1"
   },
-  "changesets": []
+  "changesets": ["tidy-rats-arrive"]
 }
