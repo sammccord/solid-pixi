@@ -1,11 +1,14 @@
 import solidJs from '@astrojs/solid-js'
 import starlight from '@astrojs/starlight'
-import { defineConfig } from 'astro/config'
+import { defineConfig, passthroughImageService } from 'astro/config'
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://sammccord.github.io',
   base: '/solid-pixi',
+  image: {
+    service: passthroughImageService()
+  },
   integrations: [
     starlight({
       title: 'Solid Pixi',
