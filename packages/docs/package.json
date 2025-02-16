@@ -16,9 +16,11 @@
     "@astrojs/starlight": "^0.21.5",
     "astro": "^4.16.18",
     "pixi.js": "^8.7.3",
-    "sharp": "^0.32.6",
     "solid-js": "^1.9.4",
     "solid-pixi": "workspace:*",
     "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "sharp": "^0.32.6"
   }
 }
