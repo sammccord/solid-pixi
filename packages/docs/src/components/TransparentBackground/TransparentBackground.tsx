@@ -1,12 +1,25 @@
 import { type PointLike, Texture } from 'pixi.js'
-import { Application, Assets, Sprite, useApplication } from '../../../../solid-pixi/src/index'
+import {
+  Application,
+  For,
+  P,
+  Stage,
+  Suspense,
+  render,
+  useApplication,
+  useAsset
+} from '../../../../solid-pixi/src/index'
+
+render(() => (
+  <TransparentBackground canvas={document.getElementById('root')! as HTMLCanvasElement} />
+))
 
 function BunniesContainer() {
   const app = useApplication()
   const texture = Texture.from('https://pixijs.com/assets/bunny.png')
 
   return (
-    <Sprite
+    <P.Sprite
       texture={texture}
       anchor={{ x: 0.5, y: 0.5 } as PointLike}
       x={app!.screen.width / 2}
@@ -20,11 +33,13 @@ function BunniesContainer() {
   )
 }
 
-export function TransparentBackground() {
+function TransparentBackground(props) {
   return (
-    <Application backgroundAlpha={0} resizeTo={window}>
+    <Application backgroundAlpha={0} resizeTo={window} canvas={props.canvas}>
       <Assets load={[['https://pixijs.com/assets/bunny.png']]}>
-        <BunniesContainer />
+        <Stage>
+          <BunniesContainer />
+        </Stage>
       </Assets>
     </Application>
   )

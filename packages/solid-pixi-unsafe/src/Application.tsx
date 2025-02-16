@@ -1,60 +1,56 @@
-import { type ApplicationOptions, Application as pxApplication } from 'pixi-unsafe'
+import { type ApplicationOptions, Application as PixiApplication } from 'pixi-unsafe'
 import {
   type JSXElement,
   Show,
-  Suspense,
   createContext,
-  createEffect,
   createResource,
-  onCleanup,
   splitProps,
   useContext
 } from 'solid-js'
-import { ParentContext } from './ParentContext'
 import { CommonPropKeys, type CommonProps } from './interfaces'
+import { effect } from './runtime'
 
-export const AppContext = createContext<pxApplication>()
-export const useApplication = () => useContext(AppContext)
+export const AppContext = createContext<PixiApplication>()
+export const useApplication = () => {
+  const app = useContext(AppContext)
+  if (!app) throw new Error('useApplication must be used within an Application')
+  return app
+}
 
-export type ApplicationProps = CommonProps<pxApplication> & {
+export type ApplicationProps = CommonProps<PixiApplication> & {
   fallback?: JSXElement
 } & Partial<ApplicationOptions>
 
-export function Application(props: ApplicationProps) {
-  const [ours, pixis] = splitProps(props, [...CommonPropKeys, 'fallback'])
+const ApplicationPropKeys = [...CommonPropKeys, 'fallback'] as const
 
-  const [app] = createResource([pixis], async ([_pixis]) => {
-    const _app = ours.as || new pxApplication()
-    await _app.init(_pixis)
-    return _app
+/**
+ * The Application component creates a PIXI.js application instance and provides it via context.
+ * This serves as the root component for PIXI applications.
+ *
+ * @param props.as - Optional existing PIXI.Application instance to use
+ * @param props.ref - Callback to get access to the PIXI.Application instance
+ * @param props.fallback - Content to show while application is initializing
+ * @param props.children - Child components that will have access to the PIXI.Application context
+ * @param props.ApplicationOptions - PIXI.Application options to initialize with
+ */
+export const Application = (props: ApplicationProps) => {
+  const [common, pixis] = splitProps(props, ApplicationPropKeys)
+
+  const [app] = createResource(
+    () => (common.as || new PixiApplication()) as PixiApplication,
+    async app => {
+      await app.init(pixis)
+      return app
+    }
+  )
+
+  effect(() => {
+    if (app()) common.ref?.(app()!)
   })
 
-  if (ours.ref) {
-    createEffect(() => {
-      const _app = app()
-      if (!_app) return
-      if (typeof ours.ref === 'function') {
-        const cleanup = ours.ref(_app)
-        if (cleanup as unknown) {
-          onCleanup(() => (cleanup as unknown as () => void)())
-        }
-      } else (ours.ref as any) = _app
-    })
-  }
-
   return (
-    <Suspense fallback={ours.fallback}>
-      <Show when={app()}>
-        {a => {
-          const _app = a()
-          return (
-            <AppContext.Provider value={_app}>
-              <ParentContext.Provider value={_app.stage}>{ours.children}</ParentContext.Provider>
-              {_app.canvas}
-            </AppContext.Provider>
-          )
-        }}
-      </Show>
-    </Suspense>
+    <Show when={app()} fallback={common.fallback}>
+      <AppContext.Provider value={app()}>{props.children}</AppContext.Provider>
+    </Show>
   )
 }

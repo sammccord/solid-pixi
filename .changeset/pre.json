@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "docs": "0.0.1",
+    "solid-pixi": "1.0.0",
+    "solid-pixi-unsafe": "1.0.1"
+  },
+  "changesets": ["tidy-rats-arrive"]
+}

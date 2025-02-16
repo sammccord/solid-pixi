@@ -9,16 +9,22 @@ Install `solid-pixi`
 
 If you need to execute code in environments that don't support `new Function`, use `solid-pixi-unsafe` instead.
 
+`npm install --save pixi-unsafe solid-js solid-pixi-unsafe`
+
 The library has no dependencies, but requires `pixi.js` and `solid-js` as a peers.
 
 And in your application:
 
 ```tsx
-import { Application } from 'solid-pixi/Application'
-// or
-import { Application } from 'solid-pixi'
+import { Application, Stage } from 'solid-pixi'
+import { createSignal } from 'solid-js'
 
 export function App() {
-  return <Application></Application>
+  const [x, setX] = createSignal(10)
+  return <Application>
+    <Stage>
+      <Sprite x={x()} interactive onpointerdown={() => setX(_x => x * 2)} texture={Texture.from('url')} />
+    </Stage>
+  </Application>
 }
 ```

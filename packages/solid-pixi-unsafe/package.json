@@ -1,6 +1,6 @@
 {
   "name": "solid-pixi-unsafe",
-  "version": "1.0.1",
+  "version": "2.0.0-next.0",
   "description": "",
   "repository": {
     "type": "git",
@@ -13,104 +13,14 @@
   "homepage": "https://sammccord.github.io/solid-pixi",
   "license": "MIT",
   "files": ["dist"],
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/solid-pixi-unsafe.umd.js",
+  "module": "./dist/solid-pixi-unsafe.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
-    "./AnimatedSprite": {
-      "require": "./dist/AnimatedSprite.umd.js",
-      "import": "./dist/AnimatedSprite.mjs",
-      "types": "./dist/AnimatedSprite.d.ts"
-    },
-    "./events": {
-      "require": "./dist/events.umd.js",
-      "import": "./dist/events.mjs",
-      "types": "./dist/events.d.ts"
-    },
-    "./interfaces": {
-      "require": "./dist/interfaces.umd.js",
-      "import": "./dist/interfaces.mjs",
-      "types": "./dist/interfaces.d.ts"
-    },
-    "./ParentContext": {
-      "require": "./dist/ParentContext.umd.js",
-      "import": "./dist/ParentContext.mjs",
-      "types": "./dist/ParentContext.d.ts"
-    },
-    "./Application": {
-      "require": "./dist/Application.umd.js",
-      "import": "./dist/Application.mjs",
-      "types": "./dist/Application.d.ts"
-    },
-    "./Assets": {
-      "require": "./dist/Assets.umd.js",
-      "import": "./dist/Assets.mjs",
-      "types": "./dist/Assets.d.ts"
-    },
-    "./Container": {
-      "require": "./dist/Container.umd.js",
-      "import": "./dist/Container.mjs",
-      "types": "./dist/Container.d.ts"
-    },
-    "./Graphics": {
-      "require": "./dist/Graphics.umd.js",
-      "import": "./dist/Graphics.mjs",
-      "types": "./dist/Graphics.d.ts"
-    },
-    "./Mesh": {
-      "require": "./dist/Mesh.umd.js",
-      "import": "./dist/Mesh.mjs",
-      "types": "./dist/Mesh.d.ts"
-    },
-    "./MeshPlane": {
-      "require": "./dist/MeshPlane.umd.js",
-      "import": "./dist/MeshPlane.mjs",
-      "types": "./dist/MeshPlane.d.ts"
-    },
-    "./MeshRope": {
-      "require": "./dist/MeshRope.umd.js",
-      "import": "./dist/MeshRope.mjs",
-      "types": "./dist/MeshRope.d.ts"
-    },
-    "./MeshSimple": {
-      "require": "./dist/MeshSimple.umd.js",
-      "import": "./dist/MeshSimple.mjs",
-      "types": "./dist/MeshSimple.d.ts"
-    },
-    "./Sprite": {
-      "require": "./dist/Sprite.umd.js",
-      "import": "./dist/Sprite.mjs",
-      "types": "./dist/Sprite.d.ts"
-    },
-    "./NineSliceSprite": {
-      "require": "./dist/NineSliceSprite.umd.js",
-      "import": "./dist/NineSliceSprite.mjs",
-      "types": "./dist/NineSliceSprite.d.ts"
-    },
-    "./Text": {
-      "require": "./dist/Text.umd.js",
-      "import": "./dist/Text.mjs",
-      "types": "./dist/Text.d.ts"
-    },
-    "./HTMLText": {
-      "require": "./dist/HTMLText.umd.js",
-      "import": "./dist/HTMLText.mjs",
-      "types": "./dist/HTMLText.d.ts"
-    },
-    "./TilingSprite": {
-      "require": "./dist/TilingSprite.umd.js",
-      "import": "./dist/TilingSprite.mjs",
-      "types": "./dist/TilingSprite.d.ts"
-    },
     ".": {
-      "require": "./dist/index.umd.js",
-      "import": "./dist/index.mjs",
+      "require": "./dist/solid-pixi-unsafe.umd.js",
+      "import": "./dist/solid-pixi-unsafe.mjs",
       "types": "./dist/index.d.ts"
-    },
-    "./Spritesheet": {
-      "import": "./dist/Spritesheet.mjs",
-      "types": "./dist/Spritesheet.d.ts",
-      "require": "./dist/Spritesheet.umd.js"
     }
   },
   "scripts": {
@@ -118,7 +28,7 @@
     "build": "vite build && tsc --emitDeclarationOnly"
   },
   "peerDependencies": {
-    "pixi-unsafe": "8",
+    "pixi-unsafe": "^8.7.3",
     "solid-js": "^1.8.5"
   }
 }

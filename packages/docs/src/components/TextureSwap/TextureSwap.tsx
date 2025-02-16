@@ -1,46 +1,49 @@
 import { type PointLike, Texture } from 'pixi.js'
-import { For, Suspense, createSignal } from 'solid-js'
+import { Show, createEffect, createSignal } from 'solid-js'
 import {
   Application,
-  Assets,
-  Container,
-  Sprite,
-  useApplication
+  P,
+  Stage,
+  render,
+  useApplication,
+  useAssets
 } from '../../../../solid-pixi/src/index'
+
+render(() => <TextureSwap canvas={document.getElementById('root')! as HTMLCanvasElement} />)
+
+const _textures = [
+  'https://pixijs.com/assets/flowerTop.png',
+  'https://pixijs.com/assets/eggHead.png'
+]
 
 function SwapContainer() {
   const app = useApplication()
-  const textures = [
-    Texture.from('https://pixijs.com/assets/flowerTop.png'),
-    Texture.from('https://pixijs.com/assets/eggHead.png')
-  ]
+  const [textures] = useAssets(_textures)
   const [texture, setTexture] = createSignal(0)
 
   return (
-    <Sprite
-      texture={textures[texture()]}
-      interactive
-      pointerdown={() => {
-        console.log(texture())
-        setTexture(1 - texture())
-      }}
-      anchor={{ x: 0.5, y: 0.5 } as PointLike}
-      x={app.screen.width / 2}
-      y={app.screen.height / 2}
-    />
+    <Show when={textures()}>
+      <P.Sprite
+        texture={Texture.from(_textures[texture()]!)}
+        interactive
+        onpointerdown={() => {
+          console.log(texture())
+          setTexture(1 - texture())
+        }}
+        anchor={{ x: 0.5, y: 0.5 } as PointLike}
+        x={app!.screen.width / 2}
+        y={app!.screen.height / 2}
+      />
+    </Show>
   )
 }
 
-export function TextureSwap() {
+function TextureSwap(props) {
   return (
-    <Application background="#1099bb" resizeTo={window}>
-      <Assets
-        load={[
-          ['https://pixijs.com/assets/flowerTop.png', 'https://pixijs.com/assets/eggHead.png']
-        ]}
-      >
+    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+      <Stage>
         <SwapContainer />
-      </Assets>
+      </Stage>
     </Application>
   )
 }
