@@ -14,36 +14,41 @@ npm install --save solid-pixi solid-js pixi.js
 - [Examples Source](./packages/docs/src/components/)
 
 ```tsx
-import { Texture, type PointLike } from 'pixi.js'
-import { createSignal } from 'solid-js'
-import { Application, Assets, Sprite, useApplication } from 'solid-pixi'
+import { Texture } from 'pixi.js'
+import { createSignal, Suspense } from 'solid-js'
+import { render, Application, useAsset, P, useApplication } from 'solid-pixi'
 
-function ClickContainer() {
-  const app = useApplication()
-  const [scale, setScale] = createSignal(1)
+render(() => <Click canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
+function Click(props) {
   return (
-    <Sprite
-      texture={Texture.from('https://pixijs.com/assets/bunny.png')}
-      interactive
-      pointerdown={() => {
-        setScale(s => s * 1.25)
-      }}
-      scale={{ x: scale(), y: scale() }}
-      anchor={{ x: 0.5, y: 0.5 } as PointLike}
-      x={app.screen.width / 2}
-      y={app.screen.height / 2}
-    />
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
+      <Stage>
+        <ClickContainer />
+      </Stage>
+    </Application>
   )
 }
 
-export function Click() {
+function ClickContainer() {
+  const app = useApplication()
+  const [texture] = useAsset('https://pixijs.com/assets/bunny.png')
+  const [scale, setScale] = createSignal(1)
+
   return (
-    <Application background="#1099bb" resizeTo={window}>
-      <Assets load={[['https://pixijs.com/assets/bunny.png']]}>
-        <ClickContainer />
-      </Assets>
-    </Application>
+    <Suspense>
+      <P.Sprite
+        texture={texture()}
+        interactive
+        onpointerdown={() => {
+          setScale(s => s * 1.25)
+        }}
+        scale={{ x: scale(), y: scale() }}
+        anchor={{ x: 0.5, y: 0.5 } as PointLike}
+        x={app.screen.width / 2}
+        y={app.screen.height / 2}
+      />
+    </Suspense>
   )
 }
 ```
