@@ -2,7 +2,6 @@ import { type PointLike, Rectangle, Texture } from 'pixi.js'
 import { createStore, produce } from 'solid-js/store'
 import {
   Application,
-  Assets,
   For,
   P,
   Stage,
@@ -16,7 +15,7 @@ render(() => <Tinting canvas={document.getElementById('root')! as HTMLCanvasElem
 
 function Dudes() {
   const app = useApplication()
-  const texture = Texture.from('https://pixijs.com/assets/eggHead.png')
+  const [texture] = useAsset('https://pixijs.com/assets/eggHead.png')
   const [dudes, setDudes] = createStore(
     Array.from({ length: 20 }).map(() => {
       const scale = 0.8 + Math.random() * 0.3
@@ -68,30 +67,30 @@ function Dudes() {
   })
 
   return (
-    <For each={dudes}>
-      {dude => (
-        <P.Sprite
-          texture={texture}
-          scale={dude.scale}
-          anchor={{ x: 0.5, y: 0.5 } as PointLike}
-          x={dude.x}
-          y={dude.y}
-          rotation={dude.rotation}
-          tint={dude.tint}
-        />
-      )}
-    </For>
+    <Suspense>
+      <For each={dudes}>
+        {dude => (
+          <P.Sprite
+            texture={texture()}
+            scale={dude.scale}
+            anchor={{ x: 0.5, y: 0.5 } as PointLike}
+            x={dude.x}
+            y={dude.y}
+            rotation={dude.rotation}
+            tint={dude.tint}
+          />
+        )}
+      </For>
+    </Suspense>
   )
 }
 
 function Tinting(props) {
   return (
     <Application backgroundAlpha={0} resizeTo={window} canvas={props.canvas}>
-      <Assets load={[['https://pixijs.com/assets/eggHead.png']]}>
-        <Stage>
-          <Dudes />
-        </Stage>
-      </Assets>
+      <Stage>
+        <Dudes />
+      </Stage>
     </Application>
   )
 }

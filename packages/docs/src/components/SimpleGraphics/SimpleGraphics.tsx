@@ -1,10 +1,7 @@
 import { Application, Stage, render } from '../../../../solid-pixi/src/index'
 import { G } from './G'
 
-render(
-  () => <SimpleGraphics canvas={document.getElementById('root')! as HTMLCanvasElement} />,
-  import.meta.hot
-)
+render(() => <SimpleGraphics canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 function SimpleGraphics(props) {
   return (

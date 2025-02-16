@@ -6,6 +6,7 @@ export function Star(props) {
   const [graphics, setG] = createSignal<Graphics>()
 
   createEffect(() => {
+    console.log('!!! effect')
     const g = graphics()
     if (!g) return
     g.star(280, 510, 7, 50, 4, 200)
@@ -13,5 +14,5 @@ export function Star(props) {
     g.fill(0xff3300)
   })
 
-  return <P.Graphics x={100} y={100 + props.x} ref={setG}></P.Graphics>
+  return <P.Graphics x={props.x} y={100} ref={setG}></P.Graphics>
 }

@@ -1,7 +1,6 @@
 import { type PointLike, Texture } from 'pixi.js'
 import {
   Application,
-  Assets,
   For,
   P,
   Stage,

@@ -1,8 +1,6 @@
-import { Container, Text } from 'pixi.js'
-import { type JSX, createRoot } from 'solid-js'
-import { type JSXElement, createRenderEffect } from 'solid-js'
+import { Text } from 'pixi-unsafe'
+import { type JSX, createRenderEffect } from 'solid-js'
 import { createRenderer } from 'solid-js/universal'
-import { ViteHotContext } from 'vite/types/hot'
 import { P } from './P'
 
 export const {
@@ -91,43 +89,42 @@ export function _spread<T>(node: any, accessor: T | (() => T)) {
 export const spread = _spread
 
 // export const render = other.render as (fn: () => JSXElement, ctx: ViteHotContext) => () => void
-const hotCtxMap = new Map<ViteHotContext, Array<() => void>>()
+// const hotCtxMap = new Map<ViteHotContext, Array<() => void>>()
+// export const render = (code: () => JSX.Element, hotCtx?: ViteHotContext) => {
+//   let disposer: () => void = () => void 0
+//   createRoot(dispose => {
+//     const elem = insert(null, code())
+//     disposer = () => {
+//       dispose()
+//       elem?.destroy?.()
+//     }
+//     if (hotCtx) {
+//       hotCtxMap.set(hotCtx, [...(hotCtxMap.get(hotCtx) ?? []), disposer])
+//       hotCtx.dispose(() => {
+//         hotCtxMap.get(hotCtx!)?.forEach(v => v())
+//         hotCtxMap.delete(hotCtx!)
+//       })
+//     }
+//   })
+
+//   return disposer
+// }
 /**
- * Renders a JSX element with hot module reloading support.
- * Creates a new root container and renders the provided JSX element into it.
+ * Renders a Solid Pixi application
  * Handles cleanup and disposal of rendered elements.
  *
  * @param code - A function that returns a JSX element to render
- * @param hotCtx - Optional Vite hot module context for HMR support
  * @returns A dispose function that cleans up the rendered element
  */
-export const render = (code: () => JSX.Element, hotCtx?: ViteHotContext) => {
-  let disposer: () => void = () => void 0
-  createRoot(dispose => {
-    const elem = insert(null, code())
-    disposer = () => {
-      dispose()
-      elem?.destroy?.()
-    }
-    if (hotCtx) {
-      hotCtxMap.set(hotCtx, [...(hotCtxMap.get(hotCtx) ?? []), disposer])
-      hotCtx.dispose(() => {
-        hotCtxMap.get(hotCtx!)?.forEach(v => v())
-        hotCtxMap.delete(hotCtx!)
-      })
-    }
-  })
-
-  return disposer
-}
+export const render = other.render as (application: () => JSX.Element) => () => void
 // Forward Solid control flow
 export {
+  ErrorBoundary,
   For,
+  Index,
+  Match,
   Show,
   Suspense,
   SuspenseList,
-  Switch,
-  Match,
-  Index,
-  ErrorBoundary
+  Switch
 } from 'solid-js'

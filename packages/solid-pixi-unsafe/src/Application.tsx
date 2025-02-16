@@ -2,7 +2,6 @@ import { type ApplicationOptions, Application as PixiApplication } from 'pixi-un
 import {
   type JSXElement,
   Show,
-  Suspense,
   createContext,
   createResource,
   splitProps,
@@ -50,10 +49,8 @@ export const Application = (props: ApplicationProps) => {
   })
 
   return (
-    <Suspense fallback={common.fallback}>
-      <Show when={app()} fallback={common.fallback}>
-        <AppContext.Provider value={app()}>{props.children}</AppContext.Provider>
-      </Show>
-    </Suspense>
+    <Show when={app()} fallback={common.fallback}>
+      <AppContext.Provider value={app()}>{props.children}</AppContext.Provider>
+    </Show>
   )
 }

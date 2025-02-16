@@ -2,7 +2,6 @@ import { type PointLike, Rectangle, Sprite, Texture } from 'pixi.js'
 import { createStore, produce } from 'solid-js/store'
 import {
   Application,
-  Assets,
   For,
   P,
   Stage,
@@ -16,7 +15,7 @@ render(() => <BlendModes canvas={document.getElementById('root')! as HTMLCanvasE
 
 function Dudes() {
   const app = useApplication()
-  const texture = Texture.from('https://pixijs.com/assets/eggHead.png')
+  const [texture] = useAsset('https://pixijs.com/assets/eggHead.png')
   const [dudes, setDudes] = createStore(
     Array.from({ length: 20 }).map(() => {
       const scale = 0.8 + Math.random() * 0.3
@@ -68,33 +67,34 @@ function Dudes() {
   })
 
   return (
-    <For each={dudes}>
-      {dude => {
-        return (
-          <P.Sprite
-            texture={texture}
-            scale={dude.scale}
-            anchor={{ x: 0.5, y: 0.5 } as PointLike}
-            blendMode={'add'}
-            x={dude.x}
-            y={dude.y}
-            rotation={dude.rotation}
-            tint={dude.tint}
-          />
-        )
-      }}
-    </For>
+    <Suspense>
+      <For each={dudes}>
+        {dude => {
+          return (
+            <P.Sprite
+              texture={texture()}
+              scale={dude.scale}
+              anchor={{ x: 0.5, y: 0.5 } as PointLike}
+              blendMode={'add'}
+              x={dude.x}
+              y={dude.y}
+              rotation={dude.rotation}
+              tint={dude.tint}
+            />
+          )
+        }}
+      </For>
+    </Suspense>
   )
 }
 
 function Background() {
   const app = useApplication()
+  const [texture] = useAsset('https://pixijs.com/assets/bg_rotate.jpg')
   return (
-    <P.Sprite
-      texture={Texture.from('https://pixijs.com/assets/bg_rotate.jpg')}
-      width={app?.stage.width}
-      height={app?.stage.height}
-    />
+    <Suspense>
+      <P.Sprite texture={texture()} width={app?.stage.width} height={app?.stage.height} />
+    </Suspense>
   )
 }
 
@@ -102,16 +102,10 @@ function BlendModes(props) {
   return (
     <Application resizeTo={window} canvas={props.canvas}>
       <Stage>
-        <Assets
-          load={[
-            ['https://pixijs.com/assets/eggHead.png', 'https://pixijs.com/assets/bg_rotate.jpg']
-          ]}
-        >
-          <Background />
-          <P.Container>
-            <Dudes />
-          </P.Container>
-        </Assets>
+        <Background />
+        <P.Container>
+          <Dudes />
+        </P.Container>
       </Stage>
     </Application>
   )

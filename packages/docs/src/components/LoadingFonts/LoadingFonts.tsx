@@ -1,25 +1,26 @@
 import { TextStyle } from 'pixi.js'
-import { For, Suspense } from 'solid-js'
+import { For, Show, Suspense, createEffect } from 'solid-js'
 import {
   Application,
-  Assets,
-  For,
   P,
   Stage,
-  Suspense,
   render,
   useApplication,
-  useAsset
+  useAsset,
+  useBundle
 } from '../../../../solid-pixi/src/index'
 
 render(() => <LoadingFonts canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
-const bundle = {
-  ChaChicle: 'https://pixijs.com/assets/webfont-loader/ChaChicle.ttf',
-  Lineal: 'https://pixijs.com/assets/webfont-loader/Lineal.otf',
-  'Dotrice Regular': 'https://pixijs.com/assets/webfont-loader/Dotrice-Regular.woff',
-  Crosterian: 'https://pixijs.com/assets/webfont-loader/Crosterian.woff2'
-}
+const fonts = [
+  { alias: 'ChaChicle', src: 'https://pixijs.com/assets/webfont-loader/ChaChicle.ttf' },
+  { alias: 'Lineal', src: 'https://pixijs.com/assets/webfont-loader/Lineal.otf' },
+  {
+    alias: 'Dotrice Regular',
+    src: 'https://pixijs.com/assets/webfont-loader/Dotrice-Regular.woff'
+  },
+  { alias: 'Crosterian', src: 'https://pixijs.com/assets/webfont-loader/Crosterian.woff2' }
+]
 
 function Font(props: { fontFamily: string; y: number }) {
   return (
@@ -32,27 +33,29 @@ function Font(props: { fontFamily: string; y: number }) {
           fontSize: 50
         })
       }
-    >
-      {props.fontFamily}
-    </P.Text>
+      text={props.fontFamily}
+    ></P.Text>
+  )
+}
+
+function Fonts() {
+  const [bundle] = useBundle('fonts', fonts)
+  return (
+    <Suspense>
+      <Show when={bundle()}>
+        <For each={fonts}>
+          {(fontFamily, i) => <Font y={i() * 150} fontFamily={fontFamily.alias} />}
+        </For>
+      </Show>
+    </Suspense>
   )
 }
 
 function LoadingFonts(props) {
   return (
-    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
+    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
       <Stage>
-        <Assets
-          addBundle={[
-            'fonts',
-            Object.entries(bundle).map(([name, url]) => ({ alias: name, src: url }))
-          ]}
-          loadBundle={['fonts']}
-        >
-          <For each={Object.keys(bundle)}>
-            {(fontFamily, i) => <Font y={i() * 150} fontFamily={fontFamily} />}
-          </For>
-        </Assets>
+        <Fonts />
       </Stage>
     </Application>
   )
