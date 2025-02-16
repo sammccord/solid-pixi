@@ -16,14 +16,14 @@ The library has no dependencies, but requires `pixi.js` and `solid-js` as a peer
 And in your application:
 
 ```tsx
-import { Application, Stage } from 'solid-pixi'
+import { Application, Stage, P } from 'solid-pixi'
 import { createSignal } from 'solid-js'
 
 export function App() {
   const [x, setX] = createSignal(10)
   return <Application>
     <Stage>
-      <Sprite x={x()} interactive onpointerdown={() => setX(_x => x * 2)} texture={Texture.from('url')} />
+      <P.Sprite x={x()} interactive onpointerdown={() => setX(_x => x * 2)} texture={Texture.from('url')} />
     </Stage>
   </Application>
 }

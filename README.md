@@ -8,6 +8,10 @@ Create Pixi.js experiences using JSX and Signals
 npm install --save solid-pixi solid-js pixi.js
 ```
 
+If you need to execute code in environments that don't support `new Function`, use `solid-pixi-unsafe` instead.
+
+`npm install --save pixi-unsafe solid-js solid-pixi-unsafe`
+
 ## Basic Usage
 
 - [Basic Examples](https://sammccord.github.io/solid-pixi/guides/basic/assets/)
