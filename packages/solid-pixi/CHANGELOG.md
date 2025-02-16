@@ -1,5 +1,12 @@
 # solid-pixi
 
+## 2.0.0-next.1
+
+### Patch Changes
+
+- 232e5cf: potential hot loading solution
+- f29d589: useSpritesheet, useBundle, useAssetInit, some jsdoc, genericize hooks
+
 ## 2.0.0-next.0
 
 ### Major Changes
