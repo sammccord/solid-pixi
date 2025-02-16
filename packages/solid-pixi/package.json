@@ -1,6 +1,6 @@
 {
   "name": "solid-pixi",
-  "version": "2.0.0-next.0",
+  "version": "2.0.0-next.1",
   "description": "",
   "repository": {
     "type": "git",
@@ -12,7 +12,9 @@
   },
   "homepage": "https://sammccord.github.io/solid-pixi",
   "license": "MIT",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/solid-pixi.umd.js",
   "module": "./dist/solid-pixi.mjs",
   "types": "./dist/index.d.ts",
