@@ -3,3 +3,4 @@ dist
 .turbo
 tsconfig.tsbuildinfo
 .cache
+.npmrc

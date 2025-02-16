@@ -54,8 +54,6 @@ jobs:
       - name: Create .npmrc
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
-      - run: git update-index --assume-unchanged .npmrc
-
       - name: Publish to NPM
         uses: changesets/action@v1
         with:
