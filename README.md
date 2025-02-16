@@ -1,4 +1,4 @@
-![](./packages/docs/src/assets/logo.png)
+![](./packages/docs/src/assets/logo.webp)
 
 Create Pixi.js experiences using JSX and Signals
 
