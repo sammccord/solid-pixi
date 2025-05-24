@@ -1,4 +1,4 @@
-import { Application, Stage, render } from '../../../../solid-pixi/src/index'
+import { Application, Stage, render } from 'solid-pixi'
 import { G } from './G'
 
 render(() => <SimpleGraphics canvas={document.getElementById('root')! as HTMLCanvasElement} />)

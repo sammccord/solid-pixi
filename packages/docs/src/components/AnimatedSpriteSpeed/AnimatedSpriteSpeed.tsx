@@ -16,7 +16,7 @@ import {
   useApplication,
   useAsset,
   useSpritesheet
-} from '../../../../solid-pixi/src/index'
+} from 'solid-pixi'
 
 render(() => <AnimatedSpriteSpeed canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 

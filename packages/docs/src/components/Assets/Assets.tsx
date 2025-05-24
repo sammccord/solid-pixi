@@ -13,7 +13,7 @@ import {
   useAsset,
   useAssetInit,
   useBundle
-} from '../../../../solid-pixi/src/index'
+} from 'solid-pixi'
 
 render(() => <AssetsLoading canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 

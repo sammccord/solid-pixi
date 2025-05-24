@@ -1,15 +1,6 @@
 import { type PointLike, Rectangle, Sprite, Texture } from 'pixi.js'
 import { createStore, produce } from 'solid-js/store'
-import {
-  Application,
-  For,
-  P,
-  Stage,
-  Suspense,
-  render,
-  useApplication,
-  useAsset
-} from '../../../../solid-pixi/src/index'
+import { Application, For, P, Stage, Suspense, render, useApplication, useAsset } from 'solid-pixi'
 
 render(() => <BlendModes canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 

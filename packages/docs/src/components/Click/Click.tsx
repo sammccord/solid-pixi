@@ -1,15 +1,6 @@
 import { type PointLike, Texture } from 'pixi.js'
 import { createSignal } from 'solid-js'
-import {
-  Application,
-  For,
-  P,
-  Stage,
-  Suspense,
-  render,
-  useApplication,
-  useAsset
-} from '../../../../solid-pixi/src/index'
+import { Application, For, P, Stage, Suspense, render, useApplication, useAsset } from 'solid-pixi'
 
 render(() => <Click canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 

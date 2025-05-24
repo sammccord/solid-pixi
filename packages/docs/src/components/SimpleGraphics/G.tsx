@@ -1,13 +1,5 @@
 import { Show, Suspense, createEffect, createSignal } from 'solid-js'
-import {
-  Application,
-  For,
-  P,
-  Stage,
-  render,
-  useApplication,
-  useAsset
-} from '../../../../solid-pixi/src/index'
+import { Application, For, P, Stage, render, useApplication, useAsset } from 'solid-pixi'
 import { Star } from './Star'
 
 export function G(props) {

@@ -1,13 +1,6 @@
 import { type PointLike, Texture } from 'pixi.js'
 import { Show, createEffect, createSignal } from 'solid-js'
-import {
-  Application,
-  P,
-  Stage,
-  render,
-  useApplication,
-  useAssets
-} from '../../../../solid-pixi/src/index'
+import { Application, P, Stage, render, useApplication, useAssets } from 'solid-pixi'
 
 render(() => <TextureSwap canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 

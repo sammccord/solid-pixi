@@ -1,6 +1,6 @@
 import { TextStyle } from 'pixi.js'
 import { createSignal, onCleanup } from 'solid-js'
-import { Application, P, Stage, render } from '../../../../solid-pixi/src/index'
+import { Application, P, Stage, render } from 'solid-pixi'
 
 render(() => <TextExample canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -80,7 +80,7 @@ function TextContainer() {
 
 function TextExample(props) {
   return (
-    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
+    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
       <Stage>
         <TextContainer />
       </Stage>

@@ -9,7 +9,7 @@ import {
   render,
   useApplication,
   useAsset
-} from '../../../../solid-pixi/src/index'
+} from 'solid-pixi'
 
 render(() => <BitmapText canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
