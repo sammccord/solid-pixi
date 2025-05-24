@@ -1,14 +1,6 @@
 import { Graphics } from 'pixi.js'
 import { createEffect, createSignal } from 'solid-js'
-import {
-  Application,
-  For,
-  P,
-  Stage,
-  render,
-  useApplication,
-  useAsset
-} from '../../../../solid-pixi/src/index'
+import { Application, For, P, Stage, render, useApplication, useAsset } from 'solid-pixi'
 
 render(() => <DynamicGraphics canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 

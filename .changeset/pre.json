@@ -1,14 +1,10 @@
 {
-  "mode": "pre",
+  "mode": "exit",
   "tag": "next",
   "initialVersions": {
     "docs": "0.0.1",
     "solid-pixi": "1.0.0",
     "solid-pixi-unsafe": "1.0.1"
   },
-  "changesets": [
-    "mean-hotels-deliver",
-    "orange-cups-pretend",
-    "tidy-rats-arrive"
-  ]
+  "changesets": ["mean-hotels-deliver", "orange-cups-pretend", "tidy-rats-arrive"]
 }

@@ -1,6 +1,6 @@
 import { Graphics } from 'pixi.js'
 import { Show, Suspense, createEffect, createSignal, onMount } from 'solid-js'
-import { Application, P, Stage, render } from '../../../../solid-pixi/src/index'
+import { Application, P, Stage, render } from 'solid-pixi'
 
 export function Star(props) {
   const [graphics, setG] = createSignal<Graphics>()

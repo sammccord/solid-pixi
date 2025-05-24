@@ -9,7 +9,7 @@ import {
   render,
   useApplication,
   useAsset
-} from '../../../../solid-pixi/src/index'
+} from 'solid-pixi'
 
 render(() => <AdvancedGraphics canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 

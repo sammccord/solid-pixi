@@ -1,14 +1,6 @@
 import { TextStyle } from 'pixi.js'
 import { For, Show, Suspense, createEffect } from 'solid-js'
-import {
-  Application,
-  P,
-  Stage,
-  render,
-  useApplication,
-  useAsset,
-  useBundle
-} from '../../../../solid-pixi/src/index'
+import { Application, P, Stage, render, useApplication, useAsset, useBundle } from 'solid-pixi'
 
 render(() => <LoadingFonts canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 

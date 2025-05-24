@@ -10,7 +10,7 @@ import {
   useApplication,
   useAsset,
   useAssets
-} from '../../../../solid-pixi/src/index'
+} from 'solid-pixi'
 
 render(() => <CustomCursor canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 

@@ -1,14 +1,5 @@
 import { Texture } from 'pixi.js'
-import {
-  Application,
-  For,
-  P,
-  Stage,
-  Suspense,
-  render,
-  useApplication,
-  useAsset
-} from '../../../../solid-pixi/src/index'
+import { Application, For, P, Stage, Suspense, render, useApplication, useAsset } from 'solid-pixi'
 
 render(() => <TilingSpriteExample canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 

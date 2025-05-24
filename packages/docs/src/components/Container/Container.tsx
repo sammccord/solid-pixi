@@ -1,20 +1,11 @@
 import { type PointLike, Texture, Ticker } from 'pixi.js'
-import {
-  Application,
-  For,
-  P,
-  Stage,
-  Suspense,
-  render,
-  useApplication,
-  useAsset
-} from '../../../../solid-pixi/src/index'
+import { Application, For, P, Stage, Suspense, render, useApplication, useAsset } from 'solid-pixi'
 
 render(() => <ContainerExample canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 function ContainerExample(props) {
   return (
-    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
+    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
       <Stage>
         <BunniesContainer />
       </Stage>
