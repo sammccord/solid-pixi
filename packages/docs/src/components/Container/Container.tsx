@@ -1,4 +1,4 @@
-import { type PointLike, Texture, Ticker } from 'pixi.js'
+import { type PointLike, Ticker } from 'pixi.js'
 import { Application, For, P, Stage, Suspense, render, useApplication, useAsset } from 'solid-pixi'
 
 render(() => <ContainerExample canvas={document.getElementById('root')! as HTMLCanvasElement} />)
