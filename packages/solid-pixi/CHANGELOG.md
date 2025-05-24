@@ -1,5 +1,16 @@
 # solid-pixi
 
+## 2.0.0
+
+### Major Changes
+
+- 6878331: refactor to use solid's unversal rendering for perf and simplicity
+
+### Patch Changes
+
+- 232e5cf: potential hot loading solution
+- f29d589: useSpritesheet, useBundle, useAssetInit, some jsdoc, genericize hooks
+
 ## 2.0.0-next.1
 
 ### Patch Changes
