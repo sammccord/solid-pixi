@@ -2,6 +2,7 @@ import { type ApplicationOptions, Application as PixiApplication } from 'pixi.js
 import {
   type Element,
   Loading,
+  Show,
   createContext,
   createEffect,
   createMemo,
@@ -45,9 +46,14 @@ export const Application = (props: ApplicationProps) => {
     instance => props.ref?.(instance)
   )
 
+  // Show reads the pending application inside a tracking scope, so it suspends
+  // to the Loading boundary. A context provider reads its value untracked, and
+  // an untracked pending read is a hard error rather than a suspension.
   return (
     <Loading fallback={props.fallback}>
-      <AppContext value={app()}>{props.children}</AppContext>
+      <Show when={app()} keyed>
+        {instance => <AppContext value={instance}>{props.children}</AppContext>}
+      </Show>
     </Loading>
   )
 }

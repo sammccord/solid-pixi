@@ -322,7 +322,7 @@ importers:
     devDependencies:
       '@solidjs/vite-plugin':
         specifier: ^3.0.0-next.34
-        version: 3.0.0-next.34(@solidjs/web@2.0.0-rc.0(solid-js@2.0.0-rc.3))(@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.28.2)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0))(solid-js@2.0.0-rc.3)(supports-color@7.2.0)
+        version: 3.0.0-next.34(@solidjs/web@2.0.0-rc.3(solid-js@2.0.0-rc.3))(@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.28.2)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0))(solid-js@2.0.0-rc.3)(supports-color@7.2.0)
       pixi.js:
         specifier: ^8.7.3
         version: 8.7.3
@@ -353,7 +353,13 @@ importers:
     devDependencies:
       '@solidjs/vite-plugin':
         specifier: ^3.0.0-next.34
-        version: 3.0.0-next.34(@solidjs/web@2.0.0-rc.0(solid-js@2.0.0-rc.3))(@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.28.2)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0))(solid-js@2.0.0-rc.3)(supports-color@7.2.0)
+        version: 3.0.0-next.34(@solidjs/web@2.0.0-rc.3(solid-js@2.0.0-rc.3))(@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.28.2)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0))(solid-js@2.0.0-rc.3)(supports-color@7.2.0)
+      '@solidjs/web':
+        specifier: 2.0.0-rc.3
+        version: 2.0.0-rc.3(solid-js@2.0.0-rc.3)
+      playwright:
+        specifier: ^1.49.0
+        version: 1.62.1
       vite:
         specifier: npm:@voidzero-dev/vite-plus-core@0.2.4
         version: '@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.28.2)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0)'
@@ -1843,10 +1849,10 @@ packages:
       '@testing-library/jest-dom':
         optional: true
 
-  '@solidjs/web@2.0.0-rc.0':
-    resolution: {integrity: sha512-pYSaA9+dH8H1h/d/ZF/P2kR6omfzFGNcdzKhWTcg9fJghXhn8+5UrXUr2iYxDdYNOXZzxxFQhYHSJ7P4HKDqgw==}
+  '@solidjs/web@2.0.0-rc.3':
+    resolution: {integrity: sha512-5ckKgOjem1pN5ADycOk6TjHmTtjbbN2fukqxo6RW3Oe3H7z0gaXWAdt8dLISto5/O4Nn8VxprFXFWpfy31+DUg==}
     peerDependencies:
-      solid-js: ^2.0.0-rc.0
+      solid-js: ^2.0.0-rc.3
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
@@ -3146,6 +3152,11 @@ packages:
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
 
+  fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -4377,6 +4388,16 @@ packages:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
     engines: {node: '>=8'}
 
+  playwright-core@1.62.1:
+    resolution: {integrity: sha512-wPYSwEBJY9GHraISXqyqtx0na0LpO3XEX7jNDhntbex7tzUS7kLnZsOlFruFJB4Hi/rhDMjXGqHewDZ68nYZVw==}
+    engines: {node: '>=20'}
+    hasBin: true
+
+  playwright@1.62.1:
+    resolution: {integrity: sha512-0M+L3LAD8/nm554LOla9Ayx0j0tmFZ0FBcoQ7F1VuVHpM/XpiC8RcDzBQB8W5+hA8L22THxELzeF+2WcUzvcLg==}
+    engines: {node: '>=20'}
+    hasBin: true
+
   pngjs@7.0.0:
     resolution: {integrity: sha512-LKWqWJRhstyYo9pGvgor/ivk2w94eSjE3RGVuzLGlr3NmD8bf7RcYGze1mNdEHRP6TRP6rMuDHk5t44hnTRyow==}
     engines: {node: '>=14.19.0'}
@@ -5474,18 +5495,6 @@ packages:
 
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
-
-  ws@8.18.0:
-    resolution: {integrity: sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: '>=5.0.2'
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
 
   ws@8.21.3:
     resolution: {integrity: sha512-201TZ/kPWxoPr/OKWjquZR1SWKXcvxdH+e1xrx89b3YbmzLMFCLfnaG1HFIgWzJOEWZ7MvpK++odZufgYR50Rw==}
@@ -6998,13 +7007,13 @@ snapshots:
     dependencies:
       solid-js: 2.0.0-rc.3
 
-  '@solidjs/vite-plugin@3.0.0-next.34(@solidjs/web@2.0.0-rc.0(solid-js@2.0.0-rc.3))(@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.28.2)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0))(solid-js@2.0.0-rc.3)(supports-color@7.2.0)':
+  '@solidjs/vite-plugin@3.0.0-next.34(@solidjs/web@2.0.0-rc.3(solid-js@2.0.0-rc.3))(@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.28.2)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0))(solid-js@2.0.0-rc.3)(supports-color@7.2.0)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@babel/core': 7.26.7(supports-color@7.2.0)
       '@solidjs/babel-plugin': 2.0.0-rc.3(@babel/core@7.26.7(supports-color@7.2.0))
       '@solidjs/compiler': 2.0.0-rc.3
-      '@solidjs/web': 2.0.0-rc.0(solid-js@2.0.0-rc.3)
+      '@solidjs/web': 2.0.0-rc.3(solid-js@2.0.0-rc.3)
       '@types/babel__core': 7.20.5
       merge-anything: 5.1.7
       solid-js: 2.0.0-rc.3
@@ -7013,7 +7022,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@solidjs/web@2.0.0-rc.0(solid-js@2.0.0-rc.3)':
+  '@solidjs/web@2.0.0-rc.3(solid-js@2.0.0-rc.3)':
     dependencies:
       seroval: 1.5.6
       seroval-plugins: 1.5.6(seroval@1.5.6)
@@ -8481,6 +8490,9 @@ snapshots:
 
   fs.realpath@1.0.0: {}
 
+  fsevents@2.3.2:
+    optional: true
+
   fsevents@2.3.3:
     optional: true
 
@@ -9038,7 +9050,7 @@ snapshots:
       whatwg-encoding: 2.0.0
       whatwg-mimetype: 3.0.0
       whatwg-url: 11.0.0
-      ws: 8.18.0
+      ws: 8.21.3
       xml-name-validator: 4.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -10112,6 +10124,14 @@ snapshots:
   pkg-dir@4.2.0:
     dependencies:
       find-up: 4.1.0
+
+  playwright-core@1.62.1: {}
+
+  playwright@1.62.1:
+    dependencies:
+      playwright-core: 1.62.1
+    optionalDependencies:
+      fsevents: 2.3.2
 
   pngjs@7.0.0: {}
 
@@ -11428,8 +11448,6 @@ snapshots:
       strip-ansi: 7.1.0
 
   wrappy@1.0.2: {}
-
-  ws@8.18.0: {}
 
   ws@8.21.3: {}
 

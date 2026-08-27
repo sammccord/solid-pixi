@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "vp test run"
+    "test": "vp test run",
+    "test:browser": "node browser/verify.mjs"
   },
   "dependencies": {
     "pixi.js": "^8.7.3",
@@ -13,6 +14,8 @@
   },
   "devDependencies": {
     "@solidjs/vite-plugin": "^3.0.0-next.34",
+    "@solidjs/web": "2.0.0-rc.3",
+    "playwright": "^1.49.0",
     "vite": "catalog:",
     "vite-plus": "catalog:"
   }
