@@ -61,6 +61,73 @@ check('a signal write repainted the canvas blue', blue[2] > 200 && blue[0] < 60,
 
 check('no console or page errors', consoleErrors.length === 0, consoleErrors.join(' | '))
 
+// --- asset hooks and Application stability, on a second page ---
+
+const assets = await browser.newPage()
+const assetNoise = []
+assets.on('console', m => ['error', 'warning'].includes(m.type()) && assetNoise.push(`${m.type()}: ${m.text()}`))
+assets.on('pageerror', e => assetNoise.push(String(e)))
+
+await assets.goto('http://localhost:5199/browser/assets.html', { waitUntil: 'load' })
+await assets.waitForFunction(() => window.assets !== undefined, null, { timeout: 20000 })
+await assets.evaluate(() => window.assets.ready)
+await assets
+  .waitForFunction(() => window.assets.app.stage.children.length === 1, null, { timeout: 20000 })
+  .catch(() => {})
+
+const loaded = await assets.evaluate(() => {
+  const { app } = window.assets
+  app.render()
+  const { pixels } = app.renderer.extract.pixels(app.stage)
+  return {
+    progress: window.assets.progressWhileLoading,
+    spriteEarly: window.assets.spriteMountedDuringFirstRender,
+    labels: app.stage.children.map(child => child.label),
+    pixel: [pixels[0], pixels[1], pixels[2]]
+  }
+})
+
+check('useAsset suspended the sprite through the first render pass', loaded.spriteEarly === false)
+check('progress reached 1 by the time the sprite mounted', loaded.progress.at(-1) === 1, JSON.stringify(loaded.progress))
+check('the loaded texture drew green pixels', loaded.pixel[1] > 150 && loaded.pixel[0] < 120, `rgb(${loaded.pixel})`)
+
+const stable = await assets.evaluate(() => {
+  const before = { renderer: window.assets.app.renderer, stage: window.assets.app.stage }
+  window.assets.setBackground('#123456')
+  return {
+    sameRenderer: window.assets.app.renderer === before.renderer,
+    sameStage: window.assets.app.stage === before.stage,
+    stillOneChild: window.assets.app.stage.children.length === 1
+  }
+})
+
+check('an option change does not re-initialize the Application', stable.sameRenderer && stable.sameStage && stable.stillOneChild, JSON.stringify(stable))
+check('no owned-write or other console noise from the hooks', assetNoise.length === 0, assetNoise.join(' | '))
+
+// --- a failing asset lands in Errored instead of halting the graph ---
+
+const errors = await browser.newPage()
+const halted = []
+errors.on('console', m => m.text().includes('REACTIVITY_HALTED') && halted.push(m.text()))
+
+await errors.goto('http://localhost:5199/browser/errors.html', { waitUntil: 'load' })
+await errors.waitForFunction(() => window.errors !== undefined, null, { timeout: 20000 })
+await errors.evaluate(() => window.errors.ready)
+await errors
+  .waitForFunction(
+    () => window.errors.app.stage.children.some(child => child.label === 'failed'),
+    null,
+    { timeout: 20000 }
+  )
+  .catch(() => {})
+
+const recovered = await errors.evaluate(() =>
+  window.errors.app.stage.children.map(child => child.label)
+)
+
+check('a failing asset renders the Errored fallback', recovered.includes('failed'), JSON.stringify(recovered))
+check('a failing asset does not halt the reactive system', halted.length === 0, halted.join(' | '))
+
 await browser.close()
 await server.close()
 

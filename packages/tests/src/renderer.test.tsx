@@ -157,6 +157,32 @@ test('renderable=false lets one last write land, then freezes props', () => {
   dispose()
 })
 
+test('renderable gating survives a toggle with prop changes in between', () => {
+  const [renderable, setRenderable] = createSignal(true)
+  const [x, setX] = createSignal(1)
+  const { root, dispose } = withRoot(() => <P.Sprite renderable={renderable()} x={x()} />)
+  const sprite = root.children[0] as Sprite
+
+  flush(() => {
+    setRenderable(false)
+    setX(2)
+  })
+  expect(sprite.renderable).toBe(false)
+  expect(sprite.x).toBe(2)
+
+  flush(() => setX(3))
+  flush(() => setX(4))
+  expect(sprite.x).toBe(2)
+
+  flush(() => setRenderable(true))
+  expect(sprite.x).toBe(4)
+
+  flush(() => setRenderable(false))
+  flush(() => setX(5))
+  expect(sprite.x).toBe(4)
+  dispose()
+})
+
 test('dispose stops the reactive graph', () => {
   const [x, setX] = createSignal(1)
   const { root, dispose } = withRoot(() => <P.Sprite x={x()} />)
