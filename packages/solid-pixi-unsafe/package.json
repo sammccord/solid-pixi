@@ -32,5 +32,10 @@
   "peerDependencies": {
     "pixi-unsafe": "^8.7.3",
     "solid-js": "^1.8.5"
+  },
+  "devDependencies": {
+    "pixi-unsafe": "^8.7.3",
+    "solid-js": "^1.9.4",
+    "vite-plugin-solid": "^2.11.0"
   }
 }
