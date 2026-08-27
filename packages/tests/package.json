@@ -1,0 +1,19 @@
+{
+  "name": "tests",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vp test run"
+  },
+  "dependencies": {
+    "pixi.js": "^8.7.3",
+    "solid-js": "^1.9.4",
+    "solid-pixi": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "catalog:",
+    "vite-plugin-solid": "^2.11.0",
+    "vite-plus": "catalog:"
+  }
+}

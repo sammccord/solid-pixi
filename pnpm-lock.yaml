@@ -341,6 +341,28 @@ importers:
         specifier: ^1.8.5
         version: 1.9.4
 
+  packages/tests:
+    dependencies:
+      pixi.js:
+        specifier: ^8.7.3
+        version: 8.7.3
+      solid-js:
+        specifier: ^1.9.4
+        version: 1.9.4
+      solid-pixi:
+        specifier: workspace:*
+        version: link:../solid-pixi
+    devDependencies:
+      vite:
+        specifier: npm:@voidzero-dev/vite-plus-core@0.2.4
+        version: '@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.28.2)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0)'
+      vite-plugin-solid:
+        specifier: ^2.11.0
+        version: 2.11.0(@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.28.2)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0))(solid-js@1.9.4)(supports-color@7.2.0)
+      vite-plus:
+        specifier: 'catalog:'
+        version: 0.2.4(@types/node@22.12.0)(@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.28.2)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0))(esbuild@0.28.2)(jiti@2.4.2)(jsdom@20.0.3(supports-color@7.2.0))(typescript@5.7.3)(yaml@2.7.0)
+
 packages:
 
   '@ampproject/remapping@2.3.0':

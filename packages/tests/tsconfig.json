@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["vite-plus/test"]
+  },
+  "include": ["src", "vite.config.mjs"],
+  "exclude": ["node_modules"]
+}
