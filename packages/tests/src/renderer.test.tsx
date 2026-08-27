@@ -1,5 +1,5 @@
 import { Container, Sprite, Text } from 'pixi.js'
-import { createSignal } from 'solid-js'
+import { createSignal, flush } from 'solid-js'
 import { For, P, Show, render } from 'solid-pixi'
 
 type Mount = (code: () => unknown, node: Container) => () => void
@@ -13,6 +13,19 @@ function withRoot(code: () => unknown) {
 }
 
 const names = (parent: Container) => parent.children.map(child => child.constructor.name)
+
+test('writes are staged until flush, as Solid 2 intends', () => {
+  const [x, setX] = createSignal(0)
+  const { root, dispose } = withRoot(() => <P.Sprite x={x()} />)
+  const sprite = root.children[0] as Sprite
+
+  setX(7)
+  expect(sprite.x).toBe(0)
+
+  flush()
+  expect(sprite.x).toBe(7)
+  dispose()
+})
 
 test('mounts a child into the root', () => {
   const { root, dispose } = withRoot(() => <P.Container />)
@@ -35,7 +48,7 @@ test('updates a prop when its signal changes', () => {
   const sprite = root.children[0] as Sprite
   expect(sprite.x).toBe(0)
 
-  setX(40)
+  flush(() => setX(40))
   expect(sprite.x).toBe(40)
   dispose()
 })
@@ -97,10 +110,10 @@ test('Show adds and removes a node', () => {
   const outer = root.children[0] as Container
   expect(outer.children.length).toBe(0)
 
-  setOn(true)
+  flush(() => setOn(true))
   expect(outer.children.map(child => child.label)).toEqual(['toggled'])
 
-  setOn(false)
+  flush(() => setOn(false))
   expect(outer.children.length).toBe(0)
   dispose()
 })
@@ -116,11 +129,11 @@ test('For reorders without recreating nodes', () => {
   expect(outer.children.map(child => child.label)).toEqual(['a', 'b', 'c'])
   const before = new Map(outer.children.map(child => [child.label, child]))
 
-  setItems(['c', 'a', 'b'])
+  flush(() => setItems(['c', 'a', 'b']))
   expect(outer.children.map(child => child.label)).toEqual(['c', 'a', 'b'])
   for (const child of outer.children) expect(before.get(child.label)).toBe(child)
 
-  setItems(['a'])
+  flush(() => setItems(['a']))
   expect(outer.children.map(child => child.label)).toEqual(['a'])
   dispose()
 })
@@ -132,14 +145,14 @@ test('renderable=false lets one last write land, then freezes props', () => {
   const sprite = root.children[0] as Sprite
   expect(sprite.x).toBe(1)
 
-  setRenderable(false)
+  flush(() => setRenderable(false))
   expect(sprite.renderable).toBe(false)
 
-  setX(2)
+  flush(() => setX(2))
   expect(sprite.x).toBe(1)
 
-  setRenderable(true)
-  setX(3)
+  flush(() => setRenderable(true))
+  flush(() => setX(3))
   expect(sprite.x).toBe(3)
   dispose()
 })
@@ -150,7 +163,7 @@ test('dispose stops the reactive graph', () => {
   const sprite = root.children[0] as Sprite
 
   dispose()
-  setX(99)
+  flush(() => setX(99))
   expect(sprite.x).toBe(1)
 })
 

@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 import * as pixi from 'pixi.js'
-import { type Ref, createMemo, splitProps } from 'solid-js'
+import { type Ref, omit, untrack } from 'solid-js'
 import { CommonPropKeys } from './interfaces'
 import { insert, spread } from './runtime'
 
@@ -66,12 +66,12 @@ export type P = {
 export const P = new Proxy<P>({} as any, {
   get(_target, name: string) {
     return function (props: any) {
-      const [common, pixis] = splitProps(props, CommonPropKeys)
+      const options = omit(props, ...CommonPropKeys)
+      const node = untrack(() => props.as ?? new (pixi as any)[name](options))
 
-      const as = common.as || new (pixi as any)[name](pixis)
-      spread(as, pixis)
-      insert(as, () => common.children)
-      return as
+      spread(node, options)
+      insert(node, () => props.children)
+      return node
     }
   }
 })

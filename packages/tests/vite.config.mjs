@@ -2,7 +2,7 @@
 
 import { fileURLToPath } from 'node:url'
 import { defineConfig, lazyPlugins } from 'vite-plus'
-import solidPlugin from 'vite-plugin-solid'
+import solidPlugin from '@solidjs/vite-plugin'
 
 const src = fileURLToPath(new URL('../solid-pixi/src/index.ts', import.meta.url))
 
