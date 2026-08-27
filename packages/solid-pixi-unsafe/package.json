@@ -27,7 +27,7 @@
   },
   "scripts": {
     "prepublishOnly": "rm -rf dist && npm run build",
-    "build": "vite build && tsc --emitDeclarationOnly"
+    "build": "vp build && tsc --emitDeclarationOnly"
   },
   "peerDependencies": {
     "pixi-unsafe": "^8.7.3",
