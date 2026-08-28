@@ -42,6 +42,11 @@ jobs:
       - name: Test (node)
         run: pnpm vp run --filter './packages/tests' test
 
+      # The docs' strict tsconfig type-checks the library source too, catching
+      # what the package's own lax tsc misses.
+      - name: Check the docs types
+        run: pnpm --filter docs exec astro check
+
       - name: Verify the published package
         run: node tools/verify-package.mjs
 
