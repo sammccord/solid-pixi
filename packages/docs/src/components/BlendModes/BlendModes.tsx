@@ -1,6 +1,16 @@
 import { type PointLike, Rectangle } from 'pixi.js'
 import { createStore, flush } from 'solid-js'
-import { Application, For, Loading, P, Stage, render, useApplication, useAsset } from 'solid-pixi'
+import {
+  Application,
+  For,
+  Loading,
+  Stage,
+  render,
+  useApplication,
+  useAsset,
+  Container,
+  Sprite
+} from 'solid-pixi'
 
 render(() => <BlendModes canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -60,7 +70,7 @@ function Dudes() {
     <Loading>
       <For each={dudes}>
         {dude => (
-          <P.Sprite
+          <Sprite
             texture={texture()}
             scale={dude.scale}
             anchor={{ x: 0.5, y: 0.5 } as PointLike}
@@ -81,7 +91,7 @@ function Background() {
   const texture = useAsset('https://pixijs.com/assets/bg_rotate.jpg')
   return (
     <Loading>
-      <P.Sprite texture={texture()} width={app.stage.width} height={app.stage.height} />
+      <Sprite texture={texture()} width={app.stage.width} height={app.stage.height} />
     </Loading>
   )
 }
@@ -91,9 +101,9 @@ function BlendModes(props) {
     <Application resizeTo={window} canvas={props.canvas}>
       <Stage>
         <Background />
-        <P.Container>
+        <Container>
           <Dudes />
-        </P.Container>
+        </Container>
       </Stage>
     </Application>
   )

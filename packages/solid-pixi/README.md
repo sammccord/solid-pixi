@@ -37,7 +37,17 @@ A file that mixes pixi and DOM JSX needs a per-file
 
 ```tsx
 import { createSignal } from 'solid-js'
-import { Application, P, Stage, render, useApplication, useAsset } from 'solid-pixi'
+import {
+  Application,
+  Errored,
+  Loading,
+  Sprite,
+  Stage,
+  Text,
+  render,
+  useApplication,
+  useAsset
+} from 'solid-pixi'
 
 render(() => <Scene canvas={document.getElementById('root') as HTMLCanvasElement} />)
 
@@ -57,9 +67,9 @@ function Bunny() {
   const [scale, setScale] = createSignal(1)
 
   return (
-    <Errored fallback={error => <P.Text text={String(error())} />}>
-      <Loading fallback={<P.Text text={`${Math.round(texture.progress() * 100)}%`} />}>
-        <P.Sprite
+    <Errored fallback={error => <Text text={String(error())} />}>
+      <Loading fallback={<Text text={`${Math.round(texture.progress() * 100)}%`} />}>
+        <Sprite
           texture={texture()}
           anchor={0.5}
           scale={scale()}
@@ -84,7 +94,7 @@ value outside it:
 
 ```tsx
 <Show when={texture()} keyed>
-  {value => <P.Graphics ref={g => g.stroke({ texture: value, width: 10 })} />}
+  {value => <Graphics ref={g => g.stroke({ texture: value, width: 10 })} />}
 </Show>
 ```
 

@@ -3,11 +3,11 @@ import {
   Application,
   For,
   Loading,
-  P,
   Stage,
   render,
   useApplication,
-  useSpritesheet
+  useSpritesheet,
+  Sprite
 } from 'solid-pixi'
 
 render(() => <Spritesheet canvas={document.getElementById('root')! as HTMLCanvasElement} />)
@@ -22,7 +22,7 @@ function SwapContainer() {
         {() => {
           const scale = 0.75 * Math.random() * 2
           return (
-            <P.Sprite
+            <Sprite
               texture={spritesheet().textures[`Explosion_Sequence_A ${10}.png`]}
               x={Math.random() * app.screen.width}
               y={Math.random() * app.screen.height}

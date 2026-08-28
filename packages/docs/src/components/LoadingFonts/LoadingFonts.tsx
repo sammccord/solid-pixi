@@ -1,5 +1,5 @@
 import { TextStyle } from 'pixi.js'
-import { Application, For, Loading, P, Show, Stage, render, useBundle } from 'solid-pixi'
+import { Application, For, Loading, Show, Stage, render, useBundle, Text } from 'solid-pixi'
 
 render(() => <LoadingFonts canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -15,7 +15,7 @@ const fonts = [
 
 function Font(props: { fontFamily: string; y: number }) {
   return (
-    <P.Text
+    <Text
       x={10}
       y={props.y}
       style={
@@ -25,7 +25,7 @@ function Font(props: { fontFamily: string; y: number }) {
         })
       }
       text={props.fontFamily}
-    ></P.Text>
+    ></Text>
   )
 }
 

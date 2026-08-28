@@ -1,5 +1,14 @@
 import { Texture } from 'pixi.js'
-import { Application, For, P, Stage, Loading, render, useApplication, useAsset } from 'solid-pixi'
+import {
+  Application,
+  For,
+  Stage,
+  Loading,
+  render,
+  useApplication,
+  useAsset,
+  TilingSprite
+} from 'solid-pixi'
 
 render(() => <TilingSpriteExample canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -11,7 +20,7 @@ function TilingSpriteContainer() {
 
   return (
     <Loading>
-      <P.TilingSprite
+      <TilingSprite
         texture={texture()}
         width={app.screen.width}
         height={app.screen.height}

@@ -37,7 +37,7 @@ const texture = useAsset('/hero.png')
 
 <Errored fallback={err => <Oops error={err()} />}>
   <Loading fallback={<Bar value={texture.progress()} />}>
-    <P.Sprite texture={texture()} />
+    <Sprite texture={texture()} />
   </Loading>
 </Errored>
 ```
@@ -54,6 +54,6 @@ a second `Assets.init`.
 **Writes are staged.** Solid 2 commits on the next microtask, so imperative code
 that reads a pixi property straight after a setter needs `flush()`.
 
-**Fixes.** Text nodes no longer use the deprecated `new Text(value)` form, the
-text-node check no longer depends on `constructor.name` surviving minification,
-and `createElement` can construct a pixi class instead of throwing.
+**Fixes.** Text nodes no longer use the deprecated `new Text(value)` form, and
+the text-node check no longer depends on `constructor.name` surviving
+minification.

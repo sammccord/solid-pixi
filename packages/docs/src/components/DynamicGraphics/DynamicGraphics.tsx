@@ -1,13 +1,13 @@
-import { Graphics } from 'pixi.js'
+import type { Graphics as PixiGraphics } from 'pixi.js'
 import { createEffect, createSignal, flush, onSettled } from 'solid-js'
-import { Application, P, Stage, render, useApplication } from 'solid-pixi'
+import { Application, Stage, render, useApplication, Graphics } from 'solid-pixi'
 
 render(() => <DynamicGraphics canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 export function GraphicsContainer() {
   const app = useApplication()
   const [_count, setCount] = createSignal(0)
-  const [_graphics, setGraphics] = createSignal<Graphics>()
+  const [_graphics, setGraphics] = createSignal<PixiGraphics>()
 
   onSettled(() => {
     const ticker = () => flush(() => setCount(c => c + 0.1))
@@ -31,7 +31,7 @@ export function GraphicsContainer() {
     }
   )
 
-  return <P.Graphics x={400} y={300} rotation={_count() * 0.1} ref={setGraphics} />
+  return <Graphics x={400} y={300} rotation={_count() * 0.1} ref={setGraphics} />
 }
 
 function DynamicGraphics(props) {

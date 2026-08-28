@@ -1,5 +1,14 @@
 import type { Application as PixiApplication } from 'pixi.js'
-import { Application, Errored, Loading, P, Stage, render, useAsset } from 'solid-pixi'
+import {
+  Application,
+  Errored,
+  Loading,
+  Stage,
+  render,
+  useAsset,
+  Container,
+  Sprite
+} from 'solid-pixi'
 
 declare global {
   interface Window {
@@ -14,7 +23,7 @@ const ready = new Promise<void>(resolve => (resolveReady = resolve))
 
 function Missing() {
   const texture = useAsset('/browser/does-not-exist.png')
-  return <P.Sprite label="art" texture={texture()} />
+  return <Sprite label="art" texture={texture()} />
 }
 
 render(() => (
@@ -29,8 +38,8 @@ render(() => (
     }}
   >
     <Stage>
-      <Errored fallback={<P.Container label="failed" />}>
-        <Loading fallback={<P.Container label="loading" />}>
+      <Errored fallback={<Container label="failed" />}>
+        <Loading fallback={<Container label="loading" />}>
           <Missing />
         </Loading>
       </Errored>

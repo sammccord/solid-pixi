@@ -1,6 +1,15 @@
 import { type PointLike, Texture } from 'pixi.js'
 import { createSignal } from 'solid-js'
-import { Application, Loading, P, Show, Stage, render, useApplication, useAssets } from 'solid-pixi'
+import {
+  Application,
+  Loading,
+  Show,
+  Stage,
+  render,
+  useApplication,
+  useAssets,
+  Sprite
+} from 'solid-pixi'
 
 render(() => <Interactivity canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -22,7 +31,7 @@ function InteractivityContainer() {
 
   return (
     <Show when={textures()}>
-      <P.Sprite
+      <Sprite
         texture={Texture.from(texture())}
         interactive
         cursor="pointer"

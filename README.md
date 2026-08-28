@@ -19,7 +19,16 @@ and the [docs site](https://sammccord.github.io/solid-pixi).
 
 ```tsx
 import { createSignal } from 'solid-js'
-import { render, Application, Loading, Stage, useAsset, P, useApplication } from 'solid-pixi'
+import {
+  Application,
+  Loading,
+  Sprite,
+  Stage,
+  Text,
+  render,
+  useApplication,
+  useAsset
+} from 'solid-pixi'
 
 render(() => <Click canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -39,8 +48,8 @@ function ClickContainer() {
   const [scale, setScale] = createSignal(1)
 
   return (
-    <Loading fallback={<P.Text text="loading" />}>
-      <P.Sprite
+    <Loading fallback={<Text text="loading" />}>
+      <Sprite
         texture={texture()}
         interactive
         onpointerdown={() => {

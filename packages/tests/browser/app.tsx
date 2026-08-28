@@ -1,6 +1,6 @@
-import type { Application as PixiApplication, Graphics } from 'pixi.js'
+import type { Application as PixiApplication, Graphics as PixiGraphics } from 'pixi.js'
 import { createSignal, flush } from 'solid-js'
-import { Application, P, Stage, render } from 'solid-pixi'
+import { Application, Stage, render, Container, Graphics, Sprite } from 'solid-pixi'
 
 declare global {
   interface Window {
@@ -23,18 +23,18 @@ let childMountedAt = Number.NaN
 function Scene() {
   return (
     <Stage>
-      <P.Graphics
+      <Graphics
         label="box"
         tint={tint()}
-        ref={(g: Graphics) => {
+        ref={(g: PixiGraphics) => {
           childMountedAt = performance.now()
           g.rect(0, 0, 200, 200)
           g.fill(0xffffff)
         }}
       />
-      <P.Container label="group">
-        <P.Sprite label="child" />
-      </P.Container>
+      <Container label="group">
+        <Sprite label="child" />
+      </Container>
     </Stage>
   )
 }

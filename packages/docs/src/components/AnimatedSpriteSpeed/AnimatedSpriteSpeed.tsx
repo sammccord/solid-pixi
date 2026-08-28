@@ -1,14 +1,14 @@
-import type { AnimatedSprite, PointLike, SpritesheetData } from 'pixi.js'
+import type { AnimatedSprite as PixiAnimatedSprite, PointLike, SpritesheetData } from 'pixi.js'
 import { createMemo } from 'solid-js'
 import {
   Application,
   Loading,
-  P,
   Show,
   Stage,
   render,
   useApplication,
-  useSpritesheet
+  useSpritesheet,
+  AnimatedSprite
 } from 'solid-pixi'
 
 render(() => <AnimatedSpriteSpeed canvas={document.getElementById('root')! as HTMLCanvasElement} />)
@@ -33,23 +33,23 @@ function SpeedContainer() {
       <Show when={frames()} keyed>
         {textures => (
           <>
-            <P.AnimatedSprite
+            <AnimatedSprite
               textures={textures}
               animationSpeed={0.5}
               y={app.screen.height / 2}
               anchor={{ x: 0.5, y: 0.5 } as PointLike}
               scale={{ x: 4, y: 4 }}
-              ref={(sprite: AnimatedSprite) => {
+              ref={(sprite: PixiAnimatedSprite) => {
                 sprite.x = (app.screen.width - sprite.width) / 2
                 sprite.play()
               }}
             />
-            <P.AnimatedSprite
+            <AnimatedSprite
               textures={textures}
               y={app.screen.height / 2}
               anchor={{ x: 0.5, y: 0.5 } as PointLike}
               scale={{ x: 4, y: 4 }}
-              ref={(sprite: AnimatedSprite) => {
+              ref={(sprite: PixiAnimatedSprite) => {
                 sprite.x = (app.screen.width + sprite.width) / 2
                 sprite.play()
               }}

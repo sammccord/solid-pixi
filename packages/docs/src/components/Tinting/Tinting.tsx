@@ -1,6 +1,15 @@
 import { type PointLike, Rectangle, Texture } from 'pixi.js'
 import { createStore, flush } from 'solid-js'
-import { Application, For, P, Stage, Loading, render, useApplication, useAsset } from 'solid-pixi'
+import {
+  Application,
+  For,
+  Stage,
+  Loading,
+  render,
+  useApplication,
+  useAsset,
+  Sprite
+} from 'solid-pixi'
 
 render(() => <Tinting canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -60,7 +69,7 @@ function Dudes() {
     <Loading>
       <For each={dudes}>
         {dude => (
-          <P.Sprite
+          <Sprite
             texture={texture()}
             scale={dude.scale}
             anchor={{ x: 0.5, y: 0.5 } as PointLike}

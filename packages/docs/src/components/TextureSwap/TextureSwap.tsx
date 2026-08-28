@@ -1,6 +1,6 @@
 import { type PointLike, Texture } from 'pixi.js'
 import { createSignal } from 'solid-js'
-import { Application, P, Show, Stage, render, useApplication, useAssets } from 'solid-pixi'
+import { Application, Show, Stage, render, useApplication, useAssets, Sprite } from 'solid-pixi'
 
 render(() => <TextureSwap canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -16,7 +16,7 @@ function SwapContainer() {
 
   return (
     <Show when={textures()}>
-      <P.Sprite
+      <Sprite
         texture={Texture.from(_textures[texture()]!)}
         interactive
         onpointerdown={() => setTexture(t => 1 - t)}

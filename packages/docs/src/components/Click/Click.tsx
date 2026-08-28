@@ -1,6 +1,6 @@
 import type { PointLike } from 'pixi.js'
 import { createSignal } from 'solid-js'
-import { Application, Loading, P, Stage, render, useApplication, useAsset } from 'solid-pixi'
+import { Application, Loading, Stage, render, useApplication, useAsset, Sprite } from 'solid-pixi'
 
 render(() => <Click canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -11,7 +11,7 @@ function ClickContainer() {
 
   return (
     <Loading>
-      <P.Sprite
+      <Sprite
         texture={texture()}
         interactive
         onpointerdown={() => {

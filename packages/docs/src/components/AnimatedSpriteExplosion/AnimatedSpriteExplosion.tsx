@@ -1,14 +1,14 @@
-import type { AnimatedSprite } from 'pixi.js'
+import type { AnimatedSprite as PixiAnimatedSprite } from 'pixi.js'
 import { createMemo } from 'solid-js'
 import {
   Application,
   For,
   Loading,
-  P,
   Stage,
   render,
   useApplication,
-  useSpritesheet
+  useSpritesheet,
+  AnimatedSprite
 } from 'solid-pixi'
 
 render(() => (
@@ -27,7 +27,7 @@ function SwapContainer() {
     <Loading>
       <For each={Array.from({ length: 50 })}>
         {() => (
-          <P.AnimatedSprite
+          <AnimatedSprite
             textures={frames()}
             x={Math.random() * app.screen.width}
             y={Math.random() * app.screen.height}
@@ -35,7 +35,7 @@ function SwapContainer() {
             rotation={Math.random() * Math.PI}
             autoUpdate
             scale={0.75 * Math.random() * 2}
-            ref={(sprite: AnimatedSprite) => sprite.gotoAndPlay((Math.random() * 26) | 0)}
+            ref={(sprite: PixiAnimatedSprite) => sprite.gotoAndPlay((Math.random() * 26) | 0)}
           />
         )}
       </For>

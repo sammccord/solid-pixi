@@ -1,5 +1,5 @@
 import { createSignal } from 'solid-js'
-import { P, Show } from 'solid-pixi'
+import { Show, Graphics } from 'solid-pixi'
 import { Star } from './Star'
 
 export function G(props) {
@@ -7,7 +7,7 @@ export function G(props) {
 
   return (
     <>
-      <P.Graphics
+      <Graphics
         interactive
         onclick={() => setScale(s => s / 2)}
         ref={g => {
@@ -16,7 +16,7 @@ export function G(props) {
         }}
       />
       <Show when={scale() < 10}>
-        <P.Graphics
+        <Graphics
           ref={g => {
             g.rect(200, 50, 100, 100)
             g.stroke({ width: 2, color: 0xfeeb77 })
@@ -25,21 +25,21 @@ export function G(props) {
         />
       </Show>
 
-      <P.Graphics
+      <Graphics
         ref={g => {
           g.rect(350, 50, 100, 100)
           g.stroke({ width: 10, color: 0xffbd01 })
           g.fill(0xc34288)
         }}
       />
-      <P.Graphics
+      <Graphics
         ref={g => {
           g.circle(250, 250, 50)
           g.stroke({ width: 10, color: 0xfeeb77 })
           g.fill(0x650a5a)
         }}
       />
-      <P.Graphics
+      <Graphics
         ref={g => {
           g.moveTo(50, 350)
           g.lineTo(250, 350)

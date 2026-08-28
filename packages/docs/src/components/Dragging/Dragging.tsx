@@ -1,5 +1,14 @@
 import { Container, type PointLike, Texture } from 'pixi.js'
-import { Application, For, P, Stage, Loading, render, useApplication, useAsset } from 'solid-pixi'
+import {
+  Application,
+  For,
+  Stage,
+  Loading,
+  render,
+  useApplication,
+  useAsset,
+  Sprite
+} from 'solid-pixi'
 
 render(() => <Dragging canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -31,7 +40,7 @@ function DraggingContainer() {
 
   return (
     <Loading>
-      <P.Sprite
+      <Sprite
         texture={texture()}
         x={Math.random() * app.screen.width}
         y={Math.random() * app.screen.height}

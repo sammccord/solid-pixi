@@ -1,9 +1,9 @@
-import type { Graphics } from 'pixi.js'
+import type { Graphics as PixiGraphics } from 'pixi.js'
 import { createEffect, createSignal } from 'solid-js'
-import { P } from 'solid-pixi'
+import { Graphics } from 'solid-pixi'
 
 export function Star(props) {
-  const [graphics, setG] = createSignal<Graphics>()
+  const [graphics, setG] = createSignal<PixiGraphics>()
 
   createEffect(
     () => graphics(),
@@ -15,5 +15,5 @@ export function Star(props) {
     }
   )
 
-  return <P.Graphics x={props.x} y={100} ref={setG} />
+  return <Graphics x={props.x} y={100} ref={setG} />
 }

@@ -1,6 +1,6 @@
 import type { Application as PixiApplication, Renderer, Container as PixiContainer } from 'pixi.js'
 import { createEffect, createSignal, flush } from 'solid-js'
-import { Application, P, Stage, render, useAsset } from 'solid-pixi'
+import { Application, Stage, render, useAsset, Sprite } from 'solid-pixi'
 
 declare global {
   interface Window {
@@ -34,7 +34,7 @@ function Art() {
 
   return (
     <Stage>
-      <P.Sprite
+      <Sprite
         label="art"
         texture={texture()}
         width={200}

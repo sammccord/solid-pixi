@@ -1,6 +1,6 @@
 import { type PointLike, Texture } from 'pixi.js'
 import { onSettled } from 'solid-js'
-import { Application, Loading, P, Stage, render, useApplication, useAssets } from 'solid-pixi'
+import { Application, Loading, Stage, render, useApplication, useAssets, Sprite } from 'solid-pixi'
 
 render(() => <CustomCursor canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -21,7 +21,7 @@ function ClickContainer() {
 
   return (
     <Loading>
-      <P.Sprite
+      <Sprite
         texture={textures()['https://pixijs.com/assets/bunny.png']}
         interactive
         cursor={hoverIcon}

@@ -1,29 +1,29 @@
-import { Container, Graphics, Sprite } from 'pixi.js'
+import { Container as PixiContainer, Graphics as PixiGraphics, Sprite as PixiSprite } from 'pixi.js'
 import { createMemo, createSignal, flush } from 'solid-js'
-import { Loading, P, Show, render } from 'solid-pixi'
+import { Loading, Show, render, Container, Graphics, Sprite } from 'solid-pixi'
 
-const mount = render as unknown as (code: () => unknown, node: Container) => () => void
+const mount = render as unknown as (code: () => unknown, node: PixiContainer) => () => void
 const settle = () => new Promise(resolve => setTimeout(resolve, 20))
 
 test('a ref may write a signal without tripping the owned-write rule', () => {
-  const root = new Container()
-  const [graphics, setGraphics] = createSignal<Graphics>()
+  const root = new PixiContainer()
+  const [graphics, setGraphics] = createSignal<PixiGraphics>()
 
-  const dispose = mount(() => <P.Graphics ref={setGraphics} />, root)
+  const dispose = mount(() => <Graphics ref={setGraphics} />, root)
   flush()
 
-  expect(graphics()).toBeInstanceOf(Graphics)
+  expect(graphics()).toBeInstanceOf(PixiGraphics)
   dispose()
 })
 
 test('an async prop reaches the node once it settles under Loading', async () => {
-  const root = new Container()
+  const root = new PixiContainer()
   const label = createMemo(async () => 'ready')
 
   const dispose = mount(
     () => (
       <Loading>
-        <P.Sprite label={label()} />
+        <Sprite label={label()} />
       </Loading>
     ),
     root
@@ -31,19 +31,19 @@ test('an async prop reaches the node once it settles under Loading', async () =>
   await settle()
   flush()
 
-  expect((root.children[0] as Sprite)?.label).toBe('ready')
+  expect((root.children[0] as PixiSprite)?.label).toBe('ready')
   dispose()
 })
 
 test('a constructor-critical async prop needs a tracked read before the component', async () => {
-  const root = new Container()
+  const root = new PixiContainer()
   const frames = createMemo(async () => ['a', 'b'])
 
   const dispose = mount(
     () => (
       <Loading>
         <Show when={frames()} keyed>
-          {value => <P.Container label={value.join('')} />}
+          {value => <Container label={value.join('')} />}
         </Show>
       </Loading>
     ),
@@ -57,7 +57,7 @@ test('a constructor-critical async prop needs a tracked read before the componen
 })
 
 test('a ref uses an async value captured outside the callback', async () => {
-  const root = new Container()
+  const root = new PixiContainer()
   const label = createMemo(async () => 'from-async')
 
   const dispose = mount(
@@ -65,8 +65,8 @@ test('a ref uses an async value captured outside the callback', async () => {
       <Loading>
         <Show when={label()} keyed>
           {value => (
-            <P.Container
-              ref={(node: Container) => {
+            <Container
+              ref={(node: PixiContainer) => {
                 node.label = value
               }}
             />

@@ -1,5 +1,5 @@
 import type { PointLike } from 'pixi.js'
-import { Application, Loading, P, Stage, render, useApplication, useAsset } from 'solid-pixi'
+import { Application, Loading, Stage, render, useApplication, useAsset, Sprite } from 'solid-pixi'
 
 render(() => (
   <TransparentBackground canvas={document.getElementById('root')! as HTMLCanvasElement} />
@@ -11,7 +11,7 @@ function BunniesContainer() {
 
   return (
     <Loading>
-      <P.Sprite
+      <Sprite
         texture={texture()}
         anchor={{ x: 0.5, y: 0.5 } as PointLike}
         x={app.screen.width / 2}

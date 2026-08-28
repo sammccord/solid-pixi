@@ -10,9 +10,9 @@ export namespace JSX {
   }
 
   /**
-   * Empty on purpose. A solid-pixi tree is built from the `P.*` components,
-   * which carry the pixi constructor options as their prop types. There are no
-   * intrinsic tags to spell.
+   * Empty on purpose. A solid-pixi tree is built from the named components
+   * solid-pixi exports, which carry the pixi constructor options as their prop
+   * types. There are no intrinsic tags to spell.
    */
   interface IntrinsicElements {}
 }

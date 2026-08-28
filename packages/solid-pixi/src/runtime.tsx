@@ -1,19 +1,21 @@
-import * as pixi from 'pixi.js'
+import { type Container as PixiContainer, Text as PixiText } from 'pixi.js'
 import type { Element } from 'solid-js'
 import { createRenderEffect, runWithOwner } from 'solid-js'
 import { createRenderer } from '@solidjs/universal'
 
-type PixiNode = pixi.Container
+type PixiNode = PixiContainer
 
 const renderer = createRenderer<PixiNode>({
-  createElement(tag, staticProps) {
-    return new (pixi as any)[tag](staticProps)
+  createElement(tag): never {
+    throw new Error(
+      `solid-pixi has no intrinsic element <${tag}>. Build the scene from the components solid-pixi exports, such as Container and Sprite.`
+    )
   },
   createTextNode(value) {
-    return new pixi.Text({ text: value })
+    return new PixiText({ text: value })
   },
   replaceText(textNode, value) {
-    ;(textNode as pixi.Text).text = value
+    ;(textNode as PixiText).text = value
   },
   setProperty(node, name, value) {
     if (name === 'size') (node as any).setSize((value as any)?.width, (value as any)?.height)
@@ -25,7 +27,7 @@ const renderer = createRenderer<PixiNode>({
     else parent.addChild(node)
   },
   isTextNode(node) {
-    return node instanceof pixi.Text
+    return node instanceof PixiText
   },
   removeNode(_parent, node) {
     node?.removeFromParent()

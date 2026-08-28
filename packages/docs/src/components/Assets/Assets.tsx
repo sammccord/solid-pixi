@@ -4,7 +4,6 @@ import {
   Application,
   For,
   Match,
-  P,
   Stage,
   Loading,
   Switch,
@@ -12,7 +11,8 @@ import {
   useApplication,
   useAsset,
   useAssetInit,
-  useBundle
+  useBundle,
+  Sprite
 } from 'solid-pixi'
 
 render(() => <AssetsLoading canvas={document.getElementById('root')! as HTMLCanvasElement} />)
@@ -64,7 +64,7 @@ function AssetsLoading(props) {
         <Loading>
           <Switch>
             <Match when={state() === 'load'}>
-              <P.Sprite
+              <Sprite
                 texture={bundle()?.flowerTop}
                 x={Math.random() * 400}
                 y={Math.random() * 300}
@@ -75,7 +75,7 @@ function AssetsLoading(props) {
               />
             </Match>
             <Match when={state() === 'game'}>
-              <P.Sprite
+              <Sprite
                 texture={bundle()?.eggHead}
                 x={Math.random() * 400}
                 y={Math.random() * 300}

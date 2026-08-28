@@ -1,5 +1,15 @@
 import { type PointLike, Ticker } from 'pixi.js'
-import { Application, For, Loading, P, Stage, render, useApplication, useAsset } from 'solid-pixi'
+import {
+  Application,
+  For,
+  Loading,
+  Stage,
+  render,
+  useApplication,
+  useAsset,
+  Container,
+  Sprite
+} from 'solid-pixi'
 
 render(() => <ContainerExample canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -19,7 +29,7 @@ function BunniesContainer() {
 
   return (
     <Loading>
-      <P.Container
+      <Container
         x={app.screen.width / 2}
         y={app.screen.height / 2}
         ref={container => {
@@ -38,7 +48,7 @@ function BunniesContainer() {
       >
         <For each={Array.from({ length: 25 })} fallback={<></>}>
           {(_, i) => (
-            <P.Sprite
+            <Sprite
               texture={resource()}
               anchor={{ x: 0.5, y: 0.5 } as PointLike}
               x={(i() % 5) * 40}
@@ -46,7 +56,7 @@ function BunniesContainer() {
             />
           )}
         </For>
-      </P.Container>
+      </Container>
     </Loading>
   )
 }

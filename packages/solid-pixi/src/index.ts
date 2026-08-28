@@ -1,6 +1,6 @@
 export * from './runtime.js'
 export * from './interfaces.js'
-export * from './P.js'
+export * from './components.js'
 export * from './Application.js'
 export * from './Stage.js'
 export * from './hooks.js'

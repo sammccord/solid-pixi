@@ -152,26 +152,26 @@ export default defineConfig({
 mkdirSync(join(fixture, 'src'), { recursive: true })
 writeFileSync(
   join(fixture, 'src/main.tsx'),
-  `import { Container, type Sprite } from 'pixi.js'
+  `import { Container as PixiContainer, type Sprite as PixiSprite } from 'pixi.js'
 import { createSignal, flush } from 'solid-js'
-import { For, P, render } from 'solid-pixi'
+import { Container, For, Sprite, render } from 'solid-pixi'
 
-const root = new Container()
+const root = new PixiContainer()
 const [x, setX] = createSignal(0)
 const [labels, setLabels] = createSignal(['a', 'b'])
 
-const dispose = (render as (code: () => unknown, node: Container) => () => void)(
+const dispose = (render as (code: () => unknown, node: PixiContainer) => () => void)(
   () => (
-    <P.Container label="scene">
-      <P.Sprite x={x()} label="hero" />
-      <For each={labels()}>{label => <P.Sprite label={label} />}</For>
-    </P.Container>
+    <Container label="scene">
+      <Sprite x={x()} label="hero" />
+      <For each={labels()}>{label => <Sprite label={label} />}</For>
+    </Container>
   ),
   root
 )
 
-const scene = root.children[0] as Container
-const hero = scene.children[0] as Sprite
+const scene = root.children[0] as PixiContainer
+const hero = scene.children[0] as PixiSprite
 
 const assert = (name: string, ok: boolean, detail?: unknown) => {
   if (!ok) throw new Error(\`\${name}: \${JSON.stringify(detail)}\`)
@@ -205,7 +205,7 @@ stage('consumer install', () => {
 
 stage('consumer typecheck (bundler)', () => {
   run('npx', ['tsc', '--noEmit'], { cwd: fixture })
-  return 'jsxImportSource: solid-pixi resolves, P.* props type-check'
+  return 'jsxImportSource: solid-pixi resolves, named component props type-check'
 })
 
 stage('consumer typecheck (node16)', () => {

@@ -44,7 +44,7 @@ A file that mixes pixi and DOM JSX needs a per-file pragma:
 ```tsx
 import { Texture } from 'pixi.js'
 import { createSignal } from 'solid-js'
-import { Application, P, Stage, render } from 'solid-pixi'
+import { Application, Sprite, Stage, render } from 'solid-pixi'
 
 render(() => <App canvas={document.getElementById('canvas')! as HTMLCanvasElement} />)
 
@@ -54,7 +54,7 @@ export function App(props) {
   return (
     <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
-        <P.Sprite
+        <Sprite
           x={x()}
           interactive
           onpointerdown={() => setX(value => value * 2)}
@@ -72,16 +72,16 @@ Asset hooks return an async accessor. Read it inside a `<Loading>` boundary, whi
 renders its fallback until the load settles, and put failures in `<Errored>`.
 
 ```tsx
-import { Errored, Loading, P, useAsset } from 'solid-pixi'
+import { Errored, Loading, Sprite, Text, useAsset } from 'solid-pixi'
 import { refresh } from 'solid-js'
 
 function Bunny() {
   const texture = useAsset('https://pixijs.com/assets/bunny.png')
 
   return (
-    <Errored fallback={error => <P.Text text={String(error())} />}>
-      <Loading fallback={<P.Text text={`${Math.round(texture.progress() * 100)}%`} />}>
-        <P.Sprite texture={texture()} />
+    <Errored fallback={error => <Text text={String(error())} />}>
+      <Loading fallback={<Text text={`${Math.round(texture.progress() * 100)}%`} />}>
+        <Sprite texture={texture()} />
       </Loading>
     </Errored>
   )
@@ -113,7 +113,7 @@ outside the callback:
 
 ```tsx
 <Show when={texture()} keyed>
-  {value => <P.Graphics ref={g => g.stroke({ texture: value, width: 10 })} />}
+  {value => <Graphics ref={g => g.stroke({ texture: value, width: 10 })} />}
 </Show>
 ```
 
