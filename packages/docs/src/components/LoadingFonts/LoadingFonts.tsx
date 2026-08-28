@@ -1,6 +1,5 @@
 import { TextStyle } from 'pixi.js'
-import { For, Show, Suspense, createEffect } from 'solid-js'
-import { Application, P, Stage, render, useApplication, useAsset, useBundle } from 'solid-pixi'
+import { Application, For, Loading, P, Show, Stage, render, useBundle } from 'solid-pixi'
 
 render(() => <LoadingFonts canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -31,15 +30,15 @@ function Font(props: { fontFamily: string; y: number }) {
 }
 
 function Fonts() {
-  const [bundle] = useBundle('fonts', fonts)
+  const bundle = useBundle('fonts', fonts)
   return (
-    <Suspense>
+    <Loading>
       <Show when={bundle()}>
         <For each={fonts}>
           {(fontFamily, i) => <Font y={i() * 150} fontFamily={fontFamily.alias} />}
         </For>
       </Show>
-    </Suspense>
+    </Loading>
   )
 }
 

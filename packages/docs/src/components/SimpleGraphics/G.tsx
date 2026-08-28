@@ -1,22 +1,15 @@
-import { Show, Suspense, createEffect, createSignal } from 'solid-js'
-import { Application, For, P, Stage, render, useApplication, useAsset } from 'solid-pixi'
+import { createSignal } from 'solid-js'
+import { P, Show } from 'solid-pixi'
 import { Star } from './Star'
 
 export function G(props) {
   const [scale, setScale] = createSignal(100)
 
-  createEffect(() => {
-    console.log(scale())
-  })
-
   return (
     <>
       <P.Graphics
         interactive
-        onclick={() => {
-          console.log('click')
-          setScale(s => s / 2)
-        }}
+        onclick={() => setScale(s => s / 2)}
         ref={g => {
           g.rect(50, 50, 100, 100)
           g.fill(0xde3249)

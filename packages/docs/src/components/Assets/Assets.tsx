@@ -1,12 +1,12 @@
 import { type PointLike, Spritesheet, Texture } from 'pixi.js'
-import { createEffect, createMemo, createSignal } from 'solid-js'
+import { createMemo, createSignal } from 'solid-js'
 import {
   Application,
   For,
   Match,
   P,
   Stage,
-  Suspense,
+  Loading,
   Switch,
   render,
   useApplication,
@@ -56,16 +56,12 @@ function AssetsLoading(props) {
     }
   })
   const stateBundle = createMemo(() => `${state()}-screen`)
-  const [bundle] = useBundle<{ flowerTop: Texture; eggHead: Texture }>(stateBundle)
-
-  createEffect(() => {
-    console.log(bundle())
-  })
+  const bundle = useBundle<{ flowerTop: Texture; eggHead: Texture }>(stateBundle)
 
   return (
     <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
       <Stage>
-        <Suspense>
+        <Loading>
           <Switch>
             <Match when={state() === 'load'}>
               <P.Sprite
@@ -88,7 +84,7 @@ function AssetsLoading(props) {
               />
             </Match>
           </Switch>
-        </Suspense>
+        </Loading>
       </Stage>
     </Application>
   )

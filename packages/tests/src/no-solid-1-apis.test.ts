@@ -2,7 +2,10 @@ import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const src = fileURLToPath(new URL('../../solid-pixi/src', import.meta.url))
+const TREES = [
+  fileURLToPath(new URL('../../solid-pixi/src', import.meta.url)),
+  fileURLToPath(new URL('../../docs/src/components', import.meta.url))
+]
 
 const REMOVED_PATHS = [
   'solid-js/universal',
@@ -66,9 +69,16 @@ function namedImports(clause: string): string[] {
     .filter(Boolean)
 }
 
-const files = readdirSync(src)
-  .filter(name => name.endsWith('.ts') || name.endsWith('.tsx'))
-  .map(name => [name, readFileSync(join(src, name), 'utf8')] as const)
+function sources(dir: string): (readonly [string, string])[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
+    const path = join(dir, entry.name)
+    if (entry.isDirectory()) return sources(path)
+    if (!entry.name.endsWith('.ts') && !entry.name.endsWith('.tsx')) return []
+    return [[entry.name, readFileSync(path, 'utf8')] as const]
+  })
+}
+
+const files = TREES.flatMap(sources)
 
 test('the source files are found', () => {
   expect(files.length).toBeGreaterThan(0)

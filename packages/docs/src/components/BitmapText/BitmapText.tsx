@@ -5,7 +5,7 @@ import {
   P,
   Show,
   Stage,
-  Suspense,
+  Loading,
   render,
   useApplication,
   useAsset
@@ -14,7 +14,7 @@ import {
 render(() => <BitmapText canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 function TextContainer() {
-  const [font] = useAsset('https://pixijs.com/assets/bitmap-font/desyrel.xml')
+  const font = useAsset('https://pixijs.com/assets/bitmap-font/desyrel.xml')
   return (
     <Show when={font()}>
       <P.Text

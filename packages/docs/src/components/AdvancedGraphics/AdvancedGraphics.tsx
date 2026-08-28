@@ -1,23 +1,14 @@
-import { Sprite } from 'pixi.js'
-import {
-  Application,
-  For,
-  P,
-  Show,
-  Stage,
-  Suspense,
-  render,
-  useApplication,
-  useAsset
-} from 'solid-pixi'
+import { Application, Loading, P, Show, Stage, render, useAsset } from 'solid-pixi'
 
 render(() => <AdvancedGraphics canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 export function GraphicsContainer() {
-  const [sprite] = useAsset('https://pixijs.com/assets/bg_rotate.jpg')
+  const sprite = useAsset('https://pixijs.com/assets/bg_rotate.jpg')
   return (
-    <Suspense>
-      <Show when={sprite()}>
+    <Loading>
+      <Show when={sprite()} keyed>
+        {texture => (
+          <>
         <P.Graphics
           x={50}
           y={50}
@@ -56,7 +47,7 @@ export function GraphicsContainer() {
           width={10}
           ref={g => {
             g.bezierCurveTo(0, -100, 150, 150, 240, 100)
-            g.stroke({ texture: sprite(), width: 10 })
+            g.stroke({ texture, width: 10 })
           }}
         />
         {/* Arc */}
@@ -75,7 +66,7 @@ export function GraphicsContainer() {
         <P.Graphics
           ref={g => {
             g.arc(650, 420, 60, 2 * Math.PI, (2.5 * Math.PI) / 2)
-            g.stroke({ texture: sprite(), width: 20 })
+            g.stroke({ texture, width: 20 })
           }}
         />
         {/* Hole */}
@@ -94,11 +85,13 @@ export function GraphicsContainer() {
           ref={g => {
             g.rect(80, 350, 150, 150)
             g.fill()
-            g.stroke({ texture: sprite(), width: 20 })
+            g.stroke({ texture, width: 20 })
           }}
         />
+          </>
+        )}
       </Show>
-    </Suspense>
+    </Loading>
   )
 }
 

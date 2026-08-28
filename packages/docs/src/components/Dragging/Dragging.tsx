@@ -1,12 +1,12 @@
 import { Container, type PointLike, Texture } from 'pixi.js'
-import { Application, For, P, Stage, Suspense, render, useApplication, useAsset } from 'solid-pixi'
+import { Application, For, P, Stage, Loading, render, useApplication, useAsset } from 'solid-pixi'
 
 render(() => <Dragging canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 function DraggingContainer() {
   const app = useApplication()
 
-  const [texture] = useAsset('https://pixijs.com/assets/bunny.png')
+  const texture = useAsset('https://pixijs.com/assets/bunny.png')
 
   let dragTarget: Container | null = null
 
@@ -18,23 +18,23 @@ function DraggingContainer() {
 
   function onDragEnd() {
     if (dragTarget) {
-      app!.stage.off('pointermove', onDragMove)
+      app.stage.off('pointermove', onDragMove)
       dragTarget.alpha = 1
       dragTarget = null
     }
   }
 
-  app!.stage.interactive = true
-  app!.stage.hitArea = app!.screen
-  app!.stage.on('pointerup', onDragEnd)
-  app!.stage.on('pointerupoutside', onDragEnd)
+  app.stage.interactive = true
+  app.stage.hitArea = app.screen
+  app.stage.on('pointerup', onDragEnd)
+  app.stage.on('pointerupoutside', onDragEnd)
 
   return (
-    <Suspense>
+    <Loading>
       <P.Sprite
         texture={texture()}
-        x={Math.random() * app!.screen.width}
-        y={Math.random() * app!.screen.height}
+        x={Math.random() * app.screen.width}
+        y={Math.random() * app.screen.height}
         interactive
         cursor='pointer'
         scale={{ x: 3, y: 3 }}
@@ -45,11 +45,11 @@ function DraggingContainer() {
           // this.data = event.data;
           e.target.alpha = 0.5
           dragTarget = e.target
-          app!.stage.on('pointermove', onDragMove)
+          app.stage.on('pointermove', onDragMove)
         }}
         anchor={{ x: 0.5, y: 0.5 } as PointLike}
       />
-    </Suspense>
+    </Loading>
   )
 }
 

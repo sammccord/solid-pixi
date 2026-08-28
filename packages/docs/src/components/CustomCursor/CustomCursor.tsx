@@ -1,22 +1,12 @@
 import { type PointLike, Texture } from 'pixi.js'
-import { createEffect, createSignal } from 'solid-js'
-import {
-  Application,
-  For,
-  P,
-  Stage,
-  Suspense,
-  render,
-  useApplication,
-  useAsset,
-  useAssets
-} from 'solid-pixi'
+import { onSettled } from 'solid-js'
+import { Application, Loading, P, Stage, render, useApplication, useAssets } from 'solid-pixi'
 
 render(() => <CustomCursor canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 function ClickContainer() {
   const app = useApplication()
-  const [textures] = useAssets<{
+  const textures = useAssets<{
     'https://pixijs.com/assets/bunny.png': Texture
     'https://pixijs.com/assets/bunny_saturated.png': Texture
   }>(['https://pixijs.com/assets/bunny.png', 'https://pixijs.com/assets/bunny_saturated.png'])
@@ -24,23 +14,23 @@ function ClickContainer() {
   const hoverIcon = "url('https://pixijs.com/assets/bunny_saturated.png'),auto"
 
   // Add custom cursor styles
-  createEffect(() => {
-    app!.renderer.events.cursorStyles.default = defaultIcon
-    app!.renderer.events.cursorStyles.hover = hoverIcon
+  onSettled(() => {
+    app.renderer.events.cursorStyles.default = defaultIcon
+    app.renderer.events.cursorStyles.hover = hoverIcon
   })
 
   return (
-    <Suspense>
+    <Loading>
       <P.Sprite
-        texture={textures()?.['https://pixijs.com/assets/bunny.png']}
+        texture={textures()['https://pixijs.com/assets/bunny.png']}
         interactive
         cursor={hoverIcon}
         scale={{ x: 3, y: 3 }}
         anchor={{ x: 0.5, y: 0.5 } as PointLike}
-        x={app!.screen.width / 2}
-        y={app!.screen.height / 2}
+        x={app.screen.width / 2}
+        y={app.screen.height / 2}
       />
-    </Suspense>
+    </Loading>
   )
 }
 

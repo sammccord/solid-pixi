@@ -1,6 +1,6 @@
 import * as pixi from 'pixi.js'
 import type { Element } from 'solid-js'
-import { createRenderEffect } from 'solid-js'
+import { createRenderEffect, runWithOwner } from 'solid-js'
 import { createRenderer } from '@solidjs/universal'
 
 type PixiNode = pixi.Container
@@ -66,10 +66,14 @@ type Props = Record<string, any>
  * until it goes true again.
  */
 export function spread(node: PixiNode, props: Props) {
+  // Detached from the current owner, matching @solidjs/universal's own ref
+  // helper. `ref={setSignal}` is the common shape and owning the callback would
+  // make that write illegal. The cost is that a ref cannot read an async
+  // accessor; capture the settled value outside the callback instead.
   createRenderEffect(
     () => props.ref,
     r => {
-      if (r) applyRef(r, node)
+      if (r) runWithOwner(null, () => applyRef(r, node))
     }
   )
 

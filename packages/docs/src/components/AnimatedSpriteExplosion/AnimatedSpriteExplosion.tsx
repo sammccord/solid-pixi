@@ -1,17 +1,6 @@
-import { AnimatedSprite, type PointLike, Texture } from 'pixi.js'
-import { createEffect, createMemo, createSignal } from 'solid-js'
-import {
-  Application,
-  For,
-  P,
-  Show,
-  Stage,
-  Suspense,
-  render,
-  useApplication,
-  useAsset,
-  useSpritesheet
-} from 'solid-pixi'
+import type { AnimatedSprite } from 'pixi.js'
+import { createMemo } from 'solid-js'
+import { Application, For, Loading, P, Stage, render, useApplication, useSpritesheet } from 'solid-pixi'
 
 render(() => (
   <AnimatedSpriteExplosion canvas={document.getElementById('root')! as HTMLCanvasElement} />
@@ -19,35 +8,29 @@ render(() => (
 
 function SwapContainer() {
   const app = useApplication()
-  const [spritesheet] = useSpritesheet('https://pixijs.com/assets/spritesheet/mc.json')
-  const textures = Array.from({ length: 26 }).map((_, i) => {
-    return Texture.from(`Explosion_Sequence_A ${i + 1}.png`)
-  })
+  const sheet = useSpritesheet('https://pixijs.com/assets/spritesheet/mc.json')
+
+  const frames = createMemo(() =>
+    Array.from({ length: 26 }, (_, i) => sheet().textures[`Explosion_Sequence_A ${i + 1}.png`]!)
+  )
 
   return (
-    <Show when={spritesheet()}>
+    <Loading>
       <For each={Array.from({ length: 50 })}>
-        {() => {
-          const scale = 0.75 * Math.random() * 2
-          const [ref, setRef] = createSignal<AnimatedSprite>()
-          createEffect(() => {
-            ref()?.gotoAndPlay((Math.random() * 26) | 0)
-          })
-          return (
-            <P.AnimatedSprite
-              textures={textures}
-              x={Math.random() * app!.screen.width}
-              y={Math.random() * app!.screen.height}
-              anchor={{ x: 0.5, y: 0.5 }}
-              rotation={Math.random() * Math.PI}
-              autoUpdate
-              scale={scale}
-              ref={setRef}
-            />
-          )
-        }}
+        {() => (
+          <P.AnimatedSprite
+            textures={frames()}
+            x={Math.random() * app.screen.width}
+            y={Math.random() * app.screen.height}
+            anchor={{ x: 0.5, y: 0.5 }}
+            rotation={Math.random() * Math.PI}
+            autoUpdate
+            scale={0.75 * Math.random() * 2}
+            ref={(sprite: AnimatedSprite) => sprite.gotoAndPlay((Math.random() * 26) | 0)}
+          />
+        )}
       </For>
-    </Show>
+    </Loading>
   )
 }
 

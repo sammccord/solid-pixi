@@ -268,6 +268,9 @@ importers:
         specifier: ^5.7.3
         version: 5.7.3
     devDependencies:
+      playwright:
+        specifier: ^1.49.0
+        version: 1.62.1
       sharp:
         specifier: ^0.32.6
         version: 0.32.6
@@ -287,6 +290,9 @@ importers:
       solid-js:
         specifier: ^2.0.0-rc.3
         version: 2.0.0-rc.3
+      typescript:
+        specifier: 'catalog:'
+        version: 5.7.3
 
   packages/tests:
     dependencies:

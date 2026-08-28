@@ -1,5 +1,5 @@
 import { type PointLike, Ticker } from 'pixi.js'
-import { Application, For, P, Stage, Suspense, render, useApplication, useAsset } from 'solid-pixi'
+import { Application, For, Loading, P, Stage, render, useApplication, useAsset } from 'solid-pixi'
 
 render(() => <ContainerExample canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -15,13 +15,13 @@ function ContainerExample(props) {
 
 function BunniesContainer() {
   const app = useApplication()
-  const [resource] = useAsset('https://pixijs.com/assets/bunny.png')
+  const resource = useAsset('https://pixijs.com/assets/bunny.png')
 
   return (
-    <Suspense>
+    <Loading>
       <P.Container
-        x={app!.screen.width / 2}
-        y={app!.screen.height / 2}
+        x={app.screen.width / 2}
+        y={app.screen.height / 2}
         ref={container => {
           container.pivot = { x: 100, y: 100 }
           const handler = (delta: Ticker) => {
@@ -29,10 +29,10 @@ function BunniesContainer() {
             // use delta to create frame-independent transform
             container.rotation -= 0.001 * delta.deltaMS
           }
-          app!.ticker.add(handler)
+          app.ticker.add(handler)
 
           return () => {
-            app!.ticker.remove(handler)
+            app.ticker.remove(handler)
           }
         }}
       >
@@ -47,6 +47,6 @@ function BunniesContainer() {
           )}
         </For>
       </P.Container>
-    </Suspense>
+    </Loading>
   )
 }

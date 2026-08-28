@@ -75,7 +75,18 @@ function Bunny() {
 ```
 
 Writes are staged. Solid 2 commits on the next microtask, so imperative code
-that reads a pixi property straight after a setter needs `flush()`.
+that reads a pixi property straight after a setter needs `flush()`. This matters
+most inside a ticker callback, which would otherwise land its write a frame late.
+
+Refs run detached from the owner, which is what makes `ref={setSignal}` legal. The
+cost is that a ref callback cannot read an async accessor. Capture the settled
+value outside it:
+
+```tsx
+<Show when={texture()} keyed>
+  {value => <P.Graphics ref={g => g.stroke({ texture: value, width: 10 })} />}
+</Show>
+```
 
 ## Docs
 
