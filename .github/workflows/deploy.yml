@@ -40,6 +40,7 @@ jobs:
         with:
           path: ./packages/docs
           package-manager: pnpm@11.24.0
+          node-version: 22
 
   deploy:
     needs: build
