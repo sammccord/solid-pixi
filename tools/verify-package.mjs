@@ -2,7 +2,7 @@
 import { execFileSync } from 'node:child_process'
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { isAbsolute, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const repo = fileURLToPath(new URL('..', import.meta.url))
@@ -11,7 +11,17 @@ const pkg = JSON.parse(readFileSync(join(pkgDir, 'package.json'), 'utf8'))
 const work = join(tmpdir(), 'solid-pixi-verify')
 const fixture = join(work, 'consumer')
 
-const attwProfile = process.env.ATTW_PROFILE ?? 'esm-only'
+// attw counts a problem toward its exit code even when the profile already
+// ignores the resolution that raised it, so the node10-only rules have to be
+// named here too. node10 predates `exports`, and nothing that can compile
+// solid-pixi JSX resolves that way. `cjs-resolves-to-esm` is ignored for the
+// same reason the package is ESM-only: authoring solid-pixi JSX needs the Solid
+// compiler, so every consumer runs a bundler and none of them `require`.
+// The `consumer typecheck (node16)` stage below is the real check on the
+// property `internal-resolution-error` would have covered, and it is stricter:
+// it caught the extensionless `.d.ts` imports by running tsc, not by heuristic.
+const attwProfile = process.env.ATTW_PROFILE ?? 'node16'
+const attwIgnored = ['cjs-resolves-to-esm', 'internal-resolution-error', 'no-resolution']
 const results = []
 
 function run(cmd, args, opts = {}) {
@@ -42,8 +52,9 @@ stage('build', () => {
 
 let tarball
 stage('pack', () => {
-  const out = run('npm', ['pack', '--pack-destination', work], { cwd: pkgDir })
-  tarball = join(work, out.trim().split('\n').pop())
+  const out = run('pnpm', ['pack', '--pack-destination', work], { cwd: pkgDir })
+  const name = out.trim().split('\n').pop()
+  tarball = isAbsolute(name) ? name : join(work, name)
   const files = run('tar', ['-tzf', tarball]).trim().split('\n').length
   return `${files} files`
 })
@@ -54,9 +65,19 @@ stage('publint', () => {
 })
 
 stage(`attw --profile ${attwProfile}`, () => {
-  run('npx', ['--yes', '@arethetypeswrong/cli@0.18.2', tarball, '--profile', attwProfile], {
-    cwd: work
-  })
+  run(
+    'npx',
+    [
+      '--yes',
+      '@arethetypeswrong/cli@0.18.5',
+      tarball,
+      '--profile',
+      attwProfile,
+      '--ignore-rules',
+      ...attwIgnored
+    ],
+    { cwd: work }
+  )
   return 'every export resolves to matching types and runtime'
 })
 

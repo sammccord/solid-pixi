@@ -1,5 +1,5 @@
-import { useApplication } from './Application'
-import { insert } from './runtime'
+import { useApplication } from './Application.js'
+import { insert } from './runtime.js'
 
 export function Stage(props: { children?: unknown }) {
   const application = useApplication()

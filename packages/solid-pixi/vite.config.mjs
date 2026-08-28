@@ -18,17 +18,11 @@ export default defineConfig({
   build: {
     lib: {
       entry: './src/index.ts',
-      name: 'SolidPIXI'
+      formats: ['es'],
+      fileName: () => 'index.js'
     },
     rolldownOptions: {
-      external: ['solid-js', '@solidjs/universal', 'pixi.js'],
-      output: {
-        globals: {
-          'solid-js': 'solid',
-          '@solidjs/universal': 'solidUniversal',
-          'pixi.js': 'PIXI'
-        }
-      }
+      external: ['solid-js', '@solidjs/universal', 'pixi.js']
     }
   }
 })

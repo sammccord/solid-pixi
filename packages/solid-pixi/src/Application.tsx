@@ -10,7 +10,7 @@ import {
   untrack,
   useContext
 } from 'solid-js'
-import { CommonPropKeys, type CommonProps } from './interfaces'
+import { CommonPropKeys, type CommonProps } from './interfaces.js'
 
 export const AppContext = createContext<PixiApplication>()
 

@@ -1,8 +1,8 @@
 /// <reference types="vite/client" />
 import * as pixi from 'pixi.js'
 import { type Ref, omit, untrack } from 'solid-js'
-import { CommonPropKeys } from './interfaces'
-import { insert, spread } from './runtime'
+import { CommonPropKeys } from './interfaces.js'
+import { insert, spread } from './runtime.js'
 
 type PixiGeneric<P, O> = new (
   ...args: any[]
