@@ -1,6 +1,6 @@
 {
   "name": "solid-pixi",
-  "version": "3.0.0",
+  "version": "2.0.0",
   "description": "Build Pixi.js scenes with Solid JSX and signals",
   "keywords": [
     "canvas",

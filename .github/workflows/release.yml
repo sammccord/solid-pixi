@@ -1,0 +1,176 @@
+name: release
+
+# Consume pending changesets on every push to main and publish a release.
+#
+# Flow:
+#   1. author work, run `pnpm changeset` to describe the bump, merge to main,
+#   2. this workflow, in one run:
+#        a. `changeset version` bumps the version, writes the CHANGELOG, and
+#           deletes the consumed `.changeset/*.md`,
+#        b. runs the same gates ci.yml runs, including the tarball verification,
+#        c. `changeset publish` publishes and creates a git tag,
+#        d. pushes the version-bump commit and tags back to main,
+#        e. re-points the prerelease dist-tag at the current version,
+#        f. creates a GitHub Release per new tag from the CHANGELOG entry.
+#
+# A push with no pending changesets is a no-op.
+#
+# Publish happens BEFORE the git push, so a failed npm publish leaves main
+# untouched and the changesets intact and a re-run republishes cleanly.
+#
+# Needs an NPM_TOKEN secret with publish rights to `solid-pixi`. Provenance is
+# attached over OIDC (`id-token: write` plus NPM_CONFIG_PROVENANCE), which
+# requires a public source repo; this one is public. Pushing the bump commit
+# uses the default GITHUB_TOKEN, so main must let the actions bot push.
+
+on:
+  push:
+    branches: [main]
+
+concurrency: release-${{ github.ref }}
+
+permissions:
+  contents: write # push the bump commit and tags, create GitHub Releases
+  id-token: write # npm provenance
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # changesets needs full history and tags
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Every `.changeset/*.md` except the README is a pending changeset.
+      - name: Detect pending changesets
+        id: cs
+        run: |
+          n=$(find .changeset -maxdepth 1 -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')
+          echo "count=$n" >> "$GITHUB_OUTPUT"
+          echo "Found $n pending changeset(s)."
+
+      # a. Bump the version, write the CHANGELOG, consume the changesets.
+      - name: Version
+        if: steps.cs.outputs.count != '0'
+        run: pnpm changeset version
+
+      # b. Gate the release on what CI gates on. Build first: the type-aware
+      #    check cannot resolve `solid-pixi` from packages/tests until dist
+      #    exists, because the exports map is the only path to its types.
+      - name: Build
+        if: steps.cs.outputs.count != '0'
+        run: pnpm vp run --filter './packages/solid-pixi' build
+
+      - name: Check (fmt + lint + typecheck)
+        if: steps.cs.outputs.count != '0'
+        run: pnpm vp check
+
+      - name: Test (node)
+        if: steps.cs.outputs.count != '0'
+        run: pnpm vp run --filter './packages/tests' test
+
+      # The last gate before an irreversible publish: pack the tarball, lint it
+      # with publint and arethetypeswrong, install it into a scratch consumer
+      # outside the workspace, and run a real pixi scene graph through it.
+      - name: Verify the published package
+        if: steps.cs.outputs.count != '0'
+        run: node tools/verify-package.mjs
+
+      # Commit locally; the push waits until npm has accepted the publish.
+      # In prerelease mode an already-consumed changeset's `.md` is retained, so
+      # the count above can be non-zero while `changeset version` is a no-op.
+      # Only commit when something actually changed, so publish stays idempotent.
+      - name: Commit version bump
+        if: steps.cs.outputs.count != '0'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No version changes to commit; skipping."
+          else
+            git commit -m "chore: release [skip ci]"
+          fi
+
+      # c. Publish. Idempotent: changesets skips versions already on the
+      #    registry. `set -o pipefail` is required, or the pipeline reports
+      #    tee's exit code and a rejected publish goes green having shipped
+      #    nothing.
+      - name: Publish to npm
+        if: steps.cs.outputs.count != '0'
+        run: |
+          set -o pipefail
+          pnpm changeset publish | tee publish.log
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: 'true'
+
+      # d. Persist the bump now that npm has accepted it.
+      - name: Push commit and tags
+        if: steps.cs.outputs.count != '0'
+        run: git push --follow-tags origin HEAD:main
+
+      # e. While every published version is still a prerelease, changesets
+      #    publishes to `latest` rather than the pre tag so a bare
+      #    `npm i solid-pixi` resolves at all. The side effect is that the pre
+      #    tag is only ever set by the very first publish and never advances.
+      #    Re-pointing it on every run keeps it honest. `npm dist-tag add` is
+      #    idempotent, so a run that changes nothing is free. Deliberately not
+      #    `|| true`: the tag write is the whole point of the step.
+      - name: Sync the prerelease dist-tag
+        if: steps.cs.outputs.count != '0'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          # `changeset pre exit` removes pre.json. After that `latest` is the
+          # real channel and there is no prerelease tag to maintain.
+          if [ ! -f .changeset/pre.json ]; then
+            echo "Not in prerelease mode; nothing to re-tag."
+            exit 0
+          fi
+          tag=$(node -p "require('./.changeset/pre.json').tag")
+          # Collect first, then loop. A `while` on the right of a pipe runs in a
+          # subshell, so a failure flag set inside it would be discarded and the
+          # step would pass having tagged nothing.
+          specs=$(pnpm ls -r --depth -1 --json \
+            | node -e 'for (const p of JSON.parse(require("fs").readFileSync(0, "utf8"))) if (!p.private) console.log(`${p.name}@${p.version}`)')
+          failed=0
+          while read -r spec; do
+            [ -z "$spec" ] && continue
+            npm dist-tag add "$spec" "$tag" || failed=1
+          done <<< "$specs"
+          exit $failed
+
+      # f. One GitHub Release per new tag, notes taken from the CHANGELOG.
+      - name: Create GitHub Releases
+        if: steps.cs.outputs.count != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          grep 'New tag:' publish.log | sed -E 's/.*New tag:[[:space:]]*//' | while read -r tag; do
+            name="${tag%@*}"
+            ver="${tag##*@}"
+            pj=$(grep -rl "\"name\": \"$name\"" --include=package.json packages | head -1)
+            dir=$(dirname "$pj")
+            notes="$tag"
+            if [ -f "$dir/CHANGELOG.md" ]; then
+              block=$(awk -v v="## $ver" '$0==v{f=1;next} /^## /{f=0} f' "$dir/CHANGELOG.md")
+              [ -n "$block" ] && notes="$block"
+            fi
+            pre=""
+            case "$ver" in *-*) pre="--prerelease" ;; esac
+            echo "Creating release $tag $pre"
+            gh release create "$tag" $pre --title "$tag" --notes "$notes" || echo "release $tag already exists, skipping"
+          done

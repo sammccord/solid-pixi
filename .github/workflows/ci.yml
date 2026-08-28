@@ -1,0 +1,75 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request: {}
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        # version comes from the root package.json `packageManager` field
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22 # engines.node >= 22.12.0
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Build BEFORE check. solid-pixi's public types are reachable only through
+      # its built `dist/index.d.ts` (the exports map points there and there is no
+      # source condition or path alias), so `packages/tests` cannot resolve
+      # `import ... from 'solid-pixi'` until dist exists. Without this the
+      # type-aware `vp check` fails with TS2307 on a fresh checkout.
+      - name: Build
+        run: pnpm vp run --filter './packages/solid-pixi' build
+
+      - name: Check (fmt + lint + typecheck)
+        run: pnpm vp check
+
+      - name: Test (node)
+        run: pnpm vp run --filter './packages/tests' test
+
+      # Packs the tarball and proves it works from outside the workspace: publint
+      # and arethetypeswrong on the archive, then a scratch consumer that
+      # installs it, type-checks under both bundler and node16 resolution, builds
+      # with @solidjs/vite-plugin, and runs a real pixi scene graph. A workspace
+      # alias hides export-map bugs; a real install does not.
+      - name: Verify the published package
+        run: node tools/verify-package.mjs
+
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium
+        run: pnpm --filter tests exec playwright install --with-deps chromium
+
+      # The renderer bugs that a node harness cannot see (a context provider fed
+      # a pending async value, the Application mount path) only surface against a
+      # real WebGL renderer, so this drives one.
+      - name: Test (browser)
+        run: pnpm --filter tests run test:browser
