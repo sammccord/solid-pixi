@@ -330,18 +330,6 @@ importers:
         specifier: ^2.0.0-rc.3
         version: 2.0.0-rc.3
 
-  packages/solid-pixi-unsafe:
-    devDependencies:
-      pixi-unsafe:
-        specifier: ^8.7.3
-        version: 8.7.3
-      solid-js:
-        specifier: ^1.9.4
-        version: 1.9.4
-      vite-plugin-solid:
-        specifier: ^2.11.0
-        version: 2.11.0(@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.28.2)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0))(solid-js@1.9.4)(supports-color@7.2.0)
-
   packages/tests:
     dependencies:
       pixi.js:
@@ -4380,9 +4368,6 @@ packages:
   pify@4.0.1:
     resolution: {integrity: sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==}
     engines: {node: '>=6'}
-
-  pixi-unsafe@8.7.3:
-    resolution: {integrity: sha512-sBExgAHPGO3VKLlfLFAZI81oPPz4My8eQrxF27kG5icOp4UWPX21W1BnXjbbvUjh79xEYucPLJSalwvKv929Ew==}
 
   pixi.js@8.7.3:
     resolution: {integrity: sha512-wfWlhJYnGx1s4f2yoouevQjaeacbJ12LTkJGa+n9AIYNIjOnmJylBtZ2mARX7iFk3mr2xv0wuo//XPe2hk5OBw==}
@@ -10100,18 +10085,6 @@ snapshots:
 
   pify@4.0.1: {}
 
-  pixi-unsafe@8.7.3:
-    dependencies:
-      '@pixi/colord': 2.9.6
-      '@types/css-font-loading-module': 0.0.12
-      '@types/earcut': 2.1.4
-      '@webgpu/types': 0.1.53
-      '@xmldom/xmldom': 0.8.10
-      earcut: 2.2.4
-      eventemitter3: 5.0.1
-      ismobilejs: 1.1.1
-      parse-svg-path: 0.1.2
-
   pixi.js@8.7.3:
     dependencies:
       '@pixi/colord': 2.9.6
@@ -11173,19 +11146,6 @@ snapshots:
       solid-refresh: 0.6.3(solid-js@1.9.4)(supports-color@7.2.0)
       vite: '@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.21.5)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0)'
       vitefu: 1.0.5(@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.21.5)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0))
-    transitivePeerDependencies:
-      - supports-color
-
-  vite-plugin-solid@2.11.0(@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.28.2)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0))(solid-js@1.9.4)(supports-color@7.2.0):
-    dependencies:
-      '@babel/core': 7.26.7(supports-color@7.2.0)
-      '@types/babel__core': 7.20.5
-      babel-preset-solid: 1.9.3(@babel/core@7.26.7(supports-color@7.2.0))
-      merge-anything: 5.1.7
-      solid-js: 1.9.4
-      solid-refresh: 0.6.3(solid-js@1.9.4)(supports-color@7.2.0)
-      vite: '@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.28.2)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0)'
-      vitefu: 1.0.5(@voidzero-dev/vite-plus-core@0.2.4(@types/node@22.12.0)(esbuild@0.28.2)(jiti@2.4.2)(typescript@5.7.3)(yaml@2.7.0))
     transitivePeerDependencies:
       - supports-color
 

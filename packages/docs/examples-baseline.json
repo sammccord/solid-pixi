@@ -1,0 +1,130 @@
+[
+  {
+    "example": "AdvancedGraphics",
+    "url": "http://localhost:4399/solid-pixi/guides/graphics/advanced/",
+    "colors": 5225,
+    "errors": []
+  },
+  {
+    "example": "AnimatedSpriteExplosion",
+    "url": "http://localhost:4399/solid-pixi/guides/sprite/animated-sprite-explosion/",
+    "colors": 2,
+    "errors": [
+      "TypeError: Cannot read properties of undefined (reading 'texture')"
+    ]
+  },
+  {
+    "example": "AnimatedSpriteSpeed",
+    "url": "http://localhost:4399/solid-pixi/guides/sprite/animated-sprite-speed/",
+    "colors": 2,
+    "errors": [
+      "TypeError: Cannot read properties of undefined (reading 'texture')"
+    ]
+  },
+  {
+    "example": "Assets",
+    "url": "http://localhost:4399/solid-pixi/guides/basic/assets/",
+    "colors": 3283,
+    "errors": []
+  },
+  {
+    "example": "BitmapText",
+    "url": "http://localhost:4399/solid-pixi/guides/text/bitmap-text/",
+    "colors": 903,
+    "errors": []
+  },
+  {
+    "example": "BlendModes",
+    "url": "http://localhost:4399/solid-pixi/guides/basic/blend-modes/",
+    "colors": 144757,
+    "errors": []
+  },
+  {
+    "example": "Click",
+    "url": "http://localhost:4399/solid-pixi/guides/events/click/",
+    "colors": 60,
+    "errors": []
+  },
+  {
+    "example": "Container",
+    "url": "http://localhost:4399/solid-pixi/guides/basic/container/",
+    "colors": 2322,
+    "errors": []
+  },
+  {
+    "example": "CustomCursor",
+    "url": "http://localhost:4399/solid-pixi/guides/events/custom-cursor/",
+    "colors": 318,
+    "errors": []
+  },
+  {
+    "example": "Dragging",
+    "url": "http://localhost:4399/solid-pixi/guides/events/dragging/",
+    "colors": 437,
+    "errors": []
+  },
+  {
+    "example": "DynamicGraphics",
+    "url": "http://localhost:4399/solid-pixi/guides/graphics/dynamic/",
+    "colors": 332,
+    "errors": []
+  },
+  {
+    "example": "Interactivity",
+    "url": "http://localhost:4399/solid-pixi/guides/events/interactivity/",
+    "colors": 4008,
+    "errors": []
+  },
+  {
+    "example": "LoadingFonts",
+    "url": "http://localhost:4399/solid-pixi/guides/text/loading-fonts/",
+    "colors": 485,
+    "errors": []
+  },
+  {
+    "example": "SimpleGraphics",
+    "url": "http://localhost:4399/solid-pixi/guides/graphics/simple/",
+    "colors": 462,
+    "errors": []
+  },
+  {
+    "example": "Spritesheet",
+    "url": "http://localhost:4399/solid-pixi/guides/sprite/spritesheet/",
+    "colors": 1,
+    "errors": [
+      "SyntaxError: The requested module '/@fs/private/tmp/solid-pixi-baseline/packages/solid-pixi/dist/solid-pixi.mjs' does not provide an export named 'Assets'"
+    ]
+  },
+  {
+    "example": "Text",
+    "url": "http://localhost:4399/solid-pixi/guides/text/text/",
+    "colors": 4547,
+    "errors": []
+  },
+  {
+    "example": "TextureSwap",
+    "url": "http://localhost:4399/solid-pixi/guides/sprite/texture-swap/",
+    "colors": 3322,
+    "errors": []
+  },
+  {
+    "example": "TilingSprite",
+    "url": "http://localhost:4399/solid-pixi/guides/sprite/tiling-sprite/",
+    "colors": 39209,
+    "errors": []
+  },
+  {
+    "example": "Tinting",
+    "url": "http://localhost:4399/solid-pixi/guides/sprite/tinting/",
+    "colors": 31119,
+    "errors": []
+  },
+  {
+    "example": "TransparentBackground",
+    "url": "http://localhost:4399/solid-pixi/guides/basic/transparent-background/",
+    "colors": 1,
+    "errors": [
+      "ReferenceError: Assets is not defined"
+    ]
+  }
+]

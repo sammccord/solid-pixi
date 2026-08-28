@@ -1,0 +1,4 @@
+ts	phase	decision	why	evidence	result
+2026-08-28T02:00:44Z	frame	rigor set high: build a package-verification harness before touching any packaging	npm publish is a one-way door and a broken exports map ships to every consumer of a major version	.audit/release-hardening.tsv	open
+2026-08-28T02:00:44Z	frame	baseline is red on three separate gates, not just missing CI	wanted the real starting state before designing the work	vp check, publint, arethetypeswrong runs below	fmt 70 files, tsconfig moduleResolution=node10 rejected, attw 3 of 4 conditions broken
+2026-08-28T02:00:44Z	frame	scoped my commits to the files I touch and left the in-flight docs work alone	the tree already had uncommitted solid-pixi-unsafe deletions and an untracked docs verifier from the previous run	git status on prerelease/solid-2	not my diff, not committing it
