@@ -18,7 +18,7 @@ export default defineConfig({
     quoteProps: 'as-needed',
     endOfLine: 'lf',
     sortPackageJson: true,
-    ignorePatterns: ['pnpm-lock.yaml']
+    ignorePatterns: ['pnpm-lock.yaml', '**/CHANGELOG.md']
   },
   lint: {
     ignorePatterns: DOCS_LINT_ONLY,
