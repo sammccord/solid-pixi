@@ -5,7 +5,7 @@ render(() => <SimpleGraphics canvas={document.getElementById('root')! as HTMLCan
 
 function SimpleGraphics(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <G />
       </Stage>

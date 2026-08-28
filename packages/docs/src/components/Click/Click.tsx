@@ -1,17 +1,17 @@
-import { type PointLike, Texture } from 'pixi.js'
+import type { PointLike } from 'pixi.js'
 import { createSignal } from 'solid-js'
-import { Application, For, P, Stage, Suspense, render, useApplication, useAsset } from 'solid-pixi'
+import { Application, Loading, Stage, render, useApplication, useAsset, Sprite } from 'solid-pixi'
 
 render(() => <Click canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 function ClickContainer() {
   const app = useApplication()
   const [scale, setScale] = createSignal(1)
-  const [texture] = useAsset('https://pixijs.com/assets/bunny.png')
+  const texture = useAsset('https://pixijs.com/assets/bunny.png')
 
   return (
-    <Suspense>
-      <P.Sprite
+    <Loading>
+      <Sprite
         texture={texture()}
         interactive
         onpointerdown={() => {
@@ -19,16 +19,16 @@ function ClickContainer() {
         }}
         scale={{ x: scale(), y: scale() }}
         anchor={{ x: 0.5, y: 0.5 } as PointLike}
-        x={app!.screen.width / 2}
-        y={app!.screen.height / 2}
+        x={app.screen.width / 2}
+        y={app.screen.height / 2}
       />
-    </Suspense>
+    </Loading>
   )
 }
 
 function Click(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <ClickContainer />
       </Stage>

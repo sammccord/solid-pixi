@@ -1,39 +1,32 @@
-import { Graphics } from 'pixi.js'
+import type { Graphics as PixiGraphics } from 'pixi.js'
 import { createEffect, createSignal } from 'solid-js'
-import { Application, For, P, Stage, render, useApplication, useAsset } from 'solid-pixi'
+import { Application, Stage, render, useTick, Graphics } from 'solid-pixi'
 
 render(() => <DynamicGraphics canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 export function GraphicsContainer() {
-  const app = useApplication()
   const [_count, setCount] = createSignal(0)
-  const [_graphics, setGraphics] = createSignal<Graphics>()
+  const [_graphics, setGraphics] = createSignal<PixiGraphics>()
 
-  createEffect(() => {
-    const ticker = () => {
-      setCount(c => c + 0.1)
+  useTick(() => setCount(c => c + 0.1))
+
+  createEffect(
+    () => ({ graphics: _graphics(), count: _count() }),
+    ({ graphics, count }) => {
+      if (!graphics) return
+      graphics
+        .clear()
+        .moveTo(-120 + Math.sin(count) * 20, -100 + Math.cos(count) * 20)
+        .lineTo(120 + Math.cos(count) * 20, -100 + Math.sin(count) * 20)
+        .lineTo(120 + Math.sin(count) * 20, 100 + Math.cos(count) * 20)
+        .lineTo(-120 + Math.cos(count) * 20, 100 + Math.sin(count) * 20)
+        .lineTo(-120 + Math.sin(count) * 20, -100 + Math.cos(count) * 20)
+        .fill({ color: 0xffff00, alpha: 0.5 })
+        .stroke({ width: 10, color: 0xff0000 })
     }
-    app!.ticker.add(ticker)
+  )
 
-    return () => app!.ticker.remove(ticker)
-  })
-
-  createEffect(() => {
-    const graphics = _graphics()
-    if (!graphics) return
-    const count = _count()
-    graphics
-      .clear()
-      .moveTo(-120 + Math.sin(count) * 20, -100 + Math.cos(count) * 20)
-      .lineTo(120 + Math.cos(count) * 20, -100 + Math.sin(count) * 20)
-      .lineTo(120 + Math.sin(count) * 20, 100 + Math.cos(count) * 20)
-      .lineTo(-120 + Math.cos(count) * 20, 100 + Math.sin(count) * 20)
-      .lineTo(-120 + Math.sin(count) * 20, -100 + Math.cos(count) * 20)
-      .fill({ color: 0xffff00, alpha: 0.5 })
-      .stroke({ width: 10, color: 0xff0000 })
-  })
-
-  return <P.Graphics x={400} y={300} rotation={_count() * 0.1} ref={setGraphics} />
+  return <Graphics x={400} y={300} rotation={_count() * 0.1} ref={setGraphics} />
 }
 
 function DynamicGraphics(props) {

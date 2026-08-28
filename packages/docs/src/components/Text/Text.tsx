@@ -1,6 +1,6 @@
 import { TextStyle } from 'pixi.js'
 import { createSignal, onCleanup } from 'solid-js'
-import { Application, P, Stage, render } from 'solid-pixi'
+import { Application, Stage, render, Container, Text } from 'solid-pixi'
 
 render(() => <TextExample canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -15,9 +15,9 @@ function TextContainer() {
   })
 
   return (
-    <P.Container>
-      <P.Text x={50} y={100} text={'Basic text in pixi'}></P.Text>
-      <P.Text
+    <Container>
+      <Text x={50} y={100} text={'Basic text in pixi'}></Text>
+      <Text
         x={50}
         y={220}
         text={'Rich text with a lot of options and across multiple lines'}
@@ -43,8 +43,8 @@ function TextContainer() {
             wordWrapWidth: 440
           })
         }
-      ></P.Text>
-      <P.Text
+      ></Text>
+      <Text
         x={300}
         y={480}
         anchor={{ x: 0.5, y: 0.5 }}
@@ -73,14 +73,14 @@ function TextContainer() {
             fontWeight: 'lighter'
           })
         }
-      ></P.Text>
-    </P.Container>
+      ></Text>
+    </Container>
   )
 }
 
 function TextExample(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <TextContainer />
       </Stage>

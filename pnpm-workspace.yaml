@@ -1,2 +1,17 @@
 packages:
-  - "packages/*"
+  - 'packages/*'
+allowBuilds:
+  esbuild: true
+  lefthook: true
+  sharp: true
+catalog:
+  typescript: ^5.7.3
+  vite: npm:@voidzero-dev/vite-plus-core@0.2.4
+  vite-plus: 0.2.4
+overrides:
+  vite: 'catalog:'
+peerDependencyRules:
+  allowAny:
+    - vite
+  allowedVersions:
+    vite: '*'

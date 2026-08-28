@@ -1,29 +1,28 @@
-/// <reference types="vitest" />
-/// <reference types="vite/client" />
+/// <reference types="vite-plus/client" />
 
-import { defineConfig } from 'vite'
-import solidPlugin from 'vite-plugin-solid'
+import { fileURLToPath } from 'node:url'
+import solidPlugin from '@solidjs/vite-plugin'
+import { defineConfig, lazyPlugins } from 'vite-plus'
+
+// The universal codegen emits imports from `moduleName`, so the library's own
+// JSX imports the renderer by package name. Point that back at the source.
+const runtime = fileURLToPath(new URL('./src/runtime.tsx', import.meta.url))
 
 export default defineConfig({
-  plugins: [solidPlugin()],
+  plugins: lazyPlugins(() => [
+    solidPlugin({ solid: { moduleName: 'solid-pixi', generate: 'universal' } })
+  ]),
+  resolve: {
+    alias: { 'solid-pixi': runtime }
+  },
   build: {
     lib: {
-      // Could also be a dictionary or array of multiple entry points
       entry: './src/index.ts',
-      name: 'SolidPIXI'
+      formats: ['es'],
+      fileName: () => 'index.js'
     },
-    rollupOptions: {
-      // make sure to externalize deps that shouldn't be bundled
-      // into your library
-      external: ['solid-js', 'pixi.js'],
-      output: {
-        // Provide global variables to use in the UMD build
-        // for externalized deps
-        globals: {
-          'solid-js': 'solid',
-          'pixi.js': 'PIXI'
-        }
-      }
+    rolldownOptions: {
+      external: ['solid-js', '@solidjs/universal', 'pixi.js']
     }
   }
 })

@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "moduleResolution": "Bundler",
+    "jsxImportSource": "solid-pixi",
+    "types": ["vite-plus/test/globals"],
+    "paths": {
+      "solid-pixi": ["../solid-pixi/src/index.ts"]
+    }
+  },
+  "include": ["src", "browser", "vite.config.mjs"],
+  "exclude": ["node_modules"]
+}

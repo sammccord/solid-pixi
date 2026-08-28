@@ -2,22 +2,22 @@ import { TextStyle } from 'pixi.js'
 import {
   Application,
   For,
-  P,
   Show,
   Stage,
-  Suspense,
+  Loading,
   render,
   useApplication,
-  useAsset
+  useAsset,
+  Text
 } from 'solid-pixi'
 
 render(() => <BitmapText canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 function TextContainer() {
-  const [font] = useAsset('https://pixijs.com/assets/bitmap-font/desyrel.xml')
+  const font = useAsset('https://pixijs.com/assets/bitmap-font/desyrel.xml')
   return (
     <Show when={font()}>
-      <P.Text
+      <Text
         x={50}
         y={220}
         style={
@@ -34,14 +34,14 @@ function TextContainer() {
         }
         text={`bitmap fonts are supported!
         Woo yay!`}
-      ></P.Text>
+      ></Text>
     </Show>
   )
 }
 
 function BitmapText(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <TextContainer />
       </Stage>

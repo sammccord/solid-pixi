@@ -1,5 +1,5 @@
-import solidJs from '@astrojs/solid-js'
 import starlight from '@astrojs/starlight'
+import solid from '@solidjs/vite-plugin'
 import { defineConfig, passthroughImageService } from 'astro/config'
 
 // https://astro.build/config
@@ -8,6 +8,9 @@ export default defineConfig({
   base: '/solid-pixi',
   image: {
     service: passthroughImageService()
+  },
+  vite: {
+    plugins: [solid({ solid: { moduleName: 'solid-pixi', generate: 'universal' } })]
   },
   integrations: [
     starlight({
@@ -29,7 +32,6 @@ export default defineConfig({
           }
         }
       ]
-    }),
-    solidJs()
+    })
   ]
 })

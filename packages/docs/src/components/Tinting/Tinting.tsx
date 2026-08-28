@@ -1,19 +1,29 @@
-import { type PointLike, Rectangle, Texture } from 'pixi.js'
-import { createStore, produce } from 'solid-js/store'
-import { Application, For, P, Stage, Suspense, render, useApplication, useAsset } from 'solid-pixi'
+import { type PointLike, Rectangle } from 'pixi.js'
+import { createStore } from 'solid-js'
+import {
+  Application,
+  For,
+  Stage,
+  Loading,
+  render,
+  useApplication,
+  useAsset,
+  useTick,
+  Sprite
+} from 'solid-pixi'
 
 render(() => <Tinting canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 function Dudes() {
   const app = useApplication()
-  const [texture] = useAsset('https://pixijs.com/assets/eggHead.png')
+  const texture = useAsset('https://pixijs.com/assets/eggHead.png')
   const [dudes, setDudes] = createStore(
     Array.from({ length: 20 }).map(() => {
       const scale = 0.8 + Math.random() * 0.3
       return {
         direction: Math.random() * Math.PI * 2,
-        x: Math.random() * app!.screen.width,
-        y: Math.random() * app!.screen.height,
+        x: Math.random() * app.screen.width,
+        y: Math.random() * app.screen.height,
         rotation: 0,
         turningSpeed: Math.random() - 0.8,
         speed: 2 + Math.random() * 2,
@@ -27,41 +37,38 @@ function Dudes() {
   const dudeBounds = new Rectangle(
     -dudeBoundsPadding,
     -dudeBoundsPadding,
-    app!.screen.width + dudeBoundsPadding * 2,
-    app!.screen.height + dudeBoundsPadding * 2
+    app.screen.width + dudeBoundsPadding * 2,
+    app.screen.height + dudeBoundsPadding * 2
   )
 
-  app?.ticker.add(() => {
-    for (let i = 0; i < 20; i++) {
-      setDudes(
-        i,
-        produce(dude => {
-          const newDirection = dude.direction + dude.turningSpeed * 0.01
-          dude.direction = newDirection
-          dude.x += Math.sin(dude.direction) * dude.speed
-          dude.y += Math.cos(dude.direction) * dude.speed
-          dude.rotation = -newDirection - Math.PI / 2
-          if (dude.x < dudeBounds.x) {
-            dude.x += dudeBounds.width
-          } else if (dude.x > dudeBounds.x + dudeBounds.width) {
-            dude.x -= dudeBounds.width
-          }
+  useTick(() => {
+    setDudes(draft => {
+      for (const dude of draft) {
+        const newDirection = dude.direction + dude.turningSpeed * 0.01
+        dude.direction = newDirection
+        dude.x += Math.sin(dude.direction) * dude.speed
+        dude.y += Math.cos(dude.direction) * dude.speed
+        dude.rotation = -newDirection - Math.PI / 2
+        if (dude.x < dudeBounds.x) {
+          dude.x += dudeBounds.width
+        } else if (dude.x > dudeBounds.x + dudeBounds.width) {
+          dude.x -= dudeBounds.width
+        }
 
-          if (dude.y < dudeBounds.y) {
-            dude.y += dudeBounds.height
-          } else if (dude.y > dudeBounds.y + dudeBounds.height) {
-            dude.y -= dudeBounds.height
-          }
-        })
-      )
-    }
+        if (dude.y < dudeBounds.y) {
+          dude.y += dudeBounds.height
+        } else if (dude.y > dudeBounds.y + dudeBounds.height) {
+          dude.y -= dudeBounds.height
+        }
+      }
+    })
   })
 
   return (
-    <Suspense>
+    <Loading>
       <For each={dudes}>
         {dude => (
-          <P.Sprite
+          <Sprite
             texture={texture()}
             scale={dude.scale}
             anchor={{ x: 0.5, y: 0.5 } as PointLike}
@@ -72,7 +79,7 @@ function Dudes() {
           />
         )}
       </For>
-    </Suspense>
+    </Loading>
   )
 }
 

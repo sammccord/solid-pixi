@@ -1,7 +1,75 @@
-import { Text } from 'pixi.js'
-import { type JSX, createRenderEffect } from 'solid-js'
-import { createRenderer } from 'solid-js/universal'
-import { P } from './P'
+import { Container as PixiContainer, Text as PixiText } from 'pixi.js'
+import type { Element } from 'solid-js'
+import { createRenderEffect, runWithOwner } from 'solid-js'
+import { createRenderer } from '@solidjs/universal'
+
+type PixiNode = PixiContainer
+
+const adopted = new WeakSet<object>()
+
+/**
+ * Marks a node as caller-owned. Removal lifts it out of the tree but never
+ * destroys it. `createPixiComponent` registers every `as` instance.
+ */
+export function adopt(node: object) {
+  adopted.add(node)
+}
+
+// Bare destroy(): Text textures and Graphics contexts the node owns are freed,
+// shared textures are not. destroy() mutates the children array, so each level
+// walks a copy, children before parent.
+function destroyTree(node: PixiNode) {
+  if (adopted.has(node)) {
+    node.removeFromParent()
+    return
+  }
+  for (const child of node.children.slice()) destroyTree(child)
+  node.destroy()
+}
+
+const renderer = createRenderer<PixiNode>({
+  createElement(tag): never {
+    throw new Error(
+      `solid-pixi has no intrinsic element <${tag}>. Build the scene from the components solid-pixi exports, such as Container and Sprite.`
+    )
+  },
+  createTextNode(value) {
+    return new PixiText({ text: value })
+  },
+  replaceText(textNode, value) {
+    ;(textNode as PixiText).text = value
+  },
+  setProperty(node, name, value) {
+    if (name === 'size') (node as any).setSize((value as any)?.width, (value as any)?.height)
+    else (node as any)[name] = value
+  },
+  // A pixi tree can carry values this renderer does not own, such as the canvas
+  // an Application created for a DOM host to mount. The host that owns such a
+  // value places and removes it. Here it is inert.
+  insertNode(parent, node, anchor) {
+    if (!parent || !(node instanceof PixiContainer)) return
+    if (anchor) parent.addChildAt(node, parent.children.indexOf(anchor))
+    else parent.addChild(node)
+  },
+  isTextNode(node) {
+    return node instanceof PixiText
+  },
+  removeNode(_parent, node) {
+    if (!(node instanceof PixiContainer)) return
+    node.removeFromParent()
+    destroyTree(node)
+  },
+  getParentNode(node) {
+    return node?.parent ?? undefined
+  },
+  getFirstChild(node) {
+    return node?.children?.[0]
+  },
+  getNextSibling(node) {
+    const siblings = node?.parent?.children
+    return siblings?.[siblings.indexOf(node) + 1]
+  }
+})
 
 export const {
   effect,
@@ -13,118 +81,65 @@ export const {
   insert,
   setProp,
   mergeProps,
-  use,
-  ...other
-} = createRenderer({
-  createElement(string) {
-    return new (P as any)[string]()
-  },
-  createTextNode(value) {
-    return new Text(value)
-  },
-  replaceText(textNode: Text, value) {
-    textNode.text = value
-  },
-  setProperty(node, name, value, _prev) {
-    if (name !== 'size') {
-      node[name] = value
-    } else {
-      // @ts-expect-error
-      node.setSize(value?.width, value?.height)
-    }
-  },
-  insertNode(parent, node, anchor) {
-    if (!parent) return
-    if (anchor) {
-      parent?.addChildAt?.(node, anchor?.parent.children.indexOf(anchor))
-    } else {
-      parent?.addChild?.(node)
-    }
-  },
-  isTextNode(node) {
-    return node?.constructor.name === 'Text'
-  },
-  removeNode(_, node) {
-    node?.removeFromParent()
-  },
-  getParentNode(node) {
-    return node?.parent
-  },
-  getFirstChild(node) {
-    return node?.children?.[0]
-  },
-  getNextSibling(node) {
-    return node?.parent?.children?.[node?.parent?.children?.indexOf(node) + 1]
-  }
-})
+  applyRef,
+  ref
+} = renderer
 
-function spreadExpression(node: any, props: any = {}, prevProps: any = {}) {
-  let renderable = props?.renderable ?? true
-  createRenderEffect(() => props.ref?.(node))
-  createRenderEffect(() => {
-    // Makes sure that we render one last time before the component's `renderable` prop is set to `true`, and then
-    // stops until its `renderable` prop is set to `false` again.
-    if (!renderable && props.renderable === false) return
-    for (const prop in props) {
-      if (prop === 'children' || prop === 'ref') continue
-      const value = props[prop]
-      if (value === prevProps[prop]) continue
-      setProp(node, prop, value, prevProps[prop])
-      prevProps[prop] = value
-    }
+type Props = Record<string, any>
 
-    renderable = props.renderable ?? true
-  })
-  return prevProps
-}
-export function _spread<T>(node: any, accessor: T | (() => T)) {
-  if (typeof accessor === 'function') {
-    createRenderEffect(current =>
-      // @ts-expect-error
-      spreadExpression(node, accessor(), current)
-    )
-  } else spreadExpression(node, accessor, undefined)
-}
-
-export const spread = _spread
-
-// export const render = other.render as (fn: () => JSXElement, ctx: ViteHotContext) => () => void
-// const hotCtxMap = new Map<ViteHotContext, Array<() => void>>()
-// export const render = (code: () => JSX.Element, hotCtx?: ViteHotContext) => {
-//   let disposer: () => void = () => void 0
-//   createRoot(dispose => {
-//     const elem = insert(null, code())
-//     disposer = () => {
-//       dispose()
-//       elem?.destroy?.()
-//     }
-//     if (hotCtx) {
-//       hotCtxMap.set(hotCtx, [...(hotCtxMap.get(hotCtx) ?? []), disposer])
-//       hotCtx.dispose(() => {
-//         hotCtxMap.get(hotCtx!)?.forEach(v => v())
-//         hotCtxMap.delete(hotCtx!)
-//       })
-//     }
-//   })
-
-//   return disposer
-// }
 /**
- * Renders a Solid Pixi application
- * Handles cleanup and disposal of rendered elements.
+ * Applies props to a pixi node and keeps them in sync.
  *
- * @param code - A function that returns a JSX element to render
- * @returns A dispose function that cleans up the rendered element
+ * Skips `children`, which callers insert themselves, and honours `renderable`
+ * as a write gate: one last pass lands after it goes false, then writes stop
+ * until it goes true again.
  */
-export const render = other.render as (application: () => JSX.Element) => () => void
-// Forward Solid control flow
-export {
-  ErrorBoundary,
-  For,
-  Index,
-  Match,
-  Show,
-  Suspense,
-  SuspenseList,
-  Switch
-} from 'solid-js'
+export function spread(node: PixiNode, props: Props) {
+  // Detached from the current owner, matching @solidjs/universal's own ref
+  // helper. `ref={setSignal}` is the common shape and owning the callback would
+  // make that write illegal. The cost is that a ref cannot read an async
+  // accessor; capture the settled value outside the callback instead.
+  createRenderEffect(
+    () => props.ref,
+    r => {
+      if (r) runWithOwner(null, () => applyRef(r, node))
+    }
+  )
+
+  const applied: Props = {}
+  let rendered: boolean | undefined
+
+  createRenderEffect(
+    () => {
+      const renderable = props.renderable ?? true
+      if (rendered === false && renderable === false) return undefined
+
+      const changed: [string, unknown][] = []
+      for (const key in props) {
+        if (key === 'children' || key === 'ref') continue
+        const value = props[key]
+        if (value !== applied[key]) changed.push([key, value])
+      }
+      return { changed, renderable }
+    },
+    update => {
+      if (!update) return
+      for (const [key, value] of update.changed) {
+        setProp(node, key, value, applied[key])
+        applied[key] = value
+      }
+      rendered = update.renderable
+    }
+  )
+}
+
+/**
+ * Renders a Solid Pixi tree.
+ *
+ * @param code returns the tree to render
+ * @param node pixi container to mount into
+ * @returns a dispose function that tears the reactive graph down
+ */
+export const render = renderer.render as (code: () => Element, node?: PixiNode) => () => void
+
+export { Errored, For, Loading, Match, Repeat, Reveal, Show, Switch } from 'solid-js'

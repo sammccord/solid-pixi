@@ -1,10 +1,13 @@
-import type { JSXElement } from 'solid-js'
-import { useApplication } from './Application'
-import { insert } from './runtime'
+import { useApplication } from './Application.js'
+import { insert } from './runtime.js'
 
-export function Stage(props: { children: any }) {
+/**
+ * Inserts its children into the enclosing application's stage. Renders nothing
+ * itself, so a DOM host around it sees only the application's canvas.
+ */
+export function Stage(props: { children?: unknown }) {
   const application = useApplication()
 
-  insert(application.stage, () => props.children)
-  return application.stage as unknown as JSXElement
+  insert(application.stage, props.children)
+  return undefined
 }

@@ -1,12 +1,21 @@
 import { type PointLike, Texture } from 'pixi.js'
-import { Show, createSignal } from 'solid-js'
-import { Application, For, P, Stage, Suspense, render, useApplication, useAssets } from 'solid-pixi'
+import { createSignal } from 'solid-js'
+import {
+  Application,
+  Loading,
+  Show,
+  Stage,
+  render,
+  useApplication,
+  useAssets,
+  Sprite
+} from 'solid-pixi'
 
 render(() => <Interactivity canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 function InteractivityContainer() {
   const app = useApplication()
-  const [textures] = useAssets<{
+  const textures = useAssets<{
     'https://pixijs.com/assets/button.png': Texture
     'https://pixijs.com/assets/button_down.png': Texture
     'https://pixijs.com/assets/button_over.png': Texture
@@ -22,10 +31,10 @@ function InteractivityContainer() {
 
   return (
     <Show when={textures()}>
-      <P.Sprite
+      <Sprite
         texture={Texture.from(texture())}
         interactive
-        cursor='pointer'
+        cursor="pointer"
         onpointerdown={() => {
           isDown = true
           setTexture('https://pixijs.com/assets/button_down.png')
@@ -61,8 +70,8 @@ function InteractivityContainer() {
           setTexture('https://pixijs.com/assets/button.png')
         }}
         anchor={{ x: 0.5, y: 0.5 } as PointLike}
-        x={app!.screen.width / 2}
-        y={app!.screen.height / 2}
+        x={app.screen.width / 2}
+        y={app.screen.height / 2}
       />
     </Show>
   )
@@ -70,7 +79,7 @@ function InteractivityContainer() {
 
 function Interactivity(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <InteractivityContainer />
       </Stage>

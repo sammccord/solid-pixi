@@ -1,0 +1,8 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "solid-pixi": "2.0.0"
+  },
+  "changesets": []
+}

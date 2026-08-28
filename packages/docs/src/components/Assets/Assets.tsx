@@ -1,18 +1,18 @@
 import { type PointLike, Spritesheet, Texture } from 'pixi.js'
-import { createEffect, createMemo, createSignal } from 'solid-js'
+import { createMemo, createSignal } from 'solid-js'
 import {
   Application,
   For,
   Match,
-  P,
   Stage,
-  Suspense,
+  Loading,
   Switch,
   render,
   useApplication,
   useAsset,
   useAssetInit,
-  useBundle
+  useBundle,
+  Sprite
 } from 'solid-pixi'
 
 render(() => <AssetsLoading canvas={document.getElementById('root')! as HTMLCanvasElement} />)
@@ -56,19 +56,15 @@ function AssetsLoading(props) {
     }
   })
   const stateBundle = createMemo(() => `${state()}-screen`)
-  const [bundle] = useBundle<{ flowerTop: Texture; eggHead: Texture }>(stateBundle)
-
-  createEffect(() => {
-    console.log(bundle())
-  })
+  const bundle = useBundle<{ flowerTop: Texture; eggHead: Texture }>(stateBundle)
 
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
-        <Suspense>
+        <Loading>
           <Switch>
             <Match when={state() === 'load'}>
-              <P.Sprite
+              <Sprite
                 texture={bundle()?.flowerTop}
                 x={Math.random() * 400}
                 y={Math.random() * 300}
@@ -79,7 +75,7 @@ function AssetsLoading(props) {
               />
             </Match>
             <Match when={state() === 'game'}>
-              <P.Sprite
+              <Sprite
                 texture={bundle()?.eggHead}
                 x={Math.random() * 400}
                 y={Math.random() * 300}
@@ -88,7 +84,7 @@ function AssetsLoading(props) {
               />
             </Match>
           </Switch>
-        </Suspense>
+        </Loading>
       </Stage>
     </Application>
   )

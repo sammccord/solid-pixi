@@ -1,11 +1,22 @@
-import { type PointLike, Ticker } from 'pixi.js'
-import { Application, For, P, Stage, Suspense, render, useApplication, useAsset } from 'solid-pixi'
+import type { Container as PixiContainer, PointLike } from 'pixi.js'
+import {
+  Application,
+  For,
+  Loading,
+  Stage,
+  render,
+  useApplication,
+  useAsset,
+  useTick,
+  Container,
+  Sprite
+} from 'solid-pixi'
 
 render(() => <ContainerExample canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 function ContainerExample(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <BunniesContainer />
       </Stage>
@@ -15,30 +26,27 @@ function ContainerExample(props) {
 
 function BunniesContainer() {
   const app = useApplication()
-  const [resource] = useAsset('https://pixijs.com/assets/bunny.png')
+  const resource = useAsset('https://pixijs.com/assets/bunny.png')
+  let container: PixiContainer | undefined
+
+  // use delta to create frame-independent transform
+  useTick(delta => {
+    if (container) container.rotation -= 0.001 * delta.deltaMS
+  })
 
   return (
-    <Suspense>
-      <P.Container
-        x={app!.screen.width / 2}
-        y={app!.screen.height / 2}
-        ref={container => {
-          container.pivot = { x: 100, y: 100 }
-          const handler = (delta: Ticker) => {
-            // rotate the container!
-            // use delta to create frame-independent transform
-            container.rotation -= 0.001 * delta.deltaMS
-          }
-          app!.ticker.add(handler)
-
-          return () => {
-            app!.ticker.remove(handler)
-          }
+    <Loading>
+      <Container
+        x={app.screen.width / 2}
+        y={app.screen.height / 2}
+        ref={node => {
+          node.pivot = { x: 100, y: 100 }
+          container = node
         }}
       >
         <For each={Array.from({ length: 25 })} fallback={<></>}>
           {(_, i) => (
-            <P.Sprite
+            <Sprite
               texture={resource()}
               anchor={{ x: 0.5, y: 0.5 } as PointLike}
               x={(i() % 5) * 40}
@@ -46,7 +54,7 @@ function BunniesContainer() {
             />
           )}
         </For>
-      </P.Container>
-    </Suspense>
+      </Container>
+    </Loading>
   )
 }
