@@ -26,6 +26,7 @@ const mounted = await page.evaluate(() => {
   return {
     rendererType: app.renderer?.type ?? null,
     canvasIsOurs: app.canvas === document.getElementById('stage'),
+    canvasCount: document.querySelectorAll('canvas').length,
     stage: app.stage.children
       .filter(child => child.label)
       .map(child => ({
@@ -37,6 +38,11 @@ const mounted = await page.evaluate(() => {
 
 check('renderer initialized', mounted.rendererType !== null, mounted.rendererType)
 check('mounted onto the canvas we passed', mounted.canvasIsOurs)
+check(
+  'a passed canvas leaves the document with no second canvas',
+  mounted.canvasCount === 1,
+  String(mounted.canvasCount)
+)
 check(
   'Stage inserted the tree into app.stage',
   JSON.stringify(mounted.stage) ===
@@ -193,6 +199,62 @@ check(
   JSON.stringify(recovered)
 )
 check('a failing asset does not halt the reactive system', halted.length === 0, halted.join(' | '))
+
+// --- a DOM host and a pixi scene in one tree, on a fourth page ---
+
+const mixed = await browser.newPage()
+const mixedErrors = []
+mixed.on('console', message => message.type() === 'error' && mixedErrors.push(message.text()))
+mixed.on('pageerror', error => mixedErrors.push(String(error)))
+
+await mixed.goto('http://localhost:5199/browser/mixed.html', { waitUntil: 'load' })
+await mixed.waitForFunction(() => window.mixed !== undefined, null, { timeout: 20000 })
+await mixed.evaluate(() => window.mixed.ready)
+await mixed
+  .waitForFunction(() => document.querySelector('#hud canvas') !== null, null, { timeout: 20000 })
+  .catch(() => {})
+
+const hosted = await mixed.evaluate(() => ({
+  isAppCanvas: document.querySelector('#hud canvas') === window.mixed.app.canvas,
+  canvasCount: document.querySelectorAll('canvas').length
+}))
+
+check(
+  'Application mounted the canvas it created into the DOM host',
+  hosted.isAppCanvas,
+  JSON.stringify(hosted)
+)
+check('the page grew exactly one canvas', hosted.canvasCount === 1, String(hosted.canvasCount))
+
+const shared = await mixed.evaluate(() => {
+  const { app } = window.mixed
+  const sample = () => {
+    app.render()
+    const { pixels } = app.renderer.extract.pixels(app.stage)
+    return [pixels[0], pixels[1], pixels[2]]
+  }
+  const label = () => document.getElementById('label').textContent
+  const before = { text: label(), pixel: sample() }
+  window.mixed.setTint(0x0000ff)
+  return { before, after: { text: label(), pixel: sample() } }
+})
+
+check(
+  'the pixi scene drew red pixels inside the DOM tree',
+  shared.before.pixel[0] > 200 && shared.before.pixel[2] < 60,
+  `rgb(${shared.before.pixel})`
+)
+check(
+  'the same write repainted the canvas blue',
+  shared.after.pixel[2] > 200 && shared.after.pixel[0] < 60,
+  `rgb(${shared.after.pixel})`
+)
+check(
+  'the same write updated the DOM text',
+  shared.before.text === 'ff0000' && shared.after.text === '0000ff',
+  JSON.stringify([shared.before.text, shared.after.text])
+)
+check('no console or page errors in mixed mode', mixedErrors.length === 0, mixedErrors.join(' | '))
 
 await browser.close()
 await server.close()

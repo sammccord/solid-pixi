@@ -35,6 +35,10 @@ const ApplicationPropKeys = [...CommonPropKeys, 'fallback'] as const
  * Creates a PIXI.js application and provides it to its children via context.
  * This is the root component of a solid-pixi tree.
  *
+ * An application left to create its own canvas renders that canvas, so a DOM
+ * host mounts it wherever the component sits. A canvas handed in through
+ * `props.canvas` stays where the caller put it.
+ *
  * @param props.as an existing PIXI.Application to adopt instead of creating one
  * @param props.ref called with the application once it has initialized
  * @param props.fallback rendered while the application is initializing
@@ -65,7 +69,12 @@ export const Application = (props: ApplicationProps) => {
   return (
     <Loading fallback={props.fallback}>
       <Show when={app()} keyed>
-        {instance => <AppContext value={instance}>{props.children}</AppContext>}
+        {instance => (
+          <AppContext value={instance}>
+            {props.canvas ? undefined : instance.canvas}
+            {props.children}
+          </AppContext>
+        )}
       </Show>
     </Loading>
   )

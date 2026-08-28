@@ -21,8 +21,9 @@ export default {
 { "compilerOptions": { "jsx": "preserve", "jsxImportSource": "solid-pixi" } }
 ```
 
-Files that mix pixi and DOM JSX need a per-file
-`/** @jsxImportSource solid-pixi */` pragma.
+Files that mix pixi and DOM JSX compile with `generate: 'dynamic'` and a DOM
+renderer override; the `jsxImportSource` pragma is a TypeScript setting only
+and does not change what the plugin compiles.
 
 **Control flow.** `Suspense`, `ErrorBoundary`, `SuspenseList`, and `Index` are
 gone. Use `Loading`, `Errored`, `Reveal`, and `<For keyed={false}>`. `Repeat` is

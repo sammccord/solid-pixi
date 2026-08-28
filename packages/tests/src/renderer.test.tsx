@@ -98,6 +98,20 @@ test('turns a string child into a pixi Text', () => {
   dispose()
 })
 
+// Application renders the canvas it created so that a DOM host mounts it. Under
+// a pixi host nothing owns that value, so it has to stay out of the tree rather
+// than crash the insert.
+test('a value that is not a pixi container never enters the tree', () => {
+  const [hosted, setHosted] = createSignal(true)
+  const foreign = {}
+  const { root, dispose } = withRoot(() => [hosted() ? foreign : undefined, <Container />])
+  expect(names(root)).toEqual(['Container'])
+
+  flush(() => setHosted(false))
+  expect(names(root)).toEqual(['Container'])
+  dispose()
+})
+
 test('Show adds and removes a node', () => {
   const [on, setOn] = createSignal(false)
   const { root, dispose } = withRoot(() => (

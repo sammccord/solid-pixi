@@ -33,11 +33,8 @@ export default {
 { "compilerOptions": { "jsx": "preserve", "jsxImportSource": "solid-pixi" } }
 ```
 
-A file that mixes pixi and DOM JSX needs a per-file pragma:
-
-```tsx
-/** @jsxImportSource solid-pixi */
-```
+A file that mixes pixi and DOM JSX needs dynamic codegen; see
+[Usage within a Solid.js DOM application](#usage-within-a-solidjs-dom-application).
 
 ## A first scene
 
@@ -120,29 +117,71 @@ outside the callback:
 
 ## Usage within a Solid.js DOM application
 
-`solid-pixi` renders to pixi, not the DOM, so mount it from a DOM component with its
-own `render` call.
+Dynamic codegen compiles both renderers in one project. Tags in the `elements` list become
+DOM templates and everything else becomes a `solid-pixi` component call, so one JSX tree can
+hold a DOM panel and a pixi scene.
 
-```tsx
-import { onSettled } from 'solid-js'
-import { Application, Stage, render } from 'solid-pixi'
+```js
+// vite.config.js
+import solid from '@solidjs/vite-plugin'
+import { DOMElements, SVGElements } from '@solidjs/web'
 
-function App() {
-  let canvas!: HTMLCanvasElement
-
-  onSettled(() => {
-    const dispose = render(() => <PixiApp canvas={canvas} />)
-    return dispose
-  })
-
-  return <canvas ref={canvas} />
-}
-
-function PixiApp(props) {
-  return (
-    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
-      <Stage />
-    </Application>
-  )
+export default {
+  plugins: [
+    solid({
+      solid: {
+        moduleName: 'solid-pixi',
+        generate: 'dynamic',
+        renderers: [
+          {
+            name: 'dom',
+            moduleName: '@solidjs/web',
+            elements: [...DOMElements, ...SVGElements]
+          }
+        ]
+      }
+    })
+  ]
 }
 ```
+
+An `<Application>` with no `canvas` prop creates its own canvas, and that canvas is what the
+component renders. A DOM parent mounts it like any other child.
+
+```tsx
+/** @jsxImportSource @solidjs/web */
+import { render } from '@solidjs/web'
+import { createSignal } from 'solid-js'
+import { Application, Graphics, Stage } from 'solid-pixi'
+
+function App() {
+  const [hot, setHot] = createSignal(true)
+
+  return (
+    <div>
+      <span>{hot() ? 'red' : 'blue'}</span>
+      <button onClick={() => setHot(value => !value)}>toggle</button>
+      <Application background="#1099bb" width={320} height={320}>
+        <Stage>
+          <Graphics
+            tint={hot() ? 0xff0000 : 0x0000ff}
+            ref={g => g.rect(0, 0, 320, 320).fill(0xffffff)}
+          />
+        </Stage>
+      </Application>
+    </div>
+  )
+}
+
+render(() => <App />, document.getElementById('root')!)
+```
+
+One signal drives the DOM text and the pixi fill. Pass a `canvas` prop instead and the
+element stays where you put it. `<Application>` then renders nothing of its own.
+
+TypeScript needs `jsxImportSource` pointed at `@solidjs/web` for a file like this, through
+either the per-file pragma above or `tsconfig.json`. `solid-pixi` declares no intrinsic tags,
+so `<div>` does not typecheck under its JSX namespace. The pragma is a TypeScript setting
+only. The plugin config decides how the file compiles.
+
+A project whose JSX is all pixi keeps `generate: 'universal'` and needs no renderer override.

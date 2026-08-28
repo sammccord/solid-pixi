@@ -1,4 +1,4 @@
-import { type Container as PixiContainer, Text as PixiText } from 'pixi.js'
+import { Container as PixiContainer, Text as PixiText } from 'pixi.js'
 import type { Element } from 'solid-js'
 import { createRenderEffect, runWithOwner } from 'solid-js'
 import { createRenderer } from '@solidjs/universal'
@@ -43,8 +43,11 @@ const renderer = createRenderer<PixiNode>({
     if (name === 'size') (node as any).setSize((value as any)?.width, (value as any)?.height)
     else (node as any)[name] = value
   },
+  // A pixi tree can carry values this renderer does not own, such as the canvas
+  // an Application created for a DOM host to mount. The host that owns such a
+  // value places and removes it. Here it is inert.
   insertNode(parent, node, anchor) {
-    if (!parent) return
+    if (!parent || !(node instanceof PixiContainer)) return
     if (anchor) parent.addChildAt(node, parent.children.indexOf(anchor))
     else parent.addChild(node)
   },
@@ -52,7 +55,7 @@ const renderer = createRenderer<PixiNode>({
     return node instanceof PixiText
   },
   removeNode(_parent, node) {
-    if (!node) return
+    if (!(node instanceof PixiContainer)) return
     node.removeFromParent()
     destroyTree(node)
   },
