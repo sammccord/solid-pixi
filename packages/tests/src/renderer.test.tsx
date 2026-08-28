@@ -138,6 +138,72 @@ test('For reorders without recreating nodes', () => {
   dispose()
 })
 
+test('a Show exit destroys the removed node and its subtree', () => {
+  const [on, setOn] = createSignal(true)
+  const { root, dispose } = withRoot(() => (
+    <Container>
+      <Show when={on()}>
+        <Container label="doomed">
+          <Sprite label="inner" />
+        </Container>
+      </Show>
+    </Container>
+  ))
+  const outer = root.children[0] as PixiContainer
+  const doomed = outer.children[0] as PixiContainer
+  const inner = doomed.children[0] as PixiSprite
+
+  flush(() => setOn(false))
+  expect(outer.children.length).toBe(0)
+  expect(doomed.destroyed).toBe(true)
+  expect(inner.destroyed).toBe(true)
+  dispose()
+})
+
+test('an adopted `as` node survives a Show exit while built siblings are destroyed', () => {
+  const keeper = new PixiSprite()
+  const [on, setOn] = createSignal(true)
+  const { root, dispose } = withRoot(() => (
+    <Container>
+      <Show when={on()}>
+        <Container label="doomed">
+          <Sprite as={keeper} />
+          <Sprite label="built" />
+        </Container>
+      </Show>
+    </Container>
+  ))
+  const outer = root.children[0] as PixiContainer
+  const doomed = outer.children[0] as PixiContainer
+  const built = doomed.children.find(child => child.label === 'built') as PixiSprite
+
+  flush(() => setOn(false))
+  expect(keeper.destroyed).toBe(false)
+  expect(keeper.parent).toBe(null)
+  expect(doomed.destroyed).toBe(true)
+  expect(built.destroyed).toBe(true)
+  dispose()
+})
+
+test('For reorder destroys nothing', () => {
+  const [items, setItems] = createSignal(['a', 'b', 'c'])
+  const { root, dispose } = withRoot(() => (
+    <Container>
+      <For each={items()}>{item => <Sprite label={item} />}</For>
+    </Container>
+  ))
+  const outer = root.children[0] as PixiContainer
+  const before = new Map(outer.children.map(child => [child.label, child]))
+
+  flush(() => setItems(['c', 'a', 'b']))
+  expect(outer.children.map(child => child.label)).toEqual(['c', 'a', 'b'])
+  for (const child of outer.children) {
+    expect(before.get(child.label)).toBe(child)
+    expect(child.destroyed).toBe(false)
+  }
+  dispose()
+})
+
 test('renderable=false lets one last write land, then freezes props', () => {
   const [renderable, setRenderable] = createSignal(true)
   const [x, setX] = createSignal(1)
@@ -193,7 +259,7 @@ test('dispose stops the reactive graph', () => {
   expect(sprite.x).toBe(1)
 })
 
-test('dispose leaves the mounted nodes attached to the root', () => {
+test('dispose leaves the mounted nodes attached to the root, undestroyed', () => {
   const { root, dispose } = withRoot(() => (
     <Container>
       <Sprite />
@@ -203,4 +269,8 @@ test('dispose leaves the mounted nodes attached to the root', () => {
 
   dispose()
   expect(root.children.length).toBe(1)
+  const outer = root.children[0] as PixiContainer
+  const inner = outer.children[0] as PixiSprite
+  expect(outer.destroyed).toBe(false)
+  expect(inner.destroyed).toBe(false)
 })

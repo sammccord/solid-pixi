@@ -1,5 +1,5 @@
-import { type PointLike, Rectangle, Texture } from 'pixi.js'
-import { createStore, flush } from 'solid-js'
+import { type PointLike, Rectangle } from 'pixi.js'
+import { createStore } from 'solid-js'
 import {
   Application,
   For,
@@ -8,6 +8,7 @@ import {
   render,
   useApplication,
   useAsset,
+  useTick,
   Sprite
 } from 'solid-pixi'
 
@@ -40,28 +41,26 @@ function Dudes() {
     app.screen.height + dudeBoundsPadding * 2
   )
 
-  app.ticker.add(() => {
-    flush(() => {
-      setDudes(draft => {
-        for (const dude of draft) {
-          const newDirection = dude.direction + dude.turningSpeed * 0.01
-          dude.direction = newDirection
-          dude.x += Math.sin(dude.direction) * dude.speed
-          dude.y += Math.cos(dude.direction) * dude.speed
-          dude.rotation = -newDirection - Math.PI / 2
-          if (dude.x < dudeBounds.x) {
-            dude.x += dudeBounds.width
-          } else if (dude.x > dudeBounds.x + dudeBounds.width) {
-            dude.x -= dudeBounds.width
-          }
-
-          if (dude.y < dudeBounds.y) {
-            dude.y += dudeBounds.height
-          } else if (dude.y > dudeBounds.y + dudeBounds.height) {
-            dude.y -= dudeBounds.height
-          }
+  useTick(() => {
+    setDudes(draft => {
+      for (const dude of draft) {
+        const newDirection = dude.direction + dude.turningSpeed * 0.01
+        dude.direction = newDirection
+        dude.x += Math.sin(dude.direction) * dude.speed
+        dude.y += Math.cos(dude.direction) * dude.speed
+        dude.rotation = -newDirection - Math.PI / 2
+        if (dude.x < dudeBounds.x) {
+          dude.x += dudeBounds.width
+        } else if (dude.x > dudeBounds.x + dudeBounds.width) {
+          dude.x -= dudeBounds.width
         }
-      })
+
+        if (dude.y < dudeBounds.y) {
+          dude.y += dudeBounds.height
+        } else if (dude.y > dudeBounds.y + dudeBounds.height) {
+          dude.y -= dudeBounds.height
+        }
+      }
     })
   })
 

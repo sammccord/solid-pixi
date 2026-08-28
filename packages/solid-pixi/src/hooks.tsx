@@ -5,20 +5,54 @@ import {
   Spritesheet,
   type SpritesheetData,
   type Texture,
+  type Ticker,
+  type TickerCallback,
   type UnresolvedAsset
 } from 'pixi.js'
 import {
   type Accessor,
   type MemoOptions,
   type SourceAccessor,
+  createEffect,
   createMemo,
-  createSignal
+  createSignal,
+  flush
 } from 'solid-js'
+import { useApplication } from './Application.js'
 
 type MaybeAccessor<T> = T | Accessor<T>
 
 const access = <T,>(v: MaybeAccessor<T>): T =>
   typeof v === 'function' && !(v as () => T).length ? (v as () => T)() : (v as T)
+
+export type TickOptions = {
+  priority?: number
+  enabled?: Accessor<boolean> | boolean
+}
+
+/**
+ * Runs `callback` on the application's ticker for the life of the component.
+ *
+ * The callback runs inside `flush`, so its signal writes commit on the frame
+ * that made them instead of a frame late. `priority` orders it among the
+ * ticker's listeners. An `enabled` accessor attaches and detaches it as the
+ * value flips; the callback detaches on cleanup either way.
+ */
+export function useTick(callback: TickerCallback<unknown>, options?: TickOptions): void {
+  const app = useApplication()
+  const tick = (ticker: Ticker) => flush(() => callback(ticker))
+  const enabled = options?.enabled ?? true
+  const isEnabled = typeof enabled === 'function' ? enabled : () => enabled
+
+  createEffect(
+    () => isEnabled(),
+    on => {
+      if (!on) return undefined
+      app.ticker.add(tick, undefined, options?.priority)
+      return () => app.ticker.remove(tick)
+    }
+  )
+}
 
 type AssetType = Texture | FontFace | string
 

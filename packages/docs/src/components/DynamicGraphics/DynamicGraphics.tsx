@@ -1,19 +1,14 @@
 import type { Graphics as PixiGraphics } from 'pixi.js'
-import { createEffect, createSignal, flush, onSettled } from 'solid-js'
-import { Application, Stage, render, useApplication, Graphics } from 'solid-pixi'
+import { createEffect, createSignal } from 'solid-js'
+import { Application, Stage, render, useTick, Graphics } from 'solid-pixi'
 
 render(() => <DynamicGraphics canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
 export function GraphicsContainer() {
-  const app = useApplication()
   const [_count, setCount] = createSignal(0)
   const [_graphics, setGraphics] = createSignal<PixiGraphics>()
 
-  onSettled(() => {
-    const ticker = () => flush(() => setCount(c => c + 0.1))
-    app.ticker.add(ticker)
-    return () => app.ticker.remove(ticker)
-  })
+  useTick(() => setCount(c => c + 0.1))
 
   createEffect(
     () => ({ graphics: _graphics(), count: _count() }),

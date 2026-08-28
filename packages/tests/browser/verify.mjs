@@ -26,10 +26,12 @@ const mounted = await page.evaluate(() => {
   return {
     rendererType: app.renderer?.type ?? null,
     canvasIsOurs: app.canvas === document.getElementById('stage'),
-    stage: app.stage.children.map(child => ({
-      label: child.label,
-      children: child.children.map(grandchild => grandchild.label)
-    }))
+    stage: app.stage.children
+      .filter(child => child.label)
+      .map(child => ({
+        label: child.label,
+        children: child.children.map(grandchild => grandchild.label)
+      }))
   }
 })
 
@@ -61,6 +63,44 @@ check('drew red pixels', red[0] > 200 && red[1] < 60 && red[2] < 60, `rgb(${red}
 await page.evaluate(() => window.verify.setTint(0x0000ff))
 const blue = await readPixel()
 check('a signal write repainted the canvas blue', blue[2] > 200 && blue[0] < 60, `rgb(${blue})`)
+
+const stageChild = await page.evaluate(() => {
+  const labels = () => window.verify.app.stage.children.map(child => child.label)
+  const before = labels()
+  window.verify.setExtra(true)
+  const shown = labels()
+  window.verify.setExtra(false)
+  const hidden = labels()
+  return { before, shown, hidden }
+})
+check(
+  'a conditional child directly under Stage mounts on its signal',
+  !stageChild.before.includes('extra') && stageChild.shown.includes('extra'),
+  JSON.stringify(stageChild)
+)
+check(
+  'the conditional child unmounts when the signal flips back',
+  !stageChild.hidden.includes('extra'),
+  JSON.stringify(stageChild.hidden)
+)
+
+const stageText = await page.evaluate(() => {
+  const node = () => window.verify.app.stage.children.find(child => 'text' in child)
+  const first = node()?.text ?? null
+  window.verify.setMessage(' second')
+  const second = node()?.text ?? null
+  return { first, second }
+})
+check(
+  'a text expression directly under Stage renders',
+  stageText.first === ' first',
+  JSON.stringify(stageText)
+)
+check(
+  'the text expression updates on its signal',
+  stageText.second === ' second',
+  JSON.stringify(stageText)
+)
 
 check('no console or page errors', consoleErrors.length === 0, consoleErrors.join(' | '))
 

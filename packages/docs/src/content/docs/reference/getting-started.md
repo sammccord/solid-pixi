@@ -94,18 +94,19 @@ reload.
 ## Two things Solid 2 changes
 
 **Writes are staged.** Setters commit on the next microtask, so imperative code that
-reads a pixi property straight after a write needs `flush()`. This matters most inside
-a ticker callback, which would otherwise land its write a frame late:
+reads a pixi property straight after a write needs `flush()`. Per-frame work goes
+through `useTick`, which runs its callback inside `flush` so the write lands on the
+frame that made it instead of a frame late:
 
 ```tsx
-app.ticker.add(() => {
-  flush(() => {
-    setDudes(draft => {
-      for (const dude of draft) dude.x += dude.speed
-    })
+useTick(() => {
+  setDudes(draft => {
+    for (const dude of draft) dude.x += dude.speed
   })
 })
 ```
+
+A callback added to `app.ticker` by hand still has to wrap its own writes in `flush()`.
 
 **Refs run detached from the owner.** That is what makes `ref={setSignal}` legal, and
 it means a ref callback cannot read an async accessor. Capture the settled value

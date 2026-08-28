@@ -1,4 +1,4 @@
-import { type PointLike, Ticker } from 'pixi.js'
+import type { Container as PixiContainer, PointLike } from 'pixi.js'
 import {
   Application,
   For,
@@ -7,6 +7,7 @@ import {
   render,
   useApplication,
   useAsset,
+  useTick,
   Container,
   Sprite
 } from 'solid-pixi'
@@ -26,24 +27,21 @@ function ContainerExample(props) {
 function BunniesContainer() {
   const app = useApplication()
   const resource = useAsset('https://pixijs.com/assets/bunny.png')
+  let container: PixiContainer | undefined
+
+  // use delta to create frame-independent transform
+  useTick(delta => {
+    if (container) container.rotation -= 0.001 * delta.deltaMS
+  })
 
   return (
     <Loading>
       <Container
         x={app.screen.width / 2}
         y={app.screen.height / 2}
-        ref={container => {
-          container.pivot = { x: 100, y: 100 }
-          const handler = (delta: Ticker) => {
-            // rotate the container!
-            // use delta to create frame-independent transform
-            container.rotation -= 0.001 * delta.deltaMS
-          }
-          app.ticker.add(handler)
-
-          return () => {
-            app.ticker.remove(handler)
-          }
+        ref={node => {
+          node.pivot = { x: 100, y: 100 }
+          container = node
         }}
       >
         <For each={Array.from({ length: 25 })} fallback={<></>}>

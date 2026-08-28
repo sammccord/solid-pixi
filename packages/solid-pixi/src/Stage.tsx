@@ -4,6 +4,6 @@ import { insert } from './runtime.js'
 export function Stage(props: { children?: unknown }) {
   const application = useApplication()
 
-  insert(application.stage, () => props.children)
+  insert(application.stage, props.children)
   return application.stage
 }

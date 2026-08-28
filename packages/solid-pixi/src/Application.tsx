@@ -6,7 +6,9 @@ import {
   createContext,
   createEffect,
   createMemo,
+  latest,
   omit,
+  onCleanup,
   untrack,
   useContext
 } from 'solid-js'
@@ -15,7 +17,13 @@ import { CommonPropKeys, type CommonProps } from './interfaces.js'
 export const AppContext = createContext<PixiApplication>()
 
 /** Reads the enclosing `Application`. Throws when there isn't one. */
-export const useApplication = () => useContext(AppContext)
+export const useApplication = (): PixiApplication => {
+  try {
+    return useContext(AppContext)
+  } catch {
+    throw new Error('useApplication must be called under <Application>')
+  }
+}
 
 export type ApplicationProps = CommonProps<PixiApplication> & {
   fallback?: Element
@@ -45,6 +53,11 @@ export const Application = (props: ApplicationProps) => {
     () => app(),
     instance => props.ref?.(instance)
   )
+
+  // `latest` reads whatever the async memo holds without suspending; a still
+  // initializing application has nothing to destroy. `destroy(true)` also
+  // removes the canvas.
+  onCleanup(() => latest(app)?.destroy(true))
 
   // Show reads the pending application inside a tracking scope, so it suspends
   // to the Loading boundary. A context provider reads its value untracked, and

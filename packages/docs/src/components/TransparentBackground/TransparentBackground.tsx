@@ -1,5 +1,14 @@
-import type { PointLike } from 'pixi.js'
-import { Application, Loading, Stage, render, useApplication, useAsset, Sprite } from 'solid-pixi'
+import type { PointLike, Sprite as PixiSprite } from 'pixi.js'
+import {
+  Application,
+  Loading,
+  Stage,
+  render,
+  useApplication,
+  useAsset,
+  useTick,
+  Sprite
+} from 'solid-pixi'
 
 render(() => (
   <TransparentBackground canvas={document.getElementById('root')! as HTMLCanvasElement} />
@@ -8,6 +17,11 @@ render(() => (
 function BunniesContainer() {
   const app = useApplication()
   const texture = useAsset('https://pixijs.com/assets/bunny.png')
+  let sprite: PixiSprite | undefined
+
+  useTick(() => {
+    if (sprite) sprite.rotation += 0.01
+  })
 
   return (
     <Loading>
@@ -16,11 +30,7 @@ function BunniesContainer() {
         anchor={{ x: 0.5, y: 0.5 } as PointLike}
         x={app.screen.width / 2}
         y={app.screen.height / 2}
-        ref={sprite => {
-          app.ticker.add(() => {
-            sprite.rotation += 0.01
-          })
-        }}
+        ref={node => (sprite = node)}
       />
     </Loading>
   )

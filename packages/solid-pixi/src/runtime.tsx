@@ -5,6 +5,28 @@ import { createRenderer } from '@solidjs/universal'
 
 type PixiNode = PixiContainer
 
+const adopted = new WeakSet<object>()
+
+/**
+ * Marks a node as caller-owned. Removal lifts it out of the tree but never
+ * destroys it. `createPixiComponent` registers every `as` instance.
+ */
+export function adopt(node: object) {
+  adopted.add(node)
+}
+
+// Bare destroy(): Text textures and Graphics contexts the node owns are freed,
+// shared textures are not. destroy() mutates the children array, so each level
+// walks a copy, children before parent.
+function destroyTree(node: PixiNode) {
+  if (adopted.has(node)) {
+    node.removeFromParent()
+    return
+  }
+  for (const child of node.children.slice()) destroyTree(child)
+  node.destroy()
+}
+
 const renderer = createRenderer<PixiNode>({
   createElement(tag): never {
     throw new Error(
@@ -30,7 +52,9 @@ const renderer = createRenderer<PixiNode>({
     return node instanceof PixiText
   },
   removeNode(_parent, node) {
-    node?.removeFromParent()
+    if (!node) return
+    node.removeFromParent()
+    destroyTree(node)
   },
   getParentNode(node) {
     return node?.parent ?? undefined

@@ -73,8 +73,8 @@ function Bunny() {
           texture={texture()}
           anchor={0.5}
           scale={scale()}
-          x={app!.screen.width / 2}
-          y={app!.screen.height / 2}
+          x={app.screen.width / 2}
+          y={app.screen.height / 2}
           eventMode="static"
           onClick={() => setScale(s => s + 0.1)}
         />
@@ -85,8 +85,9 @@ function Bunny() {
 ```
 
 Writes are staged. Solid 2 commits on the next microtask, so imperative code
-that reads a pixi property straight after a setter needs `flush()`. This matters
-most inside a ticker callback, which would otherwise land its write a frame late.
+that reads a pixi property straight after a setter needs `flush()`. Ticker
+callbacks get the flush for free from `useTick`, which runs the callback inside
+one so its writes land on the frame that made them.
 
 Refs run detached from the owner, which is what makes `ref={setSignal}` legal. The
 cost is that a ref callback cannot read an async accessor. Capture the settled

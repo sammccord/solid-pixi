@@ -1,6 +1,6 @@
 import type { Application as PixiApplication, Graphics as PixiGraphics } from 'pixi.js'
 import { createSignal, flush } from 'solid-js'
-import { Application, Stage, render, Container, Graphics, Sprite } from 'solid-pixi'
+import { Application, Show, Stage, render, Container, Graphics, Sprite } from 'solid-pixi'
 
 declare global {
   interface Window {
@@ -9,12 +9,17 @@ declare global {
       ready: Promise<void>
       app: PixiApplication
       setTint: (value: number) => void
+      setExtra: (value: boolean) => void
+      setMessage: (value: string) => void
     }
   }
 }
 
 const canvas = document.getElementById('stage') as HTMLCanvasElement
 const [tint, setTint] = createSignal(0xff0000)
+const [extra, setExtra] = createSignal(false)
+// The leading space keeps the glyphs off (0, 0), which the pixel checks sample.
+const [message, setMessage] = createSignal(' first')
 
 let resolveReady: () => void
 const ready = new Promise<void>(resolve => (resolveReady = resolve))
@@ -35,6 +40,10 @@ function Scene() {
       <Container label="group">
         <Sprite label="child" />
       </Container>
+      <Show when={extra()}>
+        <Sprite label="extra" />
+      </Show>
+      {message()}
     </Stage>
   )
 }
@@ -52,6 +61,14 @@ render(() => (
         app,
         setTint: value => {
           flush(() => setTint(value))
+          app.render()
+        },
+        setExtra: value => {
+          flush(() => setExtra(value))
+          app.render()
+        },
+        setMessage: value => {
+          flush(() => setMessage(value))
           app.render()
         }
       }
