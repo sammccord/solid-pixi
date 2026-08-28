@@ -25,7 +25,7 @@ function InteractivityContainer() {
       <P.Sprite
         texture={Texture.from(texture())}
         interactive
-        cursor='pointer'
+        cursor="pointer"
         onpointerdown={() => {
           isDown = true
           setTexture('https://pixijs.com/assets/button_down.png')
@@ -70,7 +70,7 @@ function InteractivityContainer() {
 
 function Interactivity(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <InteractivityContainer />
       </Stage>

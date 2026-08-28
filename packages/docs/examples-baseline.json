@@ -9,17 +9,13 @@
     "example": "AnimatedSpriteExplosion",
     "url": "http://localhost:4399/solid-pixi/guides/sprite/animated-sprite-explosion/",
     "colors": 2,
-    "errors": [
-      "TypeError: Cannot read properties of undefined (reading 'texture')"
-    ]
+    "errors": ["TypeError: Cannot read properties of undefined (reading 'texture')"]
   },
   {
     "example": "AnimatedSpriteSpeed",
     "url": "http://localhost:4399/solid-pixi/guides/sprite/animated-sprite-speed/",
     "colors": 2,
-    "errors": [
-      "TypeError: Cannot read properties of undefined (reading 'texture')"
-    ]
+    "errors": ["TypeError: Cannot read properties of undefined (reading 'texture')"]
   },
   {
     "example": "Assets",
@@ -123,8 +119,6 @@
     "example": "TransparentBackground",
     "url": "http://localhost:4399/solid-pixi/guides/basic/transparent-background/",
     "colors": 1,
-    "errors": [
-      "ReferenceError: Assets is not defined"
-    ]
+    "errors": ["ReferenceError: Assets is not defined"]
   }
 ]

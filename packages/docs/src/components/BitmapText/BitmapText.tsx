@@ -41,7 +41,7 @@ function TextContainer() {
 
 function BitmapText(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <TextContainer />
       </Stage>

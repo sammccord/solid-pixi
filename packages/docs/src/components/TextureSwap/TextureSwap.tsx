@@ -30,7 +30,7 @@ function SwapContainer() {
 
 function TextureSwap(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <SwapContainer />
       </Stage>

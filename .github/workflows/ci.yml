@@ -27,25 +27,21 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Build BEFORE check. solid-pixi's public types are reachable only through
-      # its built `dist/index.d.ts` (the exports map points there and there is no
-      # source condition or path alias), so `packages/tests` cannot resolve
-      # `import ... from 'solid-pixi'` until dist exists. Without this the
-      # type-aware `vp check` fails with TS2307 on a fresh checkout.
-      - name: Build
-        run: pnpm vp run --filter './packages/solid-pixi' build
-
+      # The type-aware check and both test suites resolve `solid-pixi` from
+      # source (packages/tests maps the specifier to ../solid-pixi/src in its
+      # tsconfig paths and vite alias), so no build is needed before them. The
+      # package build is exercised by the verification step below, which packs
+      # the tarball and proves it works from a scratch consumer outside the
+      # workspace: publint and arethetypeswrong on the archive, then a consumer
+      # that installs it, type-checks under both bundler and node16 resolution,
+      # builds with @solidjs/vite-plugin, and runs a real pixi scene graph. A
+      # workspace alias hides export-map bugs; a real install does not.
       - name: Check (fmt + lint + typecheck)
         run: pnpm vp check
 
       - name: Test (node)
         run: pnpm vp run --filter './packages/tests' test
 
-      # Packs the tarball and proves it works from outside the workspace: publint
-      # and arethetypeswrong on the archive, then a scratch consumer that
-      # installs it, type-checks under both bundler and node16 resolution, builds
-      # with @solidjs/vite-plugin, and runs a real pixi scene graph. A workspace
-      # alias hides export-map bugs; a real install does not.
       - name: Verify the published package
         run: node tools/verify-package.mjs
 

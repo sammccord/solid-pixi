@@ -59,7 +59,7 @@ function AssetsLoading(props) {
   const bundle = useBundle<{ flowerTop: Texture; eggHead: Texture }>(stateBundle)
 
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <Loading>
           <Switch>

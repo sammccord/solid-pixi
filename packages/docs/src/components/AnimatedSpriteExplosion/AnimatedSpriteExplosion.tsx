@@ -1,6 +1,15 @@
 import type { AnimatedSprite } from 'pixi.js'
 import { createMemo } from 'solid-js'
-import { Application, For, Loading, P, Stage, render, useApplication, useSpritesheet } from 'solid-pixi'
+import {
+  Application,
+  For,
+  Loading,
+  P,
+  Stage,
+  render,
+  useApplication,
+  useSpritesheet
+} from 'solid-pixi'
 
 render(() => (
   <AnimatedSpriteExplosion canvas={document.getElementById('root')! as HTMLCanvasElement} />
@@ -36,7 +45,7 @@ function SwapContainer() {
 
 function AnimatedSpriteExplosion(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <SwapContainer />
       </Stage>

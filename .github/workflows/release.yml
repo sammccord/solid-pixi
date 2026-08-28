@@ -7,8 +7,9 @@ name: release
 #   2. this workflow, in one run:
 #        a. `changeset version` bumps the version, writes the CHANGELOG, and
 #           deletes the consumed `.changeset/*.md`,
-#        b. runs the same gates ci.yml runs, including the tarball verification,
-#        c. `changeset publish` publishes and creates a git tag,
+#        b. runs the same gates ci.yml runs, including the browser suite and
+#           the tarball verification,
+#        c. `changeset publish` publishes and creates an annotated git tag,
 #        d. pushes the version-bump commit and tags back to main,
 #        e. re-points the prerelease dist-tag at the current version,
 #        f. creates a GitHub Release per new tag from the CHANGELOG entry.
@@ -17,6 +18,13 @@ name: release
 #
 # Publish happens BEFORE the git push, so a failed npm publish leaves main
 # untouched and the changesets intact and a re-run republishes cleanly.
+#
+# Re-run after a publish that succeeded but failed to push: the checkout is
+# back at the event SHA, where the changeset is still pending, so `changeset
+# version` regenerates the same bump; publish skips (version already on the
+# registry); the "Ensure git tags" step recreates the annotated tag that the
+# abandoned run never pushed; and the push lands the commit, the tag, and the
+# GitHub Release. Tags are matched by exact name, never forced.
 #
 # Needs an NPM_TOKEN secret with publish rights to `solid-pixi`. Provenance is
 # attached over OIDC (`id-token: write` plus NPM_CONFIG_PROVENANCE), which
@@ -36,7 +44,7 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
         with:
@@ -66,13 +74,7 @@ jobs:
         if: steps.cs.outputs.count != '0'
         run: pnpm changeset version
 
-      # b. Gate the release on what CI gates on. Build first: the type-aware
-      #    check cannot resolve `solid-pixi` from packages/tests until dist
-      #    exists, because the exports map is the only path to its types.
-      - name: Build
-        if: steps.cs.outputs.count != '0'
-        run: pnpm vp run --filter './packages/solid-pixi' build
-
+      # b. Gate the release on what CI gates on.
       - name: Check (fmt + lint + typecheck)
         if: steps.cs.outputs.count != '0'
         run: pnpm vp check
@@ -81,9 +83,18 @@ jobs:
         if: steps.cs.outputs.count != '0'
         run: pnpm vp run --filter './packages/tests' test
 
+      - name: Install Chromium
+        if: steps.cs.outputs.count != '0'
+        run: pnpm --filter tests exec playwright install --with-deps chromium
+
+      - name: Test (browser)
+        if: steps.cs.outputs.count != '0'
+        run: pnpm --filter tests run test:browser
+
       # The last gate before an irreversible publish: pack the tarball, lint it
       # with publint and arethetypeswrong, install it into a scratch consumer
       # outside the workspace, and run a real pixi scene graph through it.
+      # Builds dist as its first stage.
       - name: Verify the published package
         if: steps.cs.outputs.count != '0'
         run: node tools/verify-package.mjs
@@ -117,18 +128,42 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: 'true'
 
+      # changesets only tags packages it published in THIS run. A re-run after
+      # a publish whose push failed finds the version already on npm, publishes
+      # nothing, and would leave the tag missing. Recreate any missing tag for
+      # the current public package versions, annotated, as changesets makes
+      # them; never force an existing tag.
+      - name: Ensure git tags
+        if: steps.cs.outputs.count != '0'
+        run: |
+          specs=$(pnpm ls -r --depth -1 --json \
+            | node -e 'for (const p of JSON.parse(require("fs").readFileSync(0, "utf8"))) if (!p.private) console.log(`${p.name}@${p.version}`)')
+          while read -r spec; do
+            [ -z "$spec" ] && continue
+            if git rev-parse -q --verify "refs/tags/$spec" >/dev/null; then
+              echo "tag $spec already exists locally"
+            elif git ls-remote --tags origin "refs/tags/$spec" | grep -q "$spec"; then
+              echo "tag $spec already exists on the remote"
+            else
+              git tag "$spec" -m "$spec"
+              echo "tagged $spec"
+            fi
+          done <<< "$specs"
+
       # d. Persist the bump now that npm has accepted it.
       - name: Push commit and tags
         if: steps.cs.outputs.count != '0'
         run: git push --follow-tags origin HEAD:main
 
-      # e. While every published version is still a prerelease, changesets
-      #    publishes to `latest` rather than the pre tag so a bare
-      #    `npm i solid-pixi` resolves at all. The side effect is that the pre
-      #    tag is only ever set by the very first publish and never advances.
-      #    Re-pointing it on every run keeps it honest. `npm dist-tag add` is
-      #    idempotent, so a run that changes nothing is free. Deliberately not
-      #    `|| true`: the tag write is the whole point of the step.
+      # e. Insurance on the prerelease dist-tag. changesets publishes a
+      #    prerelease to the pre tag (`next`) whenever the package has ever had
+      #    a regular release, and only falls back to `latest` when every
+      #    published version is itself a prerelease of that tag (its
+      #    "only-pre" rule). solid-pixi has stable releases, so `next` advances
+      #    on its own and `latest` stays put. `npm dist-tag add` is idempotent,
+      #    so re-asserting the tag every run costs nothing and repairs a drift
+      #    (a deleted tag, a manual publish) that changesets would not notice.
+      #    Deliberately not `|| true`: the tag write is the point of the step.
       - name: Sync the prerelease dist-tag
         if: steps.cs.outputs.count != '0'
         env:
@@ -153,13 +188,28 @@ jobs:
           done <<< "$specs"
           exit $failed
 
-      # f. One GitHub Release per new tag, notes taken from the CHANGELOG.
+      # f. One GitHub Release per tag on the bump commit, notes taken from the
+      #    CHANGELOG. Driven by the tags that actually exist, not by publish
+      #    output, so a re-run after a partial failure recovers missing
+      #    releases. `gh release view` guards the already-exists case; any
+      #    other failure fails the job instead of being echoed away.
       - name: Create GitHub Releases
         if: steps.cs.outputs.count != '0'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          grep 'New tag:' publish.log | sed -E 's/.*New tag:[[:space:]]*//' | while read -r tag; do
+          tags=$(git tag --points-at HEAD)
+          if [ -z "$tags" ]; then
+            echo "No tags on the release commit; nothing to release."
+            exit 0
+          fi
+          failed=0
+          while read -r tag; do
+            [ -z "$tag" ] && continue
+            if gh release view "$tag" >/dev/null 2>&1; then
+              echo "release $tag already exists, skipping"
+              continue
+            fi
             name="${tag%@*}"
             ver="${tag##*@}"
             pj=$(grep -rl "\"name\": \"$name\"" --include=package.json packages | head -1)
@@ -172,5 +222,6 @@ jobs:
             pre=""
             case "$ver" in *-*) pre="--prerelease" ;; esac
             echo "Creating release $tag $pre"
-            gh release create "$tag" $pre --title "$tag" --notes "$notes" || echo "release $tag already exists, skipping"
-          done
+            gh release create "$tag" $pre --title "$tag" --notes "$notes" || failed=1
+          done <<< "$tags"
+          exit $failed

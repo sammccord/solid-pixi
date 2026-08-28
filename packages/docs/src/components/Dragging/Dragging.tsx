@@ -36,7 +36,7 @@ function DraggingContainer() {
         x={Math.random() * app.screen.width}
         y={Math.random() * app.screen.height}
         interactive
-        cursor='pointer'
+        cursor="pointer"
         scale={{ x: 3, y: 3 }}
         onpointerdown={e => {
           // store a reference to the data
@@ -55,7 +55,7 @@ function DraggingContainer() {
 
 function Dragging(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <DraggingContainer />
       </Stage>

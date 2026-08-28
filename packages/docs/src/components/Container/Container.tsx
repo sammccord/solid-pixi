@@ -5,7 +5,7 @@ render(() => <ContainerExample canvas={document.getElementById('root')! as HTMLC
 
 function ContainerExample(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <BunniesContainer />
       </Stage>

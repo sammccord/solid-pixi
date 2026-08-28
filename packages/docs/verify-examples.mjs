@@ -18,7 +18,9 @@ function pages(dir = docs) {
     const source = readFileSync(path, 'utf8')
     const example = source.match(/components\/([^/]+)\/index\.astro/)
     if (!example) return []
-    const route = relative(docs, path).replace(/\.mdx$/, '').toLowerCase()
+    const route = relative(docs, path)
+      .replace(/\.mdx$/, '')
+      .toLowerCase()
     return [{ example: example[1], url: `http://localhost:${port}/solid-pixi/${route}/` }]
   })
 }

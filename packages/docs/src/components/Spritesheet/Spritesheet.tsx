@@ -1,5 +1,14 @@
 import type { PointLike } from 'pixi.js'
-import { Application, For, Loading, P, Stage, render, useApplication, useSpritesheet } from 'solid-pixi'
+import {
+  Application,
+  For,
+  Loading,
+  P,
+  Stage,
+  render,
+  useApplication,
+  useSpritesheet
+} from 'solid-pixi'
 
 render(() => <Spritesheet canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
@@ -30,7 +39,7 @@ function SwapContainer() {
 
 function Spritesheet(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <SwapContainer />
       </Stage>

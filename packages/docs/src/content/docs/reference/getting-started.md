@@ -52,7 +52,7 @@ export function App(props) {
   const [x, setX] = createSignal(10)
 
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <P.Sprite
           x={x()}
@@ -139,7 +139,7 @@ function App() {
 
 function PixiApp(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage />
     </Application>
   )

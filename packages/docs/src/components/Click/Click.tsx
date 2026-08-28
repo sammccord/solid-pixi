@@ -28,7 +28,7 @@ function ClickContainer() {
 
 function Click(props) {
   return (
-    <Application background='#1099bb' resizeTo={window} canvas={props.canvas}>
+    <Application background="#1099bb" resizeTo={window} canvas={props.canvas}>
       <Stage>
         <ClickContainer />
       </Stage>

@@ -1,6 +1,15 @@
 import type { AnimatedSprite, PointLike, SpritesheetData } from 'pixi.js'
 import { createMemo } from 'solid-js'
-import { Application, Loading, P, Show, Stage, render, useApplication, useSpritesheet } from 'solid-pixi'
+import {
+  Application,
+  Loading,
+  P,
+  Show,
+  Stage,
+  render,
+  useApplication,
+  useSpritesheet
+} from 'solid-pixi'
 
 render(() => <AnimatedSpriteSpeed canvas={document.getElementById('root')! as HTMLCanvasElement} />)
 
