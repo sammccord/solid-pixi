@@ -69,7 +69,9 @@ export type PixiProps<Instance, Options> = Omit<
   size?: Size
 }
 
-function createPixiComponent<Instance, Options>(Class: new (options: Options) => Instance) {
+function createPixiComponent<Instance extends object, Options>(
+  Class: new (options: Options) => Instance
+) {
   return function PixiComponent(props: PixiProps<Instance, Options>) {
     const options = omit(props, ...CommonPropKeys)
     // A caller passes whatever subset of the options it wants, and the renderer
