@@ -4,7 +4,10 @@ import { createServer } from 'vite'
 const checks = []
 const check = (name, ok, detail) => checks.push({ name, ok, detail })
 
-const server = await createServer({ configFile: new URL('../vite.config.mjs', import.meta.url).pathname, server: { port: 5199 } })
+const server = await createServer({
+  configFile: new URL('../vite.config.mjs', import.meta.url).pathname,
+  server: { port: 5199 }
+})
 await server.listen()
 
 const browser = await chromium.launch()
@@ -65,7 +68,10 @@ check('no console or page errors', consoleErrors.length === 0, consoleErrors.joi
 
 const assets = await browser.newPage()
 const assetNoise = []
-assets.on('console', m => ['error', 'warning'].includes(m.type()) && assetNoise.push(`${m.type()}: ${m.text()}`))
+assets.on(
+  'console',
+  m => ['error', 'warning'].includes(m.type()) && assetNoise.push(`${m.type()}: ${m.text()}`)
+)
 assets.on('pageerror', e => assetNoise.push(String(e)))
 
 await assets.goto('http://localhost:5199/browser/assets.html', { waitUntil: 'load' })
@@ -88,8 +94,16 @@ const loaded = await assets.evaluate(() => {
 })
 
 check('useAsset suspended the sprite through the first render pass', loaded.spriteEarly === false)
-check('progress reached 1 by the time the sprite mounted', loaded.progress.at(-1) === 1, JSON.stringify(loaded.progress))
-check('the loaded texture drew green pixels', loaded.pixel[1] > 150 && loaded.pixel[0] < 120, `rgb(${loaded.pixel})`)
+check(
+  'progress reached 1 by the time the sprite mounted',
+  loaded.progress.at(-1) === 1,
+  JSON.stringify(loaded.progress)
+)
+check(
+  'the loaded texture drew green pixels',
+  loaded.pixel[1] > 150 && loaded.pixel[0] < 120,
+  `rgb(${loaded.pixel})`
+)
 
 const stable = await assets.evaluate(() => {
   const before = { renderer: window.assets.app.renderer, stage: window.assets.app.stage }
@@ -101,8 +115,16 @@ const stable = await assets.evaluate(() => {
   }
 })
 
-check('an option change does not re-initialize the Application', stable.sameRenderer && stable.sameStage && stable.stillOneChild, JSON.stringify(stable))
-check('no owned-write or other console noise from the hooks', assetNoise.length === 0, assetNoise.join(' | '))
+check(
+  'an option change does not re-initialize the Application',
+  stable.sameRenderer && stable.sameStage && stable.stillOneChild,
+  JSON.stringify(stable)
+)
+check(
+  'no owned-write or other console noise from the hooks',
+  assetNoise.length === 0,
+  assetNoise.join(' | ')
+)
 
 // --- a failing asset lands in Errored instead of halting the graph ---
 
@@ -125,7 +147,11 @@ const recovered = await errors.evaluate(() =>
   window.errors.app.stage.children.map(child => child.label)
 )
 
-check('a failing asset renders the Errored fallback', recovered.includes('failed'), JSON.stringify(recovered))
+check(
+  'a failing asset renders the Errored fallback',
+  recovered.includes('failed'),
+  JSON.stringify(recovered)
+)
 check('a failing asset does not halt the reactive system', halted.length === 0, halted.join(' | '))
 
 await browser.close()

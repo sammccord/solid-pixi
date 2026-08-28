@@ -2,8 +2,9 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "noEmit": true,
-    "types": ["vite-plus/test"]
+    "jsxImportSource": "solid-pixi",
+    "types": ["vite-plus/test/globals"]
   },
-  "include": ["src", "vite.config.mjs"],
+  "include": ["src", "browser", "vite.config.mjs"],
   "exclude": ["node_modules"]
 }

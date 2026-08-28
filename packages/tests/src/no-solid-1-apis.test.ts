@@ -56,7 +56,13 @@ function namedImports(clause: string): string[] {
   return clause
     .slice(open + 1, close)
     .split(',')
-    .map(part => part.trim().replace(/^type\s+/, '').split(/\s+as\s+/)[0]!.trim())
+    .map(part =>
+      part
+        .trim()
+        .replace(/^type\s+/, '')
+        .split(/\s+as\s+/)[0]!
+        .trim()
+    )
     .filter(Boolean)
 }
 
@@ -69,7 +75,7 @@ test('the source files are found', () => {
 })
 
 test.each(files)('%s imports no removed solid-js path', (_name, source) => {
-  const specifiers = [...source.matchAll(IMPORT)].map(match => match[3])
+  const specifiers = [...source.matchAll(IMPORT)].map(match => match[3] ?? '')
   expect(specifiers.filter(s => REMOVED_PATHS.includes(s))).toEqual([])
 })
 

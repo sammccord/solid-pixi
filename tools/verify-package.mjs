@@ -84,28 +84,32 @@ writeFileSync(
   )}\n`
 )
 
+const tsconfig = (module, moduleResolution) => ({
+  compilerOptions: {
+    target: 'es2022',
+    lib: ['es2022', 'dom'],
+    module,
+    moduleResolution,
+    jsx: 'preserve',
+    jsxImportSource: 'solid-pixi',
+    strict: true,
+    noEmit: true,
+    skipLibCheck: true,
+    types: []
+  },
+  include: ['src']
+})
+
 writeFileSync(
   join(fixture, 'tsconfig.json'),
-  `${JSON.stringify(
-    {
-      compilerOptions: {
-        target: 'es2022',
-        lib: ['es2022', 'dom'],
-        module: 'ESNext',
-        moduleResolution: 'Bundler',
-        jsx: 'preserve',
-        jsxImportSource: 'solid-pixi',
-        strict: true,
-        noEmit: true,
-        skipLibCheck: true,
-        types: []
-      },
-      include: ['src']
-    },
-    null,
-    2
-  )}\n`
+  `${JSON.stringify(tsconfig('ESNext', 'Bundler'), null, 2)}\n`
 )
+writeFileSync(
+  join(fixture, 'tsconfig.node16.json'),
+  `${JSON.stringify(tsconfig('Node16', 'Node16'), null, 2)}\n`
+)
+
+writeFileSync(join(fixture, 'pnpm-workspace.yaml'), 'allowBuilds:\n  esbuild: true\n')
 
 writeFileSync(
   join(fixture, 'vite.config.mjs'),
@@ -115,7 +119,10 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [solid({ solid: { moduleName: 'solid-pixi', generate: 'universal' } })],
   build: { ssr: 'src/main.tsx', outDir: 'out', target: 'node22' },
-  ssr: { noExternal: ['solid-js', 'pixi.js', 'solid-pixi'] },
+  ssr: {
+    noExternal: ['solid-js', 'pixi.js', 'solid-pixi'],
+    resolve: { conditions: ['development', 'browser'] }
+  },
   resolve: { conditions: ['development', 'browser'] }
 })
 `
@@ -171,13 +178,18 @@ console.log('consumer scene graph ok')
 )
 
 stage('consumer install', () => {
-  run('pnpm', ['install', '--ignore-workspace', '--no-frozen-lockfile'], { cwd: fixture })
+  run('pnpm', ['install', '--no-frozen-lockfile'], { cwd: fixture })
   return 'tarball installed as a real dependency'
 })
 
-stage('consumer typecheck', () => {
+stage('consumer typecheck (bundler)', () => {
   run('npx', ['tsc', '--noEmit'], { cwd: fixture })
   return 'jsxImportSource: solid-pixi resolves, P.* props type-check'
+})
+
+stage('consumer typecheck (node16)', () => {
+  run('npx', ['tsc', '-p', 'tsconfig.node16.json'], { cwd: fixture })
+  return 'types resolve for a plain Node ESM consumer, not just a bundler'
 })
 
 stage('consumer build', () => {
